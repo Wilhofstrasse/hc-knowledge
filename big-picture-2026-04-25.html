@@ -223,6 +223,47 @@
   .links a:hover { background: var(--hc-bg-alt); border-left-color: var(--hc-coral); }
   .links a code { color: inherit; background: transparent; padding: 0; }
 
+  .comment-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.7rem;
+    background: var(--hc-coral);
+    color: var(--hc-white);
+    border-radius: 3px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .comment-link:hover { background: var(--hc-coral-safe); }
+  .comment-link::before { content: "💬 "; }
+  .section-comment-row {
+    display: flex; justify-content: flex-end; margin-top: 0.4rem;
+  }
+  .inbox-banner {
+    background: linear-gradient(90deg, var(--hc-coral) 0%, var(--hc-coral-safe) 100%);
+    color: var(--hc-white);
+    padding: 0.85rem 1.2rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .inbox-banner strong { font-size: 1rem; }
+  .inbox-banner a {
+    color: var(--hc-white);
+    background: rgba(255,255,255,0.18);
+    padding: 0.4rem 0.9rem;
+    border-radius: 3px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.88rem;
+  }
+  .inbox-banner a:hover { background: rgba(255,255,255,0.28); }
+
   .stack {
     background: var(--hc-white);
     border: 1px solid var(--hc-gray-1);
@@ -290,6 +331,14 @@
   </div>
 </header>
 
+<div class="inbox-banner" role="region" aria-label="Comment inbox">
+  <div>
+    <strong>💬 Two-way channel.</strong> Tap any "Comment" button to open a pre-filled GitHub issue on the private repo. Claude polls the queue at the start of every session and replies in the issue thread (or pushes a fix). Your phone needs to be logged into GitHub.
+  </div>
+  <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment,big-picture&amp;title=%5Bcomment%5D+&amp;body=Section%3A+%2F%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+big-picture+page._" target="_blank" rel="noopener">+ New comment</a>
+  <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues?q=is%3Aopen+label%3Afilipe-comment" target="_blank" rel="noopener">View open comments</a>
+</div>
+
 <nav class="toc" aria-label="Table of contents">
   <strong>What's in this page</strong>
   <ol>
@@ -310,6 +359,7 @@
 
 <section id="status">
   <h2>1. Where we are right now</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Cbig-picture&title=%5Bcomment%5D+%C2%A71.+Where+we+are+right+now&body=Section%3A+%C2%A71.+Where+we+are+right+now%0AAnchor%3A+%23status%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+big-picture+page._" target="_blank" rel="noopener">Comment on §1. Where we are right now</a></div>
   <div class="panel panel-coral">
     <p>Three things changed this week and they layer on each other:</p>
     <ol>
@@ -322,6 +372,7 @@
 
 <section id="capabilities">
   <h2>2. What the tool can do — capability map</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Cbig-picture&title=%5Bcomment%5D+%C2%A72.+What+the+tool+can+do+%E2%80%94+capability+map&body=Section%3A+%C2%A72.+What+the+tool+can+do+%E2%80%94+capability+map%0AAnchor%3A+%23capabilities%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+big-picture+page._" target="_blank" rel="noopener">Comment on §2. What the tool can do — capability map</a></div>
   <p>Plain English. What works today vs. what's planned.</p>
 
   <table>
@@ -415,6 +466,7 @@
 
 <section id="architecture">
   <h2>3. Architecture in one picture</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Cbig-picture&title=%5Bcomment%5D+%C2%A73.+Architecture+in+one+picture&body=Section%3A+%C2%A73.+Architecture+in+one+picture%0AAnchor%3A+%23architecture%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+big-picture+page._" target="_blank" rel="noopener">Comment on §3. Architecture in one picture</a></div>
 
   <p>The fill engine is built from <strong>five primitives</strong>. User-facing flows are <em>compositions</em> of these primitives. Four invariants run across all of them.</p>
 
@@ -448,6 +500,7 @@ Same surface. Centralised key. Per-user auth. Audit log + cost ceilings.</div>
 
 <section id="flows">
   <h2>4. Five user flows — 2×3 matrix</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Cbig-picture&title=%5Bcomment%5D+%C2%A74.+Five+user+flows+%E2%80%94+2%C3%973+matrix&body=Section%3A+%C2%A74.+Five+user+flows+%E2%80%94+2%C3%973+matrix%0AAnchor%3A+%23flows%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+big-picture+page._" target="_blank" rel="noopener">Comment on §4. Five user flows — 2×3 matrix</a></div>
   <p>Two axes. Six cells. Five live flows + one "n/a." Each flow is a composition of primitives.</p>
 
   <div class="matrix">
@@ -481,6 +534,7 @@ Same surface. Centralised key. Per-user auth. Audit log + cost ceilings.</div>
 
 <section id="library">
   <h2>5. Library — 10 templates</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Cbig-picture&title=%5Bcomment%5D+%C2%A75.+Library+%E2%80%94+10+templates&body=Section%3A+%C2%A75.+Library+%E2%80%94+10+templates%0AAnchor%3A+%23library%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+big-picture+page._" target="_blank" rel="noopener">Comment on §5. Library — 10 templates</a></div>
   <p>Each template is a JSON record describing what shapes a slide of that type SHOULD have. The AI fills text into those shapes; future stamp primitive will create the geometry.</p>
 
   <table>
@@ -522,6 +576,7 @@ Same surface. Centralised key. Per-user auth. Audit log + cost ceilings.</div>
 
 <section id="phases">
   <h2>6. Phase plan — A.0 → A → B → C → D</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Cbig-picture&title=%5Bcomment%5D+%C2%A76.+Phase+plan+%E2%80%94+A.0+%E2%86%92+A+%E2%86%92+B+%E2%86%92+C+%E2%86%92+D&body=Section%3A+%C2%A76.+Phase+plan+%E2%80%94+A.0+%E2%86%92+A+%E2%86%92+B+%E2%86%92+C+%E2%86%92+D%0AAnchor%3A+%23phases%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+big-picture+page._" target="_blank" rel="noopener">Comment on §6. Phase plan — A.0 → A → B → C → D</a></div>
 
   <div class="stack">
     <div class="stack-row"><div class="id">A.0</div><div class="body"><strong>Listener-reliability sub-spike</strong> — 2 days, BEFORE Phase A code<div class="meta">5 mutation paths tested on Mac PowerPoint. PASS = listener-based authorship safe; FAIL = audit-driven only. <em>Awaits your manual run.</em></div></div></div>
@@ -534,6 +589,7 @@ Same surface. Centralised key. Per-user auth. Audit log + cost ceilings.</div>
 
 <section id="decisions">
   <h2>7. Decisions waiting on you (in priority order)</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Cbig-picture&title=%5Bcomment%5D+%C2%A77.+Decisions+waiting+on+you+%28in+priority+order%29&body=Section%3A+%C2%A77.+Decisions+waiting+on+you+%28in+priority+order%29%0AAnchor%3A+%23decisions%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+big-picture+page._" target="_blank" rel="noopener">Comment on §7. Decisions waiting on you (in priority order)</a></div>
 
   <div class="panel panel-coral">
     <ol>
@@ -548,6 +604,7 @@ Same surface. Centralised key. Per-user auth. Audit log + cost ceilings.</div>
 
 <section id="powerpoint">
   <h2>8. What we need PowerPoint for — your keyboard tasks</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Cbig-picture&title=%5Bcomment%5D+%C2%A78.+What+we+need+PowerPoint+for+%E2%80%94+your+keyboard+tasks&body=Section%3A+%C2%A78.+What+we+need+PowerPoint+for+%E2%80%94+your+keyboard+tasks%0AAnchor%3A+%23powerpoint%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+big-picture+page._" target="_blank" rel="noopener">Comment on §8. What we need PowerPoint for — your keyboard tasks</a></div>
   <p>Most of the work happens without you. These tasks need a human at PowerPoint (you, or Theresa — see §9).</p>
 
   <table>
@@ -611,6 +668,7 @@ Same surface. Centralised key. Per-user auth. Audit log + cost ceilings.</div>
 
 <section id="theresa">
   <h2>9. Theresa channel — bring her in for reviews</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Cbig-picture&title=%5Bcomment%5D+%C2%A79.+Theresa+channel+%E2%80%94+bring+her+in+for+reviews&body=Section%3A+%C2%A79.+Theresa+channel+%E2%80%94+bring+her+in+for+reviews%0AAnchor%3A+%23theresa%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+big-picture+page._" target="_blank" rel="noopener">Comment on §9. Theresa channel — bring her in for reviews</a></div>
   <p>Theresa Wettig will work on the project. She's a second set of eyes for review work that doesn't strictly need <em>you</em> at the keyboard. Different skill from yours: junior consultant perspective, fresh-deck-first reader, less context.</p>
 
   <h4>What she's good for (and how)</h4>
@@ -678,6 +736,7 @@ Same surface. Centralised key. Per-user auth. Audit log + cost ceilings.</div>
 
 <section id="remote">
   <h2>10. How we work this week — remote-collab pattern</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Cbig-picture&title=%5Bcomment%5D+%C2%A710.+How+we+work+this+week+%E2%80%94+remote-collab+pattern&body=Section%3A+%C2%A710.+How+we+work+this+week+%E2%80%94+remote-collab+pattern%0AAnchor%3A+%23remote%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+big-picture+page._" target="_blank" rel="noopener">Comment on §10. How we work this week — remote-collab pattern</a></div>
 
   <div class="panel panel-navy">
     <h4>Two channels</h4>
@@ -726,6 +785,7 @@ Same surface. Centralised key. Per-user auth. Audit log + cost ceilings.</div>
 
 <section id="links">
   <h2>9. Quick links — browser-accessible URLs</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Cbig-picture&title=%5Bcomment%5D+%C2%A79.+Quick+links+%E2%80%94+browser-accessible+URLs&body=Section%3A+%C2%A79.+Quick+links+%E2%80%94+browser-accessible+URLs%0AAnchor%3A+%23links%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+big-picture+page._" target="_blank" rel="noopener">Comment on §9. Quick links — browser-accessible URLs</a></div>
 
   <p><strong>Two repos:</strong> the canonical <code>corporate-ppt-tool-v2</code> repo is private (login required); the public mirror <code>hc-knowledge</code> serves the rendered HTML pages. Markdown files in the private repo render on github.com if you're logged in to your phone browser.</p>
   <p>HTML pages publish via <code>tools/publish-knowledge.sh</code> after every edit; you'll always see the latest at the htmlpreview links.</p>
@@ -779,6 +839,7 @@ Same surface. Centralised key. Per-user auth. Audit log + cost ceilings.</div>
 
 <section id="timeline">
   <h2>10. Recent milestones — last 24 hours</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Cbig-picture&title=%5Bcomment%5D+%C2%A710.+Recent+milestones+%E2%80%94+last+24+hours&body=Section%3A+%C2%A710.+Recent+milestones+%E2%80%94+last+24+hours%0AAnchor%3A+%23timeline%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+big-picture+page._" target="_blank" rel="noopener">Comment on §10. Recent milestones — last 24 hours</a></div>
 
   <div class="timeline">
     <div class="timeline-row"><span class="stamp">25.04 morning</span> <span class="desc"><strong>Architecture LOCKED v1.2</strong> after 3 specialist agents + 3 Codex iterate rounds GREEN</span></div>
