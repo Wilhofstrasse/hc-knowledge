@@ -235,6 +235,46 @@
     .panel, .callout, blockquote { break-inside: avoid; }
     pre { white-space: pre-wrap; }
   }
+
+  .comment-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.7rem;
+    background: var(--hc-coral);
+    color: var(--hc-white);
+    border-radius: 3px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .comment-link:hover { background: var(--hc-coral-safe); }
+  .comment-link::before { content: "💬 "; }
+  .section-comment-row { display: flex; justify-content: flex-end; margin-top: 0.4rem; }
+  .inbox-banner {
+    background: linear-gradient(90deg, var(--hc-coral) 0%, var(--hc-coral-safe) 100%);
+    color: var(--hc-white);
+    padding: 0.85rem 1.2rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .inbox-banner strong { font-size: 1rem; }
+  .inbox-banner a {
+    color: var(--hc-white);
+    background: rgba(255,255,255,0.18);
+    padding: 0.4rem 0.9rem;
+    border-radius: 3px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.88rem;
+  }
+  .inbox-banner a:hover { background: rgba(255,255,255,0.28); }
+
 </style>
 </head>
 <body>
@@ -247,6 +287,14 @@
   <p class="sub"><span class="verdict">Working</span>25.04.2026 — built overnight, ready for your PowerPoint smoke-test.</p>
 </header>
 
+
+<div class="inbox-banner" role="region" aria-label="Comment inbox">
+  <div>
+    <strong>💬 Two-way channel.</strong> Tap any "Comment" button to open a pre-filled GitHub issue on the private repo. Claude polls the queue and propagates every comment into the canonical markdown sources. Your phone needs to be logged into GitHub.
+  </div>
+  <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment&amp;title=%5Bcomment%5D+&amp;body=%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+test-version+handoff_" target="_blank" rel="noopener">+ New comment</a>
+  <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues?q=is%3Aopen+label%3Afilipe-comment" target="_blank" rel="noopener">View open comments</a>
+</div>
 <nav class="toc" aria-label="Table of contents">
   <strong>What's in this page</strong>
   <ol>
@@ -265,6 +313,7 @@
 
 <section id="tldr">
   <h2>1. What's actually different from yesterday</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment&title=%5Bcomment%5D+%C2%A71.+What%27s+actually+different+from+yesterday&body=Section%3A+%C2%A71.+What%27s+actually+different+from+yesterday%0AAnchor%3A+%23tldr%0APage%3A+test-version-handoff%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+test-version+handoff+page._" target="_blank" rel="noopener">Comment on §1. What's actually different from yesterday</a></div>
   <div class="panel">
     <p>Yesterday: the "Fill slide" button in the sidebar logged "STUB" to the activity log.</p>
     <p>Today: the same button calls a real AI (Google Gemini 3 Flash by default — swappable to Claude or any OpenRouter model with a one-line edit), gets back consulting copy that respects H&amp;C house style, and writes it onto the slide. End-to-end, ~3-5 seconds, ~$0.001-0.003 per call.</p>
@@ -274,6 +323,7 @@
 
 <section id="morning">
   <h2>2. Your 5-minute morning test</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment&title=%5Bcomment%5D+%C2%A72.+Your+5-minute+morning+test&body=Section%3A+%C2%A72.+Your+5-minute+morning+test%0AAnchor%3A+%23morning%0APage%3A+test-version-handoff%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+test-version+handoff+page._" target="_blank" rel="noopener">Comment on §2. Your 5-minute morning test</a></div>
 
   <h3>Step 1 — Verify the system is healthy</h3>
   <p>Open Terminal. Paste:</p>
@@ -311,6 +361,7 @@
 
 <section id="flow">
   <h2>3. How the call flows (one screen)</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment&title=%5Bcomment%5D+%C2%A73.+How+the+call+flows+%28one+screen%29&body=Section%3A+%C2%A73.+How+the+call+flows+%28one+screen%29%0AAnchor%3A+%23flow%0APage%3A+test-version-handoff%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+test-version+handoff+page._" target="_blank" rel="noopener">Comment on §3. How the call flows (one screen)</a></div>
   <div class="ascii">Sidebar in PowerPoint  ──&gt;  Local proxy  ──&gt;  OpenRouter  ──&gt;  Gemini 3 Flash
                               (your Mac)     (cloud router)    (Google)
                                                                     │
@@ -321,6 +372,7 @@ Sidebar applies text  &lt;──  Local proxy  &lt;──  OpenRouter  &lt;─�
 
 <section id="tested">
   <h2>4. What I tested last night</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment&title=%5Bcomment%5D+%C2%A74.+What+I+tested+last+night&body=Section%3A+%C2%A74.+What+I+tested+last+night%0AAnchor%3A+%23tested%0APage%3A+test-version-handoff%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+test-version+handoff+page._" target="_blank" rel="noopener">Comment on §4. What I tested last night</a></div>
   <p>All 5 library templates pass curl smoke against the proxy. Latest run is on Gemini 3 Flash via OpenRouter:</p>
 
   <table>
@@ -358,6 +410,7 @@ Sidebar applies text  &lt;──  Local proxy  &lt;──  OpenRouter  &lt;─�
 
 <section id="decisions">
   <h2>5. Decisions I made on your behalf</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment&title=%5Bcomment%5D+%C2%A75.+Decisions+I+made+on+your+behalf&body=Section%3A+%C2%A75.+Decisions+I+made+on+your+behalf%0AAnchor%3A+%23decisions%0APage%3A+test-version-handoff%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+test-version+handoff+page._" target="_blank" rel="noopener">Comment on §5. Decisions I made on your behalf</a></div>
   <p>Each is reversible if you want.</p>
   <table>
     <thead>
@@ -400,6 +453,7 @@ Sidebar applies text  &lt;──  Local proxy  &lt;──  OpenRouter  &lt;─�
 
 <section id="caveat">
   <h2>6. Caveat — read this before the demo</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment&title=%5Bcomment%5D+%C2%A76.+Caveat+%E2%80%94+read+this+before+the+demo&body=Section%3A+%C2%A76.+Caveat+%E2%80%94+read+this+before+the+demo%0AAnchor%3A+%23caveat%0APage%3A+test-version-handoff%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+test-version+handoff+page._" target="_blank" rel="noopener">Comment on §6. Caveat — read this before the demo</a></div>
   <div class="callout">
     <strong>Ordinal mismatch on the test deck</strong>
     The "Fill slide" button matches Office.js shapes to template-shape records by reading order (1st on slide → template's 1st, etc.). Your test deck doesn't match any template cleanly.
@@ -424,6 +478,7 @@ Sidebar applies text  &lt;──  Local proxy  &lt;──  OpenRouter  &lt;─�
 
 <section id="open">
   <h2>7. What's not built yet</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment&title=%5Bcomment%5D+%C2%A77.+What%27s+not+built+yet&body=Section%3A+%C2%A77.+What%27s+not+built+yet%0AAnchor%3A+%23open%0APage%3A+test-version-handoff%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+test-version+handoff+page._" target="_blank" rel="noopener">Comment on §7. What's not built yet</a></div>
   <table>
     <thead>
       <tr><th>Gap</th><th>Why it's not built</th><th>When</th></tr>
@@ -440,6 +495,7 @@ Sidebar applies text  &lt;──  Local proxy  &lt;──  OpenRouter  &lt;─�
 
 <section id="cost">
   <h2>8. Cost watch</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment&title=%5Bcomment%5D+%C2%A78.+Cost+watch&body=Section%3A+%C2%A78.+Cost+watch%0AAnchor%3A+%23cost%0APage%3A+test-version-handoff%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+test-version+handoff+page._" target="_blank" rel="noopener">Comment on §8. Cost watch</a></div>
   <div class="panel">
     <p><strong>OpenRouter key budget: ~$4.93 remaining.</strong> Each Gemini-3-Flash fill is $0.001-0.003. Plenty of room for ~2000-4000 fills before the key runs out.</p>
     <p>If the activity log shows <code>BACKEND_UNAVAILABLE 401</code>, the key was rotated. Update via:</p>
@@ -451,6 +507,7 @@ Sidebar applies text  &lt;──  Local proxy  &lt;──  OpenRouter  &lt;─�
 
 <section id="commits">
   <h2>9. Commits made overnight</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment&title=%5Bcomment%5D+%C2%A79.+Commits+made+overnight&body=Section%3A+%C2%A79.+Commits+made+overnight%0AAnchor%3A+%23commits%0APage%3A+test-version-handoff%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+test-version+handoff+page._" target="_blank" rel="noopener">Comment on §9. Commits made overnight</a></div>
   <p>8 total, all on <code>feature/test-version-fill</code>. Run <code>git log feature/test-version-fill</code> to see them.</p>
   <table class="commits-table">
     <thead>
@@ -473,6 +530,7 @@ Sidebar applies text  &lt;──  Local proxy  &lt;──  OpenRouter  &lt;─�
 
 <section id="next">
   <h2>10. Next moves when you're ready</h2>
+  <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment&title=%5Bcomment%5D+%C2%A710.+Next+moves+when+you%27re+ready&body=Section%3A+%C2%A710.+Next+moves+when+you%27re+ready%0AAnchor%3A+%23next%0APage%3A+test-version-handoff%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+test-version+handoff+page._" target="_blank" rel="noopener">Comment on §10. Next moves when you're ready</a></div>
 
   <h3>If the smoke-test passes</h3>
   <ol>
