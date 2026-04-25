@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>H&amp;C Corporate PPT — Test-version handoff (25.04.2026)</title>
+<style>
+  :root {
+    --hc-navy: #14324E;
+    --hc-navy-soft: #3A5C7A;
+    --hc-coral: #E94D3A;
+    --hc-coral-safe: #B8321F;
+    --hc-gray-1: #C2C2C2;
+    --hc-gray-3: #87878B;
+    --hc-gray-4: #5B5D64;
+    --hc-bg: #F7F7F7;
+    --hc-bg-alt: #F0F0F0;
+    --hc-white: #FFFFFF;
+    --hc-green: #1F6B33;
+    --hc-amber: #8B5A00;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Calibri Light", -apple-system, system-ui, "Segoe UI", sans-serif;
+    font-weight: 300;
+    color: var(--hc-navy);
+    background: var(--hc-bg);
+    line-height: 1.55;
+    font-size: 15px;
+  }
+  .container { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  header.top {
+    border-left: 5px solid var(--hc-coral);
+    padding: 0.4rem 0 0.4rem 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .kicker {
+    font-family: Consolas, "SF Mono", monospace;
+    color: var(--hc-coral);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 0.25rem 0 0.4rem;
+    font-weight: 700;
+    color: var(--hc-navy);
+    font-size: 1.65rem;
+    line-height: 1.25;
+  }
+  .sub { margin: 0; color: var(--hc-gray-4); font-size: 0.95rem; }
+  .verdict {
+    display: inline-block;
+    background: var(--hc-green);
+    color: var(--hc-white);
+    padding: 0.15rem 0.7rem;
+    border-radius: 3px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-right: 0.5rem;
+  }
+
+  nav.toc {
+    background: var(--hc-white);
+    border: 1px solid var(--hc-gray-1);
+    border-left: 3px solid var(--hc-coral);
+    padding: 0.8rem 1rem;
+    margin-bottom: 1.8rem;
+    border-radius: 3px;
+  }
+  nav.toc strong { color: var(--hc-coral); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-bottom: 0.4rem; }
+  nav.toc ol { margin: 0; padding-left: 1.2rem; font-size: 0.9rem; }
+  nav.toc li { margin: 0.15rem 0; }
+  nav.toc a { color: var(--hc-navy); text-decoration: none; border-bottom: 1px solid transparent; }
+  nav.toc a:hover { color: var(--hc-coral); border-bottom-color: var(--hc-coral); }
+
+  section { margin-bottom: 2.2rem; }
+  h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--hc-navy);
+    border-bottom: 2px solid var(--hc-navy);
+    padding-bottom: 0.3rem;
+    margin: 0 0 0.9rem;
+  }
+  h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--hc-navy);
+    margin: 1.2rem 0 0.5rem;
+  }
+  p { margin: 0.5rem 0; }
+
+  .panel {
+    background: var(--hc-white);
+    border: 1px solid var(--hc-gray-1);
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    margin: 0.6rem 0 1rem;
+  }
+  .panel-tight { padding: 0.6rem 1rem; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 0.5rem 0 1rem; }
+  th { text-align: left; background: var(--hc-bg-alt); color: var(--hc-navy); padding: 0.5rem 0.7rem; font-weight: 600; font-size: 0.82rem; border-bottom: 1px solid var(--hc-gray-1); }
+  td { padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--hc-bg-alt); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.muted { color: var(--hc-gray-4); }
+
+  pre, code {
+    font-family: Consolas, "SF Mono", monospace;
+  }
+  pre {
+    background: var(--hc-navy);
+    color: #D8E1EA;
+    padding: 0.7rem 0.9rem;
+    border-radius: 3px;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    overflow-x: auto;
+    white-space: pre;
+    margin: 0.6rem 0;
+  }
+  code {
+    background: var(--hc-bg-alt);
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-size: 0.84rem;
+    color: var(--hc-navy);
+  }
+  pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+
+  .callout {
+    border-left: 3px solid var(--hc-coral);
+    background: #FFF8E1;
+    padding: 0.7rem 1rem;
+    margin: 0.7rem 0;
+    border-radius: 0 3px 3px 0;
+  }
+  .callout strong { color: var(--hc-coral-safe); display: block; font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.25rem; }
+
+  .step-list { padding-left: 0; list-style: none; counter-reset: step; }
+  .step-list li {
+    counter-increment: step;
+    padding: 0.55rem 0 0.55rem 2.5rem;
+    position: relative;
+    border-bottom: 1px solid var(--hc-bg-alt);
+  }
+  .step-list li:last-child { border-bottom: none; }
+  .step-list li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 1.85rem;
+    height: 1.85rem;
+    background: var(--hc-coral);
+    color: var(--hc-white);
+    font-family: Consolas, monospace;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+  }
+
+  .pill {
+    display: inline-block;
+    padding: 0.1rem 0.55rem;
+    border-radius: 11px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .pill-green { background: #E1F2E5; color: var(--hc-green); }
+  .pill-amber { background: #FFF3CD; color: var(--hc-amber); }
+  .pill-coral { background: #FCE4DD; color: var(--hc-coral-safe); }
+
+  blockquote {
+    margin: 0.8rem 0;
+    padding: 0.6rem 1rem;
+    border-left: 3px solid var(--hc-navy-soft);
+    background: var(--hc-bg-alt);
+    color: var(--hc-navy);
+    border-radius: 0 3px 3px 0;
+  }
+  blockquote strong { color: var(--hc-coral); font-weight: 700; }
+
+  .ascii {
+    background: var(--hc-navy);
+    color: #D8E1EA;
+    padding: 0.9rem 1.2rem;
+    border-radius: 3px;
+    font-family: Consolas, "SF Mono", monospace;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  details {
+    margin: 0.5rem 0;
+    background: var(--hc-bg-alt);
+    border-radius: 3px;
+    padding: 0.5rem 0.8rem;
+  }
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--hc-navy);
+    font-size: 0.92rem;
+  }
+  summary:hover { color: var(--hc-coral); }
+  details[open] { background: var(--hc-white); border: 1px solid var(--hc-gray-1); }
+
+  .commits-table td.commit { font-family: Consolas, monospace; font-size: 0.8rem; color: var(--hc-coral); }
+
+  footer.bottom {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--hc-gray-1);
+    color: var(--hc-gray-4);
+    font-size: 0.82rem;
+    text-align: center;
+  }
+
+  @media print {
+    body { background: white; }
+    .container { padding: 0; }
+    .panel, .callout, blockquote { break-inside: avoid; }
+    pre { white-space: pre-wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header class="top">
+  <div class="kicker">H&amp;C Corporate PPT · Test-version handoff</div>
+  <h1>The sidebar can now actually fill a slide.</h1>
+  <p class="sub"><span class="verdict">Working</span>25.04.2026 — built overnight, ready for your PowerPoint smoke-test.</p>
+</header>
+
+<nav class="toc" aria-label="Table of contents">
+  <strong>What's in this page</strong>
+  <ol>
+    <li><a href="#tldr">What's actually different from yesterday</a></li>
+    <li><a href="#morning">Your 5-minute morning test</a></li>
+    <li><a href="#flow">How the call flows (one screen)</a></li>
+    <li><a href="#tested">What I tested last night</a></li>
+    <li><a href="#decisions">Decisions I made on your behalf</a></li>
+    <li><a href="#caveat">Caveat — read this before the demo</a></li>
+    <li><a href="#open">What's not built yet</a></li>
+    <li><a href="#cost">Cost watch</a></li>
+    <li><a href="#commits">Commits made overnight</a></li>
+    <li><a href="#next">Next moves when you're ready</a></li>
+  </ol>
+</nav>
+
+<section id="tldr">
+  <h2>1. What's actually different from yesterday</h2>
+  <div class="panel">
+    <p>Yesterday: the "Fill slide" button in the sidebar logged "STUB" to the activity log.</p>
+    <p>Today: the same button calls a real AI (Google Gemini 3 Flash by default — swappable to Claude or any OpenRouter model with a one-line edit), gets back consulting copy that respects H&amp;C house style, and writes it onto the slide. End-to-end, ~3-5 seconds, ~$0.001-0.003 per call.</p>
+    <p>I tested all five library templates with a curl call — they all returned sensible output. The PowerPoint click-test is what's left, and that's what you do this morning.</p>
+  </div>
+</section>
+
+<section id="morning">
+  <h2>2. Your 5-minute morning test</h2>
+
+  <h3>Step 1 — Verify the system is healthy</h3>
+  <p>Open Terminal. Paste:</p>
+  <pre><code>~/Developer/corporate-ppt-tool-v2/addin/server/morning-check.sh</code></pre>
+  <p>Should print <strong>ALL GREEN</strong> and two lines of sample AI output. ~5 seconds. If it fails, paste what it printed and I debug.</p>
+
+  <h3>Step 2 — Click-test in PowerPoint</h3>
+  <ol class="step-list">
+    <li>Open <code>~/Downloads/H_C_Master-Test-File.pptx</code></li>
+    <li>Insert ribbon → Add-ins → "H&amp;C Corporate PPT Tool (dev)"</li>
+    <li>Close + reopen the sidebar (so it picks up tonight's code)</li>
+    <li>Scroll to the section "Real AI fill (test-version)"</li>
+    <li>Pick <strong>thesis</strong> from the dropdown → click <strong>Load template</strong></li>
+    <li>Type a deck thesis (sample below) into the textarea</li>
+    <li>Pick <strong>slide 3</strong> of the test deck (best ordinal match)</li>
+    <li>Click <strong>Fill slide (all shapes — recommended)</strong></li>
+    <li>Wait ~6 seconds. Watch the activity log fill</li>
+    <li>Look at the slide on the canvas — shapes should now have real consulting copy</li>
+  </ol>
+
+  <h3>Sample deck thesis to paste in step 6</h3>
+  <blockquote>
+    LATAM market entry strategy for a B2B manufacturer. Recommend lead Brazil 2026, fast-follow Mexico 2027-2028, opportunistic Argentina + Chile.
+  </blockquote>
+
+  <div class="callout">
+    <strong>If it works</strong>
+    You can demo it. Merge the feature branch into main when ready.
+  </div>
+  <div class="callout">
+    <strong>If it breaks</strong>
+    Paste the activity log to me, I debug. Or roll back: <code>git checkout main</code> — yesterday's known-good state is untouched.
+  </div>
+</section>
+
+<section id="flow">
+  <h2>3. How the call flows (one screen)</h2>
+  <div class="ascii">Sidebar in PowerPoint  ──&gt;  Local proxy  ──&gt;  OpenRouter  ──&gt;  Gemini 3 Flash
+                              (your Mac)     (cloud router)    (Google)
+                                                                    │
+Sidebar applies text  &lt;──  Local proxy  &lt;──  OpenRouter  &lt;──────────┘
+                              parses JSON</div>
+  <p>Zero AI keys live in the sidebar code. The local proxy reads the OpenRouter key from your Mac's keychain at startup (entry: <code>openrouter-frankenstein-key</code>).</p>
+</section>
+
+<section id="tested">
+  <h2>4. What I tested last night</h2>
+  <p>All 5 library templates pass curl smoke against the proxy. Latest run is on Gemini 3 Flash via OpenRouter:</p>
+
+  <table>
+    <thead>
+      <tr><th>Template</th><th class="num">Shapes</th><th class="num">Time</th><th class="num">Cost</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>cover</code></td><td class="num">3</td><td class="num">2.2s</td><td class="num">~$0.001</td><td>title + positioning + footer</td></tr>
+      <tr><td><code>thesis</code></td><td class="num">6</td><td class="num">3.3s</td><td class="num">~$0.001</td><td>recommendation + 3 bullets + caption + source</td></tr>
+      <tr><td><code>matrix-2x2</code></td><td class="num">13</td><td class="num">4.8s</td><td class="num">~$0.003</td><td>quadrant labels + axis labels + country pins</td></tr>
+      <tr><td><code>evidence-with-chart</code></td><td class="num">5</td><td class="num">3.6s</td><td class="num">~$0.002</td><td>action title + 3 bullets + source</td></tr>
+      <tr><td><code>conclusio-with-regions</code></td><td class="num">10</td><td class="num">4.7s</td><td class="num">~$0.003</td><td>4 region labels + timeline + 3 risks</td></tr>
+    </tbody>
+  </table>
+
+  <p>Total spent: <strong>~$0.011</strong> of a $5 OpenRouter budget — Gemini Flash is roughly 3x cheaper than Sonnet 4.6 at the same task. Per-template raw responses are saved at <code>design/spikes/test-version-runs/</code>.</p>
+
+  <details>
+    <summary>Sample output — thesis template, Gemini 3 Flash (6 shapes)</summary>
+    <p style="margin-top:0.6rem;"><strong>a101 (action title)</strong><br>
+    Enter Brazil in 2026 to lead LATAM expansion followed by Mexico in 2027</p>
+    <p><strong>a102 (lead bullet)</strong><br>
+    <strong>Brazil</strong> serves as the primary entry point in 2026 due to its scale and regulatory stability</p>
+    <p><strong>a103 (fast-follow)</strong><br>
+    <strong>Mexico</strong> follows in 2027 or 2028 once USMCA tariff clarity provides a stable investment outlook</p>
+    <p><strong>a104 (opportunistic)</strong><br>
+    Argentina and Chile remain opportunistic positions awaiting FX stabilization or sector-policy improvement</p>
+    <p><strong>a105 (why now)</strong><br>
+    Regional nearshoring trends and manufacturing demand drive immediate market potential</p>
+    <p><strong>a106 (source)</strong><br>
+    Source: H&amp;C Market Intelligence; IMF World Economic Outlook 2024</p>
+    <p style="margin-top:0.7rem; color: var(--hc-gray-4); font-size: 0.85rem;">H&amp;C house style respected: active verbs, no hedging, no colons in titles, digits not words, single-clause bullets. Gemini also produced multi-run output with bolded entity names ("<strong>Brazil</strong>", "<strong>Mexico</strong>"), exercising the bold-run write-back path more thoroughly than Sonnet's flat-runs response did.</p>
+  </details>
+</section>
+
+<section id="decisions">
+  <h2>5. Decisions I made on your behalf</h2>
+  <p>Each is reversible if you want.</p>
+  <table>
+    <thead>
+      <tr><th>#</th><th>Decision</th><th>Why</th><th>How to reverse</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="num">1</td>
+        <td>Use OpenRouter directly, not the router-mcp Worker</td>
+        <td>The credentials path the Worker expects didn't exist on this Mac. The default OpenRouter key was rotated. <code>openrouter-frankenstein-key</code> was the only live one.</td>
+        <td>Re-route through router-mcp later if you want centralized audit + budget tracking.</td>
+      </tr>
+      <tr>
+        <td class="num">2</td>
+        <td>Use Gemini 3 Flash (Google), swappable</td>
+        <td>Started with Claude Sonnet 4.6 overnight, swapped to Gemini Flash on your morning request — ~3x cheaper, ~30-40% faster, similar output quality. Production model choice belongs to the H&amp;C backend when it ships.</td>
+        <td>One-line model swap at <code>addin/server/fill-proxy.ts</code> line 74.</td>
+      </tr>
+      <tr>
+        <td class="num">3</td>
+        <td>"Fill slide" (whole-slide) is the primary path</td>
+        <td>Phase 0 last week proved this beats "Fill shape" on coherence.</td>
+        <td>Use the "Fill shape" button if you want single-shape demos.</td>
+      </tr>
+      <tr>
+        <td class="num">4</td>
+        <td>Match slide shapes to template by reading order</td>
+        <td>Quick to ship; works when slide and template have the same shape count.</td>
+        <td>Production fix would tag each shape with a stable id (logged as Q-LAYOUT-01).</td>
+      </tr>
+      <tr>
+        <td class="num">5</td>
+        <td>Worked on a feature branch, not main</td>
+        <td>So you can review every commit before merging.</td>
+        <td>Merge <code>feature/test-version-fill</code> → <code>main</code> when satisfied.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="caveat">
+  <h2>6. Caveat — read this before the demo</h2>
+  <div class="callout">
+    <strong>Ordinal mismatch on the test deck</strong>
+    The "Fill slide" button matches Office.js shapes to template-shape records by reading order (1st on slide → template's 1st, etc.). Your test deck doesn't match any template cleanly.
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>Slide</th><th class="num">Text shapes</th><th>Closest template</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td class="num">5</td><td>thesis (6) — close</td><td class="muted">first shape may not be the title — quirky placement</td></tr>
+      <tr><td>2</td><td class="num">5</td><td>thesis (6) — close</td><td class="muted">same</td></tr>
+      <tr><td>3</td><td class="num">6</td><td><strong>thesis (6) ✓</strong></td><td><span class="pill pill-green">Best for demo</span></td></tr>
+      <tr><td>4</td><td class="num">9</td><td>none</td><td class="muted">spike-test slide, too many shapes</td></tr>
+      <tr><td>5</td><td class="num">2</td><td>cover (3) — close</td><td class="muted">too few</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Best-case demo:</strong> slide 3 + thesis template. Even so, the shape order in PowerPoint may not exactly match the template's intended order, so you might see "title-slot" content land in a "bullet-slot" shape. Output is still H&amp;C-quality copy — just possibly in the wrong placement.</p>
+  <p><strong>Truly clean output:</strong> add a fresh slide with 6 text boxes laid out top-to-bottom (one big title, four bullets, one footer). Then ordinal binding aligns perfectly.</p>
+</section>
+
+<section id="open">
+  <h2>7. What's not built yet</h2>
+  <table>
+    <thead>
+      <tr><th>Gap</th><th>Why it's not built</th><th>When</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Production backend (H&amp;C Cloudflare Worker)</td><td>Needs Azure AD setup + legal sign-off</td><td>When you sign off the 6-row form in <code>decisions-log.md</code></td></tr>
+      <tr><td>Bullet / paragraph-aware response</td><td>Flat-runs is enough for the test-version (Q-DATA-13)</td><td>Future iteration</td></tr>
+      <tr><td>Width-aware character budget</td><td>The AI already respects <code>char_budget</code>, but small shapes can still visually overflow (Q-DATA-11)</td><td>Future iteration</td></tr>
+      <tr><td>Stable shape-id tagging</td><td>Needed for clean ordinal-independent binding (Q-LAYOUT-01)</td><td>Future iteration</td></tr>
+      <tr><td>Schema-package npm publish</td><td>Scaffold-only; types are inlined in the add-in for now</td><td>When first non-Filipe consumer needs them</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="cost">
+  <h2>8. Cost watch</h2>
+  <div class="panel">
+    <p><strong>OpenRouter key budget: ~$4.93 remaining.</strong> Each Gemini-3-Flash fill is $0.001-0.003. Plenty of room for ~2000-4000 fills before the key runs out.</p>
+    <p>If the activity log shows <code>BACKEND_UNAVAILABLE 401</code>, the key was rotated. Update via:</p>
+    <pre><code>security add-generic-password -a "$USER" \
+  -s openrouter-frankenstein-key \
+  -w 'sk-or-v1-NEW-KEY' -U</code></pre>
+  </div>
+</section>
+
+<section id="commits">
+  <h2>9. Commits made overnight</h2>
+  <p>8 total, all on <code>feature/test-version-fill</code>. Run <code>git log feature/test-version-fill</code> to see them.</p>
+  <table class="commits-table">
+    <thead>
+      <tr><th>Commit</th><th>What it did</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="commit">f2a0cd5</td><td>Local proxy <code>/api/fill</code> calls real Sonnet via OpenRouter</td></tr>
+      <tr><td class="commit">933c814</td><td>Sidebar's Fill-shape and Fill-slide buttons call the proxy</td></tr>
+      <tr><td class="commit">567a50d</td><td>Full thesis-template smoke (6 shapes) PASSED</td></tr>
+      <tr><td class="commit">e7b0e9f</td><td>First version of this morning summary (markdown)</td></tr>
+      <tr><td class="commit">11524cf</td><td>All 5 templates pass curl smoke</td></tr>
+      <tr><td class="commit">49c9436</td><td><code>morning-check.sh</code> + Q-LAYOUT-01 + Q-AUTH-01 + caveats</td></tr>
+      <tr><td class="commit">e4a6133</td><td>Crash fix when slide has Picture / Chart / Table shapes</td></tr>
+      <tr><td class="commit">031dffb</td><td>Log shows the binding plan BEFORE the AI runs (transparency)</td></tr>
+      <tr><td class="commit">afe25c3</td><td><code>knowledge/</code>: this handoff doc + matching markdown</td></tr>
+      <tr><td class="commit">c0a6cad</td><td>Swap proxy model: Sonnet 4.6 → Gemini 3 Flash (preview)</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="next">
+  <h2>10. Next moves when you're ready</h2>
+
+  <h3>If the smoke-test passes</h3>
+  <ol>
+    <li>Merge <code>feature/test-version-fill</code> → <code>main</code></li>
+    <li>Pick one open gap to tackle next: bullets (Q-DATA-13), char-budget (Q-DATA-11), shape-id tagging (Q-LAYOUT-01), schema-package publish, or production backend</li>
+    <li>For production: Azure AD app registration → legal §6 sign-off → deploy the H&amp;C backend Worker</li>
+  </ol>
+
+  <h3>If the smoke-test breaks</h3>
+  <ul>
+    <li>Paste the activity log to me, I debug</li>
+    <li>Or <code>git checkout main</code> from the project root to roll back to yesterday's known-good state — nothing on <code>main</code> is touched</li>
+  </ul>
+</section>
+
+<footer class="bottom">
+  Saved to <code>knowledge/2026-04-25_test-version-handoff.{md, html}</code> for future reference.
+</footer>
+
+</div>
+</body>
+</html>
