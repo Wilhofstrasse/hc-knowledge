@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>H&amp;C Corporate PPT Tool — Big picture (week of 25.04.2026)</title>
+<style>
+  :root {
+    --hc-navy: #14324E;
+    --hc-navy-soft: #3A5C7A;
+    --hc-coral: #E94D3A;
+    --hc-coral-safe: #B8321F;
+    --hc-gray-1: #C2C2C2;
+    --hc-gray-3: #87878B;
+    --hc-gray-4: #5B5D64;
+    --hc-bg: #F7F7F7;
+    --hc-bg-alt: #F0F0F0;
+    --hc-white: #FFFFFF;
+    --hc-green: #1F6B33;
+    --hc-amber: #8B5A00;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Calibri Light", -apple-system, system-ui, "Segoe UI", sans-serif;
+    font-weight: 300;
+    color: var(--hc-navy);
+    background: var(--hc-bg);
+    line-height: 1.55;
+    font-size: 15px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  header.top {
+    border-left: 5px solid var(--hc-coral);
+    padding: 0.4rem 0 0.4rem 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .kicker {
+    font-family: Consolas, "SF Mono", monospace;
+    color: var(--hc-coral);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 0.25rem 0 0.4rem;
+    font-weight: 700;
+    color: var(--hc-navy);
+    font-size: 1.65rem;
+    line-height: 1.25;
+  }
+  .sub { margin: 0; color: var(--hc-gray-4); font-size: 0.95rem; }
+
+  .verdict-row {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem;
+  }
+  .pill {
+    display: inline-block;
+    padding: 0.18rem 0.65rem;
+    border-radius: 11px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .pill-green { background: #E1F2E5; color: var(--hc-green); }
+  .pill-amber { background: #FFF3CD; color: var(--hc-amber); }
+  .pill-coral { background: #FCE4DD; color: var(--hc-coral-safe); }
+  .pill-navy  { background: #DDE5EE; color: var(--hc-navy); }
+
+  nav.toc {
+    background: var(--hc-white);
+    border: 1px solid var(--hc-gray-1);
+    border-left: 3px solid var(--hc-coral);
+    padding: 0.8rem 1rem;
+    margin-bottom: 1.8rem;
+    border-radius: 3px;
+    columns: 2;
+    column-gap: 1.5rem;
+  }
+  nav.toc strong { color: var(--hc-coral); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-bottom: 0.4rem; column-span: all; }
+  nav.toc ol { margin: 0; padding-left: 1.2rem; font-size: 0.9rem; }
+  nav.toc li { margin: 0.18rem 0; break-inside: avoid; }
+  nav.toc a { color: var(--hc-navy); text-decoration: none; border-bottom: 1px solid transparent; }
+  nav.toc a:hover { color: var(--hc-coral); border-bottom-color: var(--hc-coral); }
+
+  section { margin-bottom: 2.4rem; }
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--hc-navy);
+    border-bottom: 2px solid var(--hc-navy);
+    padding-bottom: 0.3rem;
+    margin: 0 0 0.9rem;
+  }
+  h3 {
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: var(--hc-navy);
+    margin: 1.4rem 0 0.5rem;
+  }
+  h4 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--hc-navy-soft);
+    margin: 1rem 0 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  p { margin: 0.5rem 0; }
+
+  .panel {
+    background: var(--hc-white);
+    border: 1px solid var(--hc-gray-1);
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    margin: 0.6rem 0 1rem;
+  }
+  .panel-tight { padding: 0.6rem 1rem; }
+  .panel-coral { border-left: 4px solid var(--hc-coral); }
+  .panel-navy { border-left: 4px solid var(--hc-navy); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 0.5rem 0 1rem; }
+  th { text-align: left; background: var(--hc-bg-alt); color: var(--hc-navy); padding: 0.5rem 0.7rem; font-weight: 600; font-size: 0.82rem; border-bottom: 1px solid var(--hc-gray-1); }
+  td { padding: 0.55rem 0.7rem; border-bottom: 1px solid var(--hc-bg-alt); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.muted { color: var(--hc-gray-4); }
+  td.ok { color: var(--hc-green); font-weight: 600; }
+  td.todo { color: var(--hc-coral-safe); }
+
+  pre, code { font-family: Consolas, "SF Mono", monospace; }
+  pre {
+    background: var(--hc-navy);
+    color: #D8E1EA;
+    padding: 0.7rem 0.9rem;
+    border-radius: 3px;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    overflow-x: auto;
+    white-space: pre;
+    margin: 0.6rem 0;
+  }
+  code {
+    background: var(--hc-bg-alt);
+    padding: 1px 5px;
+    border-radius: 2px;
+    font-size: 0.84rem;
+    color: var(--hc-navy);
+  }
+  pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+
+  .ascii {
+    background: var(--hc-navy);
+    color: #D8E1EA;
+    padding: 0.9rem 1.2rem;
+    border-radius: 3px;
+    font-family: Consolas, "SF Mono", monospace;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .matrix {
+    display: grid;
+    grid-template-columns: 110px repeat(3, 1fr);
+    gap: 0;
+    margin: 0.6rem 0 1rem;
+  }
+  .matrix > div {
+    border: 1px solid var(--hc-gray-1);
+    padding: 0.7rem 0.85rem;
+    background: var(--hc-white);
+    font-size: 0.86rem;
+  }
+  .matrix .axis-h { background: var(--hc-bg-alt); font-weight: 700; text-align: center; font-size: 0.82rem; }
+  .matrix .axis-v { background: var(--hc-bg-alt); font-weight: 700; writing-mode: horizontal-tb; font-size: 0.82rem; display: flex; align-items: center; }
+  .matrix .cell { min-height: 80px; }
+  .matrix .cell strong { color: var(--hc-coral); display: block; margin-bottom: 0.2rem; font-size: 0.82rem; letter-spacing: 0.04em; }
+  .matrix .cell .desc { color: var(--hc-navy); }
+  .matrix .cell .prim { color: var(--hc-gray-4); font-size: 0.76rem; margin-top: 0.3rem; font-family: Consolas, monospace; }
+
+  .timeline {
+    border-left: 3px solid var(--hc-coral);
+    padding-left: 1rem;
+    margin: 0.5rem 0 1rem 0.4rem;
+  }
+  .timeline-row {
+    margin-bottom: 0.55rem;
+    position: relative;
+  }
+  .timeline-row::before {
+    content: "";
+    position: absolute;
+    left: -1.3rem;
+    top: 0.4rem;
+    width: 9px;
+    height: 9px;
+    background: var(--hc-coral);
+    border-radius: 50%;
+  }
+  .timeline-row .stamp { font-family: Consolas, monospace; color: var(--hc-coral); font-size: 0.78rem; font-weight: 700; }
+  .timeline-row .desc { font-size: 0.92rem; }
+
+  details {
+    margin: 0.5rem 0;
+    background: var(--hc-bg-alt);
+    border-radius: 3px;
+    padding: 0.5rem 0.8rem;
+  }
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--hc-navy);
+    font-size: 0.92rem;
+  }
+  summary:hover { color: var(--hc-coral); }
+  details[open] { background: var(--hc-white); border: 1px solid var(--hc-gray-1); }
+
+  .links a { display: block; color: var(--hc-coral); text-decoration: none; margin: 0.3rem 0; padding: 0.3rem 0.5rem; border-left: 2px solid transparent; }
+  .links a:hover { background: var(--hc-bg-alt); border-left-color: var(--hc-coral); }
+  .links a code { color: inherit; background: transparent; padding: 0; }
+
+  .stack {
+    background: var(--hc-white);
+    border: 1px solid var(--hc-gray-1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0.6rem 0;
+  }
+  .stack-row {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid var(--hc-bg-alt);
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 0.7rem;
+    align-items: center;
+  }
+  .stack-row:last-child { border-bottom: none; }
+  .stack-row .id {
+    font-family: Consolas, monospace;
+    font-weight: 700;
+    color: var(--hc-coral);
+    font-size: 0.92rem;
+  }
+  .stack-row .body strong { display: block; color: var(--hc-navy); }
+  .stack-row .body .meta { color: var(--hc-gray-4); font-size: 0.84rem; margin-top: 0.15rem; }
+
+  footer.bottom {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--hc-gray-1);
+    color: var(--hc-gray-4);
+    font-size: 0.82rem;
+    text-align: center;
+  }
+
+  @media (max-width: 760px) {
+    nav.toc { columns: 1; }
+    .matrix { grid-template-columns: 1fr; }
+    .matrix .axis-h, .matrix .axis-v { display: none; }
+    .matrix .cell { border-bottom: 1px solid var(--hc-gray-1); }
+  }
+
+  @media print {
+    body { background: white; }
+    .container { padding: 0; }
+    .panel, blockquote, details, .stack { break-inside: avoid; }
+    pre { white-space: pre-wrap; }
+    nav.toc { columns: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header class="top">
+  <div class="kicker">H&amp;C Corporate PPT · Big picture · Week of 25.04.2026</div>
+  <h1>What we can do together — capability map &amp; remote-collab plan</h1>
+  <p class="sub">Filipe is on the road, working via remote control only. This page is the single read for "what's built, what's locked, what's next, and how do we collaborate this week."</p>
+  <div class="verdict-row">
+    <span class="pill pill-green">Architecture LOCKED v1.2</span>
+    <span class="pill pill-green">Phase A invariants shipped</span>
+    <span class="pill pill-navy">10-template library</span>
+    <span class="pill pill-amber">Phase A.0 spike awaiting your run</span>
+    <span class="pill pill-coral">Production wiring blocks on 6-row sign-off</span>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Table of contents">
+  <strong>What's in this page</strong>
+  <ol>
+    <li><a href="#status">1. Where we are right now</a></li>
+    <li><a href="#capabilities">2. What the tool can do (capability map)</a></li>
+    <li><a href="#architecture">3. Architecture in one picture</a></li>
+    <li><a href="#flows">4. Five user flows (2×3 matrix)</a></li>
+    <li><a href="#library">5. Library — 10 templates</a></li>
+    <li><a href="#phases">6. Phase plan (A.0 → A → B → C → D)</a></li>
+    <li><a href="#decisions">7. Decisions waiting on you</a></li>
+    <li><a href="#powerpoint">8. What we need PowerPoint for (your keyboard tasks)</a></li>
+    <li><a href="#theresa">9. Theresa channel — bring her in for reviews</a></li>
+    <li><a href="#remote">10. How we work this week (remote pattern)</a></li>
+    <li><a href="#links">11. Quick links (browser-accessible URLs)</a></li>
+    <li><a href="#timeline">12. Recent milestones (timeline)</a></li>
+  </ol>
+</nav>
+
+<section id="status">
+  <h2>1. Where we are right now</h2>
+  <div class="panel panel-coral">
+    <p>Three things changed this week and they layer on each other:</p>
+    <ol>
+      <li><strong>The architecture is locked.</strong> After multi-agent review (3 specialist agents + 3 Codex iterate rounds → GREEN) the fill-engine architecture is no longer a draft. Five primitives (fill, stamp, detect, match, restructure) + four invariants (stable shape id, authorship attribution, audit trail, consent revocation) + a 2×3 user-flow matrix replace the misframed three-mode taxonomy from earlier in the week.</li>
+      <li><strong>Phase A invariants are shipped in code.</strong> Every shape now gets a stable id; every fill writes a deck-local audit row; user-typed shapes are refused unless explicitly promoted. The trust contract has teeth — not just in the doc.</li>
+      <li><strong>The library doubled.</strong> From 5 to 10 templates (cover / thesis / matrix-2x2 / evidence-with-chart / conclusio-with-regions / swot / executive-summary / agenda / timeline / recommendation-matrix). All ten pass curl smoke against the AI; all ten produce H&amp;C-style copy.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="capabilities">
+  <h2>2. What the tool can do — capability map</h2>
+  <p>Plain English. What works today vs. what's planned.</p>
+
+  <table>
+    <thead>
+      <tr><th>Capability</th><th>What it does</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Real AI fill (Fill slide)</strong></td>
+        <td>Click "Fill slide" → AI writes H&amp;C-style copy into all text shapes on the current slide. Uses Google Gemini 3 Flash via OpenRouter. Median ~4s, ~$0.002 per slide.</td>
+        <td class="ok">Working</td>
+      </tr>
+      <tr>
+        <td><strong>Real AI fill (Fill shape)</strong></td>
+        <td>Click "Fill shape" → AI rewrites just the selected shape, keeping siblings untouched. Slower-context but useful for touch-ups.</td>
+        <td class="ok">Working</td>
+      </tr>
+      <tr>
+        <td><strong>Status overlay on slide</strong></td>
+        <td>While AI runs, a navy progress bar appears in the middle of the slide (▰▰▰▰▱▱▱▱ AI working…). Removed on completion.</td>
+        <td class="ok">Working</td>
+      </tr>
+      <tr>
+        <td><strong>Library template picker</strong></td>
+        <td>Dropdown loads a template instantly when you pick it. 10 templates available. Shape-count + role-blurb shown after load.</td>
+        <td class="ok">Working</td>
+      </tr>
+      <tr>
+        <td><strong>Stable shape identity</strong></td>
+        <td>Every shape on first read gets a UUID stamped to <code>shape.tags["shape_guid"]</code>. Survives save+reopen. Used by audit trail, undo, and re-fill.</td>
+        <td class="ok">Working (Phase A invariant)</td>
+      </tr>
+      <tr>
+        <td><strong>Authorship attribution</strong></td>
+        <td><code>shape.tags["hc_filled_by"]</code> tracks user / ai / null. Default-to-user on ambiguity. Fill refuses to overwrite user-typed shapes unless you promote them.</td>
+        <td class="ok">Working (Phase A invariant)</td>
+      </tr>
+      <tr>
+        <td><strong>Audit trail in the deck</strong></td>
+        <td>Every fill writes a row to <code>presentation.customXmlParts["urn:hc-deck-audit/v1"]</code> with timestamp, model, hash, prompt (4 KB inline). Survives save+reopen. Readable offline.</td>
+        <td class="ok">Working (Phase A invariant)</td>
+      </tr>
+      <tr>
+        <td><strong>Consent revocation (Purge)</strong></td>
+        <td>One button strips every <code>hc_*</code> tag + <code>urn:hc-*</code> XML part from the deck. GDPR-grade kill switch. Phase A version is pattern-match.</td>
+        <td class="ok">Working (Phase A invariant)</td>
+      </tr>
+      <tr>
+        <td><strong>Audit-trail viewer</strong></td>
+        <td>"View audit trail" button dumps the last 10 fill rows to the activity log so you see what the AI did + when.</td>
+        <td class="ok">Working</td>
+      </tr>
+      <tr>
+        <td><strong>One-shot promote</strong></td>
+        <td>"Promote selected shape" button lets next Fill overwrite a user-typed shape. Auto-clears after the fill (re-promote needed each time).</td>
+        <td class="ok">Working</td>
+      </tr>
+      <tr>
+        <td><strong>Round-trip durability spike (button 7)</strong></td>
+        <td>Writes a deck-scoped XML part, reads it back after save+close+reopen. Confirms <code>presentation.customXmlParts</code> is durable. Validated 25.04.2026.</td>
+        <td class="ok">Validated</td>
+      </tr>
+      <tr>
+        <td><strong>Listener diagnostic (Phase A.0 spike)</strong></td>
+        <td>Reports the 5-path test plan + paths to run when you have PowerPoint in front of you. Outcome decides whether listener-based authorship is safe vs. audit-driven only.</td>
+        <td class="todo">Awaits your manual run</td>
+      </tr>
+      <tr>
+        <td><strong>Stamp template onto blank slide</strong></td>
+        <td>Drop the template's geometry on a blank slide so an empty deck can become a thesis/matrix/etc. without manual box-drawing.</td>
+        <td class="todo">Phase B (~3-4 weeks)</td>
+      </tr>
+      <tr>
+        <td><strong>Detect existing shapes + role mapping</strong></td>
+        <td>Look at an in-progress slide, classify each shape (user / AI / empty), propose what role it plays in the chosen template. Binding plan preview before any fill fires.</td>
+        <td class="todo">Phase C (~2 weeks)</td>
+      </tr>
+      <tr>
+        <td><strong>Jumpstart from input materials</strong></td>
+        <td>Feed in a brief / interview / source deck → AI proposes a storyline, matches each section to a library template, stamps and fills the deck end-to-end.</td>
+        <td class="todo">Phase D (~6-8 weeks, gated on H&amp;C backend + legal §6)</td>
+      </tr>
+      <tr>
+        <td><strong>Production backend (H&amp;C-owned Worker)</strong></td>
+        <td>Centralised, auth-gated, audit-logged AI calls. Required for non-Filipe consultants to use the tool safely.</td>
+        <td class="todo">Blocked on 6-row sign-off + Azure AD + legal §6</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="architecture">
+  <h2>3. Architecture in one picture</h2>
+
+  <p>The fill engine is built from <strong>five primitives</strong>. User-facing flows are <em>compositions</em> of these primitives. Four invariants run across all of them.</p>
+
+  <div class="stack">
+    <div class="stack-row"><div class="id">P1</div><div class="body"><strong>fill</strong> — single shape gets new text from the AI<div class="meta">Built and Phase 0 PROVEN. Used by every flow.</div></div></div>
+    <div class="stack-row"><div class="id">P2</div><div class="body"><strong>stamp</strong> — drop a template's geometry onto a slide<div class="meta">Not built. The dummy-deck workaround substitutes for it today.</div></div></div>
+    <div class="stack-row"><div class="id">P3</div><div class="body"><strong>detect</strong> — classify shapes on a slide (user-typed vs AI-filled vs empty), propose roles<div class="meta">Not built. The consultant's daily-reality primitive.</div></div></div>
+    <div class="stack-row"><div class="id">P4</div><div class="body"><strong>match</strong> — given source materials + library, propose a storyline + template per section<div class="meta">Not built. Jumpstart's hard problem.</div></div></div>
+    <div class="stack-row"><div class="id">P5</div><div class="body"><strong>restructure</strong> — delete / move / merge / reorder slides at deck level<div class="meta">Not built. Re-thread requires this.</div></div></div>
+  </div>
+
+  <h4>Four invariants (run across every primitive)</h4>
+  <div class="stack">
+    <div class="stack-row"><div class="id">I1</div><div class="body"><strong>Stable shape identity</strong> — UUID stamped to every shape on first read, first-write-wins on collision<div class="meta">Implemented in <code>addin/src/invariants.ts</code> · ensureShapeGuid()</div></div></div>
+    <div class="stack-row"><div class="id">I2</div><div class="body"><strong>Authorship attribution</strong> — every shape carries hc_filled_by ∈ {user, ai, null}, default-to-user on ambiguity<div class="meta">Implemented · ensureHcFilledBy() / markAiFilled() / markUserAuthored()</div></div></div>
+    <div class="stack-row"><div class="id">I3</div><div class="body"><strong>Audit trail</strong> — append-only log in the deck, 4 KB inline prompt + ref for larger (offline-readable)<div class="meta">Implemented · appendAuditEntry() / readAuditBody()</div></div></div>
+    <div class="stack-row"><div class="id">I4</div><div class="body"><strong>Consent revocation</strong> — purge primitive strips every hc_* tag + urn:hc-* XML part<div class="meta">Implemented · purgeAllHcArtifacts() · Phase A pattern-match version</div></div></div>
+  </div>
+
+  <h4>Where the AI call goes (today)</h4>
+  <div class="ascii">Sidebar in PowerPoint  ──&gt;  Local proxy  ──&gt;  OpenRouter  ──&gt;  Gemini 3 Flash
+                              (Filipe's Mac)  (cloud router)    (Google)
+                                                                    │
+Sidebar applies text  &lt;──  Local proxy  &lt;──  OpenRouter  &lt;──────────┘
+                              parses JSON
+                              writes audit row to deck
+
+Production swap (later): Local proxy → H&amp;C backend Worker (Option C).
+Same surface. Centralised key. Per-user auth. Audit log + cost ceilings.</div>
+</section>
+
+<section id="flows">
+  <h2>4. Five user flows — 2×3 matrix</h2>
+  <p>Two axes. Six cells. Five live flows + one "n/a." Each flow is a composition of primitives.</p>
+
+  <div class="matrix">
+    <div class="axis-h"></div>
+    <div class="axis-h">One shape</div>
+    <div class="axis-h">One slide</div>
+    <div class="axis-h">Whole deck</div>
+
+    <div class="axis-v">No prior content</div>
+    <div class="cell"><strong>n/a</strong><div class="desc">Nothing to fill</div></div>
+    <div class="cell"><strong>F1 · Stamp + fill new slide</strong><div class="desc">Pick a template, get a slide with the right shapes, AI fills.</div><div class="prim">P2 + P1</div></div>
+    <div class="cell"><strong>F4 · Jumpstart from scratch</strong><div class="desc">Feed in a brief, get a complete deck.</div><div class="prim">P4 + P2 + P1</div></div>
+
+    <div class="axis-v">With prior content</div>
+    <div class="cell"><strong>F2 · Edit-in-place</strong><div class="desc">Touch up one shape's copy. Siblings untouched.</div><div class="prim">P1 only</div></div>
+    <div class="cell"><strong>F3 · Detect + fill empty slots</strong><div class="desc">Look at an in-progress slide, fill what's missing, preserve user content.</div><div class="prim">P3 + P1 (+P2 for missing slots)</div></div>
+    <div class="cell"><strong>F5a / F5b · Re-thread or stitch</strong><div class="desc">F5a re-points an existing deck to a new thesis. F5b combines slides from multiple decks.</div><div class="prim">P3 + P4 + P1 + P5</div></div>
+  </div>
+
+  <h4>Trust contract — what every "with prior content" flow MUST do</h4>
+  <table>
+    <tbody>
+      <tr><td><strong>Binding plan preview</strong></td><td>Before any write: show "shape A → text X (replacing your text Y)" for every shape, user approves.</td></tr>
+      <tr><td><strong>Per-shape undo</strong></td><td>Every shape's last 3 versions kept in audit trail with author attribution. Revert one without touching siblings.</td></tr>
+      <tr><td><strong>No silent classification</strong></td><td>P3's role mapping must be visible + editable before fill fires.</td></tr>
+      <tr><td><strong>§6 legal gate</strong></td><td>Client data only crosses the perimeter after the 6-row sign-off form is closed.</td></tr>
+      <tr><td><strong>Provenance per generated line</strong></td><td>Each text_run carries optional confidence + provenance_ref so consultants can defend "what produced this number?"</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="library">
+  <h2>5. Library — 10 templates</h2>
+  <p>Each template is a JSON record describing what shapes a slide of that type SHOULD have. The AI fills text into those shapes; future stamp primitive will create the geometry.</p>
+
+  <table>
+    <thead>
+      <tr><th>Template</th><th class="num">Shapes</th><th>Role in a deck</th><th class="num">Tested cost</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>cover</code></td><td class="num">3</td><td>Opening slide — title + positioning + date-line</td><td class="num">$0.001</td></tr>
+      <tr><td><code>agenda</code></td><td class="num">8</td><td>Table of contents — 4-6 numbered sections + duration</td><td class="num">$0.002</td></tr>
+      <tr><td><code>thesis</code></td><td class="num">6</td><td>The recommendation slide — action title + 3 bullets + caption + source</td><td class="num">$0.001</td></tr>
+      <tr><td><code>executive-summary</code></td><td class="num">8</td><td>At-a-glance summary — title + 5 numbered points + next-step</td><td class="num">$0.002</td></tr>
+      <tr><td><code>evidence-with-chart</code></td><td class="num">5</td><td>Numerical justification — title + 3 bullets + chart placeholder + source</td><td class="num">$0.002</td></tr>
+      <tr><td><code>matrix-2x2</code></td><td class="num">13</td><td>2×2 attractiveness plot — title + 4 quadrant labels + axes + 4 country pins + takeaway + footer</td><td class="num">$0.003</td></tr>
+      <tr><td><code>swot</code></td><td class="num">6</td><td>SWOT analysis — title + 4 quadrants + footer</td><td class="num">$0.002</td></tr>
+      <tr><td><code>timeline</code></td><td class="num">14</td><td>Phased roadmap — title + 4 phases + horizontal bar + source</td><td class="num">$0.003</td></tr>
+      <tr><td><code>recommendation-matrix</code></td><td class="num">18</td><td>Decision matrix — title + 3×3 cells + row/col labels + takeaway + footer</td><td class="num">$0.003</td></tr>
+      <tr><td><code>conclusio-with-regions</code></td><td class="num">10</td><td>Structured close — title + 4 region labels (LEAD/FAST-FOLLOW/etc) + timeline + 3 risks + footer</td><td class="num">$0.003</td></tr>
+    </tbody>
+  </table>
+
+  <p class="sub">Total smoke-test spend across all 10: ~$0.04. Median latency 4.5s, p95 6.4s.</p>
+
+  <details>
+    <summary>Sample output — thesis template, 6 shapes</summary>
+    <p style="margin-top:0.6rem;"><strong>a101 (action title)</strong><br>
+    Enter Brazil in 2026 to lead LATAM expansion followed by Mexico in 2027</p>
+    <p><strong>a102 (lead bullet)</strong><br>
+    <strong>Brazil</strong> serves as the primary entry point in 2026 due to its scale and regulatory stability</p>
+    <p><strong>a103 (fast-follow)</strong><br>
+    <strong>Mexico</strong> follows in 2027 or 2028 once USMCA tariff clarity provides a stable investment outlook</p>
+    <p><strong>a104 (opportunistic)</strong><br>
+    Argentina and Chile remain opportunistic positions awaiting FX stabilization or sector-policy improvement</p>
+    <p><strong>a105 (why now)</strong><br>
+    Regional nearshoring trends and manufacturing demand drive immediate market potential</p>
+    <p><strong>a106 (source)</strong><br>
+    Source: H&amp;C Market Intelligence; IMF World Economic Outlook 2024</p>
+  </details>
+</section>
+
+<section id="phases">
+  <h2>6. Phase plan — A.0 → A → B → C → D</h2>
+
+  <div class="stack">
+    <div class="stack-row"><div class="id">A.0</div><div class="body"><strong>Listener-reliability sub-spike</strong> — 2 days, BEFORE Phase A code<div class="meta">5 mutation paths tested on Mac PowerPoint. PASS = listener-based authorship safe; FAIL = audit-driven only. <em>Awaits your manual run.</em></div></div></div>
+    <div class="stack-row"><div class="id">A</div><div class="body"><strong>Trustworthy Edit-in-Place</strong> — ~7 days, internal-Filipe-only<div class="meta">F2 with binding-plan preview + per-shape undo. Invariants live in code today. UI binding-plan preview is the next chunk of work.</div></div></div>
+    <div class="stack-row"><div class="id">B</div><div class="body"><strong>Stamp + Fill Templates</strong> — ~3-4 weeks, consultant-deployable<div class="meta">F1 ships. Library browse UX, version pinning, paragraphs[] schema, retire dummy-deck. First time the tool is shippable to non-Filipe consultants.</div></div></div>
+    <div class="stack-row"><div class="id">C</div><div class="body"><strong>Detect + Fill</strong> — ~2 weeks, after A + B<div class="meta">F3 ships. Role-proposal heuristic + benchmark gate (≥80% accuracy on 30+ slides) before consultants get it.</div></div></div>
+    <div class="stack-row"><div class="id">D</div><div class="body"><strong>Jumpstart + restructure</strong> — ~6-8 weeks, gated on production backend<div class="meta">F4 + F5a + F5b + P5 restructure. Cannot ship without 6-row sign-off + Azure AD + legal §6.</div></div></div>
+  </div>
+</section>
+
+<section id="decisions">
+  <h2>7. Decisions waiting on you (in priority order)</h2>
+
+  <div class="panel panel-coral">
+    <ol>
+      <li><strong>Phase A.0 sub-spike — manual PowerPoint run.</strong> 15 minutes. 5 mutation paths in <code>design/spikes/phase-a-listener-reliability-v1.md</code>. The diagnostic button in the sidebar lists the paths. Result decides whether listener-based authorship is safe vs. fall back to audit-driven only.</li>
+      <li><strong>Q-FILL-05 (paragraphs[] merge behaviour) — Phase A blocker.</strong> When the AI returns flat text_runs but the target shape has multiple paragraphs (bullets), what's the merge rule? Concatenate with newline (current behavior)? Flatten? Refuse and flag? Pick one before Phase A's binding-plan UI ships.</li>
+      <li><strong>6-row LLM-boundary sign-off form</strong> in <code>decisions-log.md</code> 25.04.2026. Production wiring blocks until every row is ticked or pushed back. §4 (deck-state via customXmlParts) is now data-backed; the other 5 are your call.</li>
+      <li><strong>Q-FILL-01 (confidence + provenance schema)</strong>. What fields per text_run? Confidence in [0,1]? Provenance pointer to source paragraph? Affects Phase A.</li>
+      <li><strong>Q-FILL-04 (Jumpstart input format)</strong>. Pasted text only, or files (.docx / .pdf / .pptx) too? Affects Phase D scope.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="powerpoint">
+  <h2>8. What we need PowerPoint for — your keyboard tasks</h2>
+  <p>Most of the work happens without you. These tasks need a human at PowerPoint (you, or Theresa — see §9).</p>
+
+  <table>
+    <thead>
+      <tr><th>Task</th><th>Why PowerPoint</th><th>Time</th><th>Output</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Phase A.0 listener-reliability spike</strong></td>
+        <td>Need to type/paste/format-paint manually + watch which Office.js events fire. Can't be scripted because the test IS "what fires when a real human edits."</td>
+        <td>~15 min</td>
+        <td><code>phase-a-listener-reliability-v1-findings.md</code> with verdict</td>
+      </tr>
+      <tr>
+        <td><strong>Visual click-test of Fill slide</strong></td>
+        <td>Verify the AI-filled output actually <em>looks</em> like an H&amp;C slide on the canvas — fonts, alignment, no overflow, bold renders. Curl smoke proves the contract; only the canvas proves the consultant-acceptable result.</td>
+        <td>~5 min per template</td>
+        <td>Note in <code>WEEK-LOG</code> + screenshot if you spot drift</td>
+      </tr>
+      <tr>
+        <td><strong>Status overlay verification</strong></td>
+        <td>Confirm the navy progress bar appears in slide center while AI runs and disappears on completion. Best-effort styling falls back silently on Mac if a property isn't supported.</td>
+        <td>~2 min</td>
+        <td>Visual confirm</td>
+      </tr>
+      <tr>
+        <td><strong>Audit-trail durability re-spike (Phase A)</strong></td>
+        <td>Original spike validated 1 entry on 1 shape. Phase A trust contract needs a long append-only log to survive save+reopen. Need to fire 20+ fills on real deck, save, close, reopen, click "View audit trail," verify all entries are there.</td>
+        <td>~10 min</td>
+        <td><code>phase-a-audit-durability-findings.md</code></td>
+      </tr>
+      <tr>
+        <td><strong>Purge button validation</strong></td>
+        <td>Click "Purge AI traces" on a deck that's been filled, verify shape_guid + audit trail are gone, verify the final purge row exists in <code>urn:hc-deck-purged/v1</code>.</td>
+        <td>~5 min</td>
+        <td>Note in <code>WEEK-LOG</code></td>
+      </tr>
+      <tr>
+        <td><strong>Library quality review</strong></td>
+        <td>For each of the 10 templates: stamp it (manually for now, before Phase B's stamp primitive ships) onto a blank slide, fill it, judge "would I show this to a client?" — house style, density, polish.</td>
+        <td>~30-60 min full pass</td>
+        <td>Per-template notes in a review file</td>
+      </tr>
+      <tr>
+        <td><strong>Real-deck stress test</strong></td>
+        <td>Use the tool on an actual H&amp;C client deck (anonymised if needed) instead of <code>H_C_Master-Test-File.pptx</code>. Surfaces edge cases the test deck doesn't have: master-inherited placeholders, custom fonts, embedded charts, comments, animations.</td>
+        <td>30 min - 2 h depending on deck</td>
+        <td>Per-edge-case notes; new Q-FILL-* questions if surfaced</td>
+      </tr>
+      <tr>
+        <td><strong>Phase B+ feature smoke tests</strong></td>
+        <td>Once stamp / detect / restructure ship, each needs a click-test: "does the stamp produce shapes at the right positions?" "does detect classify shapes correctly?" "does restructure delete + revert cleanly?"</td>
+        <td>~15-30 min per feature</td>
+        <td>Per-feature findings docs</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="sub">Anything I write a "spec" for that ends with "Filipe runs this" lives in <code>design/spikes/</code>. Each has a fixed shape: hypothesis, steps, pass criteria, kill criteria, artifacts.</p>
+</section>
+
+<section id="theresa">
+  <h2>9. Theresa channel — bring her in for reviews</h2>
+  <p>Theresa Wettig will work on the project. She's a second set of eyes for review work that doesn't strictly need <em>you</em> at the keyboard. Different skill from yours: junior consultant perspective, fresh-deck-first reader, less context.</p>
+
+  <h4>What she's good for (and how)</h4>
+  <table>
+    <thead><tr><th>Review type</th><th>What she does</th><th>What we send her</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Library quality review</strong></td>
+        <td>For each of 10 templates: stamp, fill, judge "would I show this to a client?" — house style, density, polish. Fresh eye catches drift you'd miss.</td>
+        <td>The <code>library/v0/dummy-deck.pptx</code> + access to PowerPoint with the add-in sideloaded + a deck-thesis to use as input + template-by-template review template</td>
+      </tr>
+      <tr>
+        <td><strong>Visual click-test (replaces some of your §8 tasks)</strong></td>
+        <td>Run the click-test pass over a real-deck stress test. Reports what looks weird from a junior-consultant POV.</td>
+        <td>The test deck + add-in access + a <code>review-checklist.md</code></td>
+      </tr>
+      <tr>
+        <td><strong>Architecture sanity check</strong></td>
+        <td>Read the <code>fill-architecture-v1.md</code> doc cold. Tell us where it confuses her, what jargon needs translation, what concepts feel missing.</td>
+        <td>htmlpreview link to the doc + a 1-page "what to look for" brief</td>
+      </tr>
+      <tr>
+        <td><strong>Phase A.0 listener spike (parallel to you)</strong></td>
+        <td>Run the same 5-path mutation test on her machine. Two data points instead of one — catches platform-specific listener behaviour.</td>
+        <td>Same as you: spec link + sideloaded add-in</td>
+      </tr>
+      <tr>
+        <td><strong>Real H&amp;C deck stress test</strong></td>
+        <td>If she has access to project decks you don't, she runs the tool against decks you can't (data-residency, project-confidentiality reasons).</td>
+        <td>Add-in access + her own decks (we don't see them)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>What we send Theresa to start (handoff bundle)</h4>
+  <p>I can build this as a single drop-zone bundle. Contents:</p>
+  <div class="panel panel-tight">
+    <ol>
+      <li><strong>README — for human</strong> (plain English): "what is this tool, what is your role, here's how to set up"</li>
+      <li><strong>README — for LLM</strong> (in case she pastes the bundle into Claude/ChatGPT for help): "ignore this if you're a human reading"</li>
+      <li><strong><code>setup-add-in.md</code></strong>: how to clone the repo, install Node, run <code>npm run dev</code>, sideload the add-in, open the dummy deck</li>
+      <li><strong><code>review-tasks.md</code></strong>: prioritised list of review tasks she can run independently, with output templates for each</li>
+      <li><strong><code>library-review-checklist.md</code></strong>: per-template checklist for the library quality review</li>
+      <li><strong>Architecture brief</strong>: a 2-page plain-English summary of what the tool does + the locked architecture (extract from this big-picture page)</li>
+      <li><strong><code>dummy-deck.pptx</code></strong>: the 10-template demo deck</li>
+      <li><strong>OpenRouter key envelope</strong>: separate channel — <em>not</em> in the bundle. Either she uses her own key, or we share via a secure channel (signal/keychain, never the bundle).</li>
+    </ol>
+  </div>
+
+  <h4>Access pattern</h4>
+  <ul>
+    <li><strong>GitHub:</strong> add her as a collaborator on <code>github.com/Wilhofstrasse/corporate-ppt-tool-v2</code>. Read access is enough for now; write access if she's contributing fixes.</li>
+    <li><strong>Files:</strong> drop-zone bundle (when those tools are reconnected) for the first hand-off. After that, <code>git pull</code> + a sideload command keeps her in sync.</li>
+    <li><strong>Reviews:</strong> she commits her findings docs to a <code>theresa-reviews/</code> folder in the repo, or drops them into a shared folder, your call.</li>
+    <li><strong>Cost:</strong> she runs through Filipe's OpenRouter budget OR her own; pick one and document.</li>
+  </ul>
+
+  <p class="sub">The bundle assembly is a no-regret task — I can stage it now and sit on it until you say "send." Nothing leaves until you confirm what level of access she gets.</p>
+
+  <details>
+    <summary>Status of the Theresa bundle right now</summary>
+    <p style="margin-top:0.6rem;">Not yet built. I'd need ~1 hour to draft + commit. If you want it staged today, just say the word. If you'd rather wait until after the Phase A.0 spike runs (so the bundle includes the listener-reliability findings), that's also fine.</p>
+  </details>
+</section>
+
+<section id="remote">
+  <h2>10. How we work this week — remote-collab pattern</h2>
+
+  <div class="panel panel-navy">
+    <h4>Two channels</h4>
+    <table>
+      <thead><tr><th>Channel</th><th>What flows through it</th><th>Latency</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>GitHub htmlpreview URLs</strong></td>
+          <td>Every doc + every review I produce gets pushed to <code>feature/test-version-fill</code>. You read the .md / .html in the browser via htmlpreview links (see §9).</td>
+          <td>~30 s after I push</td>
+        </tr>
+        <tr>
+          <td><strong>Drop zone</strong></td>
+          <td>Binary artifacts (PPTX decks, PDFs, screenshots). Currently the drop-zone tools aren't connected this session — when they're back, I'll upload deliverables there and link them.</td>
+          <td>Manual</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>What I do autonomously</h4>
+  <ul>
+    <li>Architecture iteration — multi-agent + Codex per [P-190]. Doc converges to GREEN before I commit.</li>
+    <li>Code: invariants, fill flow, library, dummy-deck, schema-package. Every commit auto-pushes to the feature branch.</li>
+    <li>No-regret follow-ups — typo fixes, log dumps, stale-reference cleanup, library expansion.</li>
+    <li>Update <code>WEEK-LOG-2026-04-25.md</code> at every session boundary so you have a fast read.</li>
+  </ul>
+
+  <h4>What I escalate to you</h4>
+  <ul>
+    <li>Decision-class items in §7 above.</li>
+    <li>Anything where I'd need to push to <code>main</code> (currently I stay on <code>feature/test-version-fill</code>).</li>
+    <li>Cost decisions if a chunk would burn &gt;$1 of OpenRouter budget.</li>
+    <li>Anything destructive (force-push, drop tables, delete history) — never autonomous.</li>
+  </ul>
+
+  <h4>Your remote-control session shape</h4>
+  <ol>
+    <li>Open this page (or <code>WEEK-LOG-2026-04-25.md</code>) for the latest snapshot.</li>
+    <li>If a decision is needed: name it, type the answer, I commit + propagate.</li>
+    <li>If I'm doing something wrong: tell me, I update the rule (playbook entry) + redeploy.</li>
+    <li>If you want to verify a build: I push a fresh htmlpreview link + you click.</li>
+    <li>End of session: I update <code>WEEK-LOG</code> + this page so the next session opens cold.</li>
+  </ol>
+</section>
+
+<section id="links">
+  <h2>9. Quick links — browser-accessible URLs</h2>
+
+  <p>All paths are in <code>github.com/Wilhofstrasse/corporate-ppt-tool-v2</code> on branch <code>feature/test-version-fill</code>. HTML files render via <code>htmlpreview.github.io</code>; markdown renders directly on github.com.</p>
+
+  <h4>Big-picture + status</h4>
+  <div class="links">
+    <a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Wilhofstrasse/corporate-ppt-tool-v2/feature/test-version-fill/knowledge/big-picture-2026-04-25.html">📊 This page (big-picture-2026-04-25.html)</a>
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/WEEK-LOG-2026-04-25.md">📓 WEEK-LOG (markdown, renders on github.com)</a>
+    <a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Wilhofstrasse/corporate-ppt-tool-v2/feature/test-version-fill/knowledge/2026-04-25_test-version-handoff.html">📄 Test-version handoff (full doc)</a>
+  </div>
+
+  <h4>Architecture canon</h4>
+  <div class="links">
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/architecture-notes/fill-architecture-v1.md">🏛️ fill-architecture v1.2 (LOCKED)</a>
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/architecture-notes/llm-boundary-v1.md">🔒 llm-boundary v1.1 (awaits sign-off)</a>
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/architecture-notes/reverse-template-capture-v1.md">📥 reverse-template-capture v1 (separate library-curation axis)</a>
+  </div>
+
+  <h4>Project canon</h4>
+  <div class="links">
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/latest.md">📌 latest.md (current synthesis)</a>
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/decisions-log.md">📑 decisions-log.md</a>
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/open-questions.md">❓ open-questions.md (Q-FILL-01..Q-FILL-06)</a>
+  </div>
+
+  <h4>Spike findings</h4>
+  <div class="links">
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/design/spikes/round-trip-v1-findings.md">🧪 Round-trip spike v1 — PASSED</a>
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/design/spikes/phase-a-listener-reliability-v1.md">🧪 Phase A.0 listener-reliability — awaits your run</a>
+  </div>
+
+  <h4>Library</h4>
+  <div class="links">
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/tree/feature/test-version-fill/library/v0/templates">📚 10 templates (JSON records)</a>
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/library/v0/template-schema.md">📋 Template schema</a>
+  </div>
+
+  <h4>Code</h4>
+  <div class="links">
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/addin/src/main.ts">⚙️ addin/src/main.ts (task-pane code)</a>
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/addin/src/invariants.ts">🛡️ addin/src/invariants.ts (Phase A invariants)</a>
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/tree/feature/test-version-fill/schema-package/src">📦 schema-package 0.1.0</a>
+  </div>
+
+  <h4>Branch + diff</h4>
+  <div class="links">
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/compare/main...feature/test-version-fill">🔀 main...feature/test-version-fill (full diff)</a>
+    <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/commits/feature/test-version-fill">📜 Commit history</a>
+  </div>
+</section>
+
+<section id="timeline">
+  <h2>10. Recent milestones — last 24 hours</h2>
+
+  <div class="timeline">
+    <div class="timeline-row"><span class="stamp">25.04 morning</span> <span class="desc"><strong>Architecture LOCKED v1.2</strong> after 3 specialist agents + 3 Codex iterate rounds GREEN</span></div>
+    <div class="timeline-row"><span class="stamp">25.04 morning</span> <span class="desc">Phase A invariants shipped (shape_guid, hc_filled_by, hc-deck-audit, hc-deck-purge)</span></div>
+    <div class="timeline-row"><span class="stamp">25.04 morning</span> <span class="desc">Trust UI live (Promote / Audit viewer / Purge / Listener-diag buttons)</span></div>
+    <div class="timeline-row"><span class="stamp">25.04 morning</span> <span class="desc">schema-package 0.1.0 published with v1.2 contracts</span></div>
+    <div class="timeline-row"><span class="stamp">25.04 morning</span> <span class="desc">Library 5→10 templates; all pass curl smoke against Gemini 3 Flash</span></div>
+    <div class="timeline-row"><span class="stamp">25.04 morning</span> <span class="desc">Slide-center "AI working" status overlay wired into Fill</span></div>
+    <div class="timeline-row"><span class="stamp">25.04 morning</span> <span class="desc">[P-190] rule deployed: every non-trivial design auto-routes through Codex + agents</span></div>
+    <div class="timeline-row"><span class="stamp">25.04 dawn</span> <span class="desc">Test-version end-to-end (Fill slide actually calls the AI) — proven on all 5 original templates</span></div>
+    <div class="timeline-row"><span class="stamp">25.04 dawn</span> <span class="desc">Vite local proxy /api/fill ships; reads OpenRouter key from macOS keychain</span></div>
+    <div class="timeline-row"><span class="stamp">24.04 night</span> <span class="desc">Round-trip spike v1 PASSED on Mac PowerPoint 16.108.1</span></div>
+    <div class="timeline-row"><span class="stamp">24.04 night</span> <span class="desc">Phase 2 add-in scaffold landed (manifest + Vite + task pane + selection wiring)</span></div>
+    <div class="timeline-row"><span class="stamp">24.04 evening</span> <span class="desc">Phase 0 content-quality gate PASSED (all 7 kill criteria cleared)</span></div>
+  </div>
+
+  <p class="sub">Full commit history available at the <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/commits/feature/test-version-fill">commits page</a>.</p>
+</section>
+
+<footer class="bottom">
+  Saved to <code>knowledge/big-picture-2026-04-25.html</code>. Direct browser access via the htmlpreview link in §9.<br>
+  Updated each session along with <code>WEEK-LOG-2026-04-25.md</code>.
+</footer>
+
+</div>
+</body>
+</html>
