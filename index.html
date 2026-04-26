@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>H&amp;C Knowledge Cockpit</title>
+<style>
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: "Calibri Light", -apple-system, system-ui, "Segoe UI", sans-serif;
+  font-weight: 300;
+  color: #14324E;
+  background: #F7F7F7;
+  line-height: 1.5;
+  font-size: 15px;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
+
+header.top {
+  border-left: 5px solid #E94D3A;
+  padding: 0.4rem 0 0.4rem 1.2rem;
+  margin-bottom: 1.5rem;
+}
+.kicker {
+  font-family: Consolas, "SF Mono", monospace;
+  color: #E94D3A;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+h1 { margin: 0.25rem 0 0.4rem; font-weight: 700; color: #14324E; font-size: 1.65rem; line-height: 1.25; }
+.sub { margin: 0; color: #5B5D64; font-size: 0.95rem; }
+
+h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #14324E;
+  border-bottom: 2px solid #14324E;
+  padding-bottom: 0.3rem;
+  margin: 2rem 0 0.8rem;
+}
+
+.status-bar {
+  background: #14324E;
+  color: #fff;
+  padding: 1rem 1.2rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.8rem;
+}
+.status-bar .item .label { color: #C2C2C2; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.status-bar .item .value { color: #fff; font-size: 1.1rem; font-weight: 700; margin-top: 0.15rem; }
+.status-bar .item .sub { color: #DDE5EE; font-size: 0.78rem; margin-top: 0.1rem; }
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.8rem;
+}
+.card {
+  background: #fff;
+  border: 1px solid #C2C2C2;
+  border-left: 4px solid #14324E;
+  border-radius: 4px;
+  padding: 0.9rem 1.1rem;
+  text-decoration: none;
+  color: #14324E;
+  display: flex;
+  flex-direction: column;
+  transition: border-left-color 0.15s, transform 0.1s;
+}
+.card:hover { border-left-color: #E94D3A; transform: translateY(-1px); }
+.card.featured { border-left-color: #E94D3A; background: linear-gradient(180deg, #fff 0%, #FCE4DD 100%); }
+.card.live { border-left-color: #1F6B33; }
+.card .badge {
+  font-family: Consolas, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5B5D64;
+  margin-bottom: 0.3rem;
+}
+.card .badge.coral { color: #E94D3A; font-weight: 700; }
+.card .badge.green { color: #1F6B33; font-weight: 700; }
+.card .badge.amber { color: #8B5A00; font-weight: 700; }
+.card .title {
+  font-weight: 700;
+  font-size: 1.02rem;
+  color: #14324E;
+  margin-bottom: 0.25rem;
+}
+.card .desc { color: #5B5D64; font-size: 0.86rem; line-height: 1.4; }
+.card .footer {
+  margin-top: 0.6rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid #F0F0F0;
+  font-family: Consolas, monospace;
+  font-size: 0.74rem;
+  color: #87878B;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.iter-pill {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  font-family: Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: 9px;
+  margin-right: 0.4rem;
+}
+.iter-pill.i1 { background: #DDE5EE; color: #14324E; }
+.iter-pill.i2 { background: #DDE5EE; color: #14324E; }
+.iter-pill.i3 { background: #FFF3CD; color: #8B5A00; }
+.iter-pill.i4 { background: #E1F2E5; color: #1F6B33; }
+
+.section-divider { height: 1px; background: #C2C2C2; margin: 2rem 0 1rem; }
+
+footer.bottom {
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid #C2C2C2;
+  color: #5B5D64;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.tool-link {
+  background: linear-gradient(90deg, #14324E 0%, #3A5C7A 100%);
+  color: #fff !important;
+  padding: 0.7rem 1.1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin: 0.4rem 0.4rem 0.4rem 0;
+}
+.tool-link:hover { background: #1f3a5e; }
+
+.creds {
+  background: #F0F0F0;
+  border-radius: 3px;
+  padding: 0.6rem 0.9rem;
+  font-family: Consolas, monospace;
+  font-size: 0.85rem;
+  color: #14324E;
+  margin: 0.4rem 0;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="top">
+  <div class="kicker">H&amp;C KNOWLEDGE COCKPIT · DECK-REV PROJECT · 26.04.2026</div>
+  <h1>Alle Berichte, Tools, Iterationen — eine Seite</h1>
+  <p class="sub">Bookmarke diese URL. Wird mit jeder neuen Iteration aktualisiert. Alle Links rendern direkt im iPhone Safari (GitHub Pages, kein htmlpreview-Proxy).</p>
+</header>
+
+<div class="status-bar">
+  <div class="item">
+    <div class="label">Latest iteration</div>
+    <div class="value">Iter 4</div>
+    <div class="sub">Strategy A — Tabellen befüllt</div>
+  </div>
+  <div class="item">
+    <div class="label">Status</div>
+    <div class="value">🟢 Live</div>
+    <div class="sub">Service auto-restart on crash</div>
+  </div>
+  <div class="item">
+    <div class="label">Total spend</div>
+    <div class="value">$50</div>
+    <div class="sub">von $100 Budget · $50 frei</div>
+  </div>
+  <div class="item">
+    <div class="label">Code-Version</div>
+    <div class="value">v0.1.13</div>
+    <div class="sub">cost tracking pro Regen</div>
+  </div>
+</div>
+
+<h2>🔧 Live Tool — direkt benutzen</h2>
+<div class="card-grid">
+  <a class="card live" href="https://districts-eau-habits-built.trycloudflare.com/" target="_blank">
+    <div class="badge green">LIVE · Persistente URL</div>
+    <div class="title">deck-reverse-engineer Tool</div>
+    <div class="desc">Upload .pptx → Template + 30+ regenerierte Decks für jede Firma. Multi-Template-Archiv mit Kosten-Tracking pro Regen.</div>
+    <div class="footer">
+      <span>Login: <code>filipe</code></span>
+      <span>Pwd: <code>JPOMNdQYfoOf9T0mQTIk</code></span>
+    </div>
+  </a>
+</div>
+
+<h2>📊 Eval Dashboard — gesamtbild</h2>
+<div class="card-grid">
+  <a class="card featured" href="deck-rev-eval-dashboard.html">
+    <div class="badge coral">SINGLE STABLE URL · auto-refresh</div>
+    <div class="title">📚 Eval Dashboard</div>
+    <div class="desc">Failure-Modes pro Iteration nebeneinander, Score-Evolution mit ▲/▼ Trends, Spend-Bilanz. Wird nach jeder Iteration in-place aktualisiert.</div>
+    <div class="footer">
+      <span>updated nach iter4</span>
+      <span>›</span>
+    </div>
+  </a>
+  <a class="card" href="deck-rev-spend-vs-success-2026-04-26.html">
+    <div class="badge">SPEND-BILANZ</div>
+    <div class="title">💰 Tool-Erfolg pro Geld</div>
+    <div class="desc">Bar-Chart pro Iteration mit "wert investiert vs verbrannt durch stille Bugs". $-Bilanz nach iter4.</div>
+    <div class="footer">
+      <span>iter1+iter2 valid · iter3 attempts wasted</span>
+      <span>›</span>
+    </div>
+  </a>
+</div>
+
+<h2>🔁 Iterationen — was wurde wann gemacht</h2>
+<div class="card-grid">
+  <a class="card" href="deck-rev-eval-iter1-2026-04-26.html">
+    <div class="badge"><span class="iter-pill i1">ITER 1</span>BASELINE</div>
+    <div class="title">Iter 1 · Baseline ohne Fixes</div>
+    <div class="desc">Erste Messung. 30 Firmen durchgespielt. Alle Failure-Modes etabliert. Content avg ~2.65/5, Format avg ~2.20/5. Spend $10.</div>
+    <div class="footer">
+      <span>30/30 firms · $1.39 vision</span>
+      <span>26.04 13:30</span>
+    </div>
+  </a>
+  <a class="card" href="deck-rev-eval-iter2-2026-04-26.html">
+    <div class="badge"><span class="iter-pill i2">ITER 2</span>TABLE FIX DEPLOYED</div>
+    <div class="title">Iter 2 · Tabellen werden befüllt</div>
+    <div class="desc">v0.1.8.2 — extract emittet 36 Tabellenzellen als child-records. Tabellen +13% gefüllt; ABER: HALLUCINATED_NUMBERS neu (37%, AI erfindet KPIs).</div>
+    <div class="footer">
+      <span>30/30 firms · $1.39 vision</span>
+      <span>26.04 15:20</span>
+    </div>
+  </a>
+  <a class="card" href="deck-rev-eval-dashboard.html#iter3">
+    <div class="badge"><span class="iter-pill i3">ITER 3 v4</span>BUNDLE — partial</div>
+    <div class="title">Iter 3 · Text-Overflow + Numeric-Guard + Chart-XML</div>
+    <div class="desc">v0.1.10 + v0.1.11.x. Numeric guard funktioniert (HALLUCINATED 0%); Chart-Fix nur partiell (3 silent bugs unterwegs gefixt). Tables_filled regressiert auf 1.0.</div>
+    <div class="footer">
+      <span>30/30 firms · $1.25 vision</span>
+      <span>26.04 18:25</span>
+    </div>
+  </a>
+  <a class="card" href="deck-rev-eval-dashboard.html#iter4">
+    <div class="badge"><span class="iter-pill i4">ITER 4</span>STRATEGY A — TARGETED</div>
+    <div class="title">Iter 4 · Tabellen Original-Werte zurück</div>
+    <div class="desc">v0.1.12 — em-dash raus, Original-KPIs bleiben. <strong>tables_filled 1.0 → 2.40 ▲▲</strong>. Chart-Fix nun verifiziert (chart6 spider funktioniert).</div>
+    <div class="footer">
+      <span>30/30 firms · $1.30 vision</span>
+      <span>26.04 21:10</span>
+    </div>
+  </a>
+</div>
+
+<h2>📋 Handoffs &amp; Briefings</h2>
+<div class="card-grid">
+  <a class="card" href="deck-rev-handoff-2026-04-26.html">
+    <div class="badge">MORGEN-HANDOFF</div>
+    <div class="title">Deck-Rev — Morgenübergabe 26.04.</div>
+    <div class="desc">Was über Nacht gebaut wurde, Quick Tunnel, Service, Filipe's "must not forget" (Tabellen + Spider).</div>
+    <div class="footer"><span>v0.1.0 → v0.1.3 ship night</span><span>›</span></div>
+  </a>
+  <a class="card" href="big-picture-2026-04-25.html">
+    <div class="badge">CORPORATE-PPT-TOOL-V2</div>
+    <div class="title">Big Picture · Architektur 25.04.</div>
+    <div class="desc">Übersicht corporate-ppt-tool-v2 (das Schwester-Projekt, Add-in Path).</div>
+    <div class="footer"><span>fill-architecture v1.2 LOCKED</span><span>›</span></div>
+  </a>
+  <a class="card" href="2026-04-25_test-version-handoff.html">
+    <div class="badge">TEST-VERSION</div>
+    <div class="title">Test-Version Handoff</div>
+    <div class="desc">corporate-ppt-tool-v2 test-version build, Phase A invariants, 10 templates Library.</div>
+    <div class="footer"><span>25.04.</span><span>›</span></div>
+  </a>
+</div>
+
+<h2>🎯 Was als nächstes</h2>
+<div class="card-grid">
+  <div class="card" style="background:#FFF3CD;border-left-color:#ffc107;">
+    <div class="badge amber">PIECEMEAL · DEINE WAHL</div>
+    <div class="title">Iter 5 — welches Format-Target?</div>
+    <div class="desc"><strong>Optionen</strong> (alle ~$8 + 50 min):<br>
+    1. Bilder erhalten 1.6 → 4+ (Vision-Rubrik analysieren)<br>
+    2. Layout bleibt 1.97 → 4+ (mittlerer Aufwand)<br>
+    3. Text passt rein 1.33 → 4+ (render-and-judge meta-fix, größter Aufwand)<br><br>
+    Sag eine Zahl im Chat → ich starte iter5.</div>
+  </div>
+</div>
+
+<footer class="bottom">
+  Generated automatically · auto-updated nach jeder Iteration ·
+  <a href="https://github.com/Wilhofstrasse/deck-reverse-engineer" style="color:#E94D3A;text-decoration:none;">Repo</a> ·
+  <a href="https://github.com/Wilhofstrasse/hc-knowledge" style="color:#E94D3A;text-decoration:none;">Knowledge Repo</a><br>
+  Diese Seite ist auf GitHub Pages public-readable. Migration auf <code>filipeandrade.com/secure/deck-rev/</code> wäre möglich aber braucht CF Worker Anpassung — separater Follow-up wenn gewünscht.
+</footer>
+
+</div>
+</body>
+</html>
