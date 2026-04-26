@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>deck-rev eval — iter 1 — baseline (no fixes applied)</title>
+<style>
+* { box-sizing:border-box; }
+body { font-family:Calibri Light,-apple-system,system-ui,Segoe UI,sans-serif; font-weight:300; color:#14324E; background:#F7F7F7; line-height:1.55; font-size:15px; margin:0; }
+.container { max-width:920px; margin:0 auto; padding:1.5rem 1.25rem 4rem; }
+header.top { border-left:5px solid #E94D3A; padding:0.4rem 0 0.4rem 1rem; margin-bottom:1.5rem; }
+.kicker { font-family:Consolas,SF Mono,monospace; color:#E94D3A; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; }
+h1 { margin:0.25rem 0 0.4rem; font-weight:700; color:#14324E; font-size:1.55rem; line-height:1.25; }
+.sub { margin:0; color:#5B5D64; font-size:0.95rem; }
+h2 { font-size:1.15rem; font-weight:700; color:#14324E; border-bottom:2px solid #14324E; padding-bottom:0.25rem; margin:1.8rem 0 0.6rem; }
+h3 { font-size:0.95rem; font-weight:700; color:#14324E; margin:1rem 0 0.4rem; }
+.headline-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:0.6rem; margin:0.6rem 0 1rem; }
+.headline-card { background:white; border:1px solid #C2C2C2; border-left:3px solid #E94D3A; border-radius:3px; padding:0.7rem 0.9rem; }
+.headline-card .label { color:#5B5D64; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; }
+.headline-card .value { color:#14324E; font-size:1.4rem; font-weight:700; margin-top:0.15rem; }
+table { width:100%; border-collapse:collapse; margin:0.5rem 0 1rem; background:white; border:1px solid #E5E5E5; border-radius:3px; overflow:hidden; }
+th { text-align:left; background:#F0F0F0; color:#14324E; padding:0.5rem 0.7rem; font-weight:600; font-size:0.82rem; border-bottom:1px solid #C2C2C2; }
+td { border-bottom:1px solid #F0F0F0; vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+ul { margin:0.4rem 0; padding-left:1.4rem; }
+ul li { margin:0.2rem 0; }
+code { font-family:Consolas,SF Mono,monospace; background:#F0F0F0; padding:1px 5px; border-radius:2px; font-size:0.84rem; color:#14324E; }
+.section-divider { height:1px; background:#C2C2C2; margin:1.6rem 0 0.8rem; }
+footer.bottom { margin-top:2rem; padding-top:0.8rem; border-top:1px solid #C2C2C2; color:#5B5D64; font-size:0.8rem; text-align:center; }
+</style>
+</head>
+<body>
+<div class='container'>
+
+<header class='top'>
+  <div class='kicker'>deck-rev eval · iteration 1 · baseline (no fixes applied)</div>
+  <h1>30 of 30 firms reviewed — clear fix priorities for iter 2-4</h1>
+</header>
+
+<div class='headline-grid'>
+  <div class='headline-card'>
+    <div class='label'>Firms reviewed</div>
+    <div class='value'>30 <span style='color:#5B5D64;font-size:0.9rem;'>/ 30</span></div>
+  </div>
+  <div class='headline-card'>
+    <div class='label'>Vision spend (this iter)</div>
+    <div class='value'>$1.39</div>
+  </div>
+  <div class='headline-card'>
+    <div class='label'>Total regen wallclock</div>
+    <div class='value'>180 min</div>
+  </div>
+  <div class='headline-card'>
+    <div class='label'>Failures</div>
+    <div class='value'>0</div>
+  </div>
+</div>
+
+<h2>Context</h2><p>This is the unmodified baseline run. <strong>Iter 2 is currently in flight</strong> with the table-cell fix (v0.1.8.2) deployed; expected ~14:30. Iter 3 will land the text-overflow patch (v0.1.9, already coded). Iter 4 will tackle the chart-text XML walk.</p><p>The HBL deck has 17 slides and ~302 fillable text shapes. Each firm regen makes that many serial calls to Gemini 3 Flash via OpenRouter (~5-6 minutes per firm), then Claude Sonnet 4.6 reviews the rendered PDF (~17 PNGs) against the firm profile.</p>
+
+<h2>Failure modes — frequency across all firms</h2>
+<table>
+  <thead><tr><th>Mode</th><th style='text-align:right;'>Count</th><th style='width:40%;'>Bar</th></tr></thead>
+  <tbody>
+        <tr>
+          <td style='padding:0.4rem 0.6rem;font-family:Consolas,SF Mono,monospace;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM</td>
+          <td style='padding:0.4rem 0.6rem;text-align:right;font-weight:700;color:#B8321F;'>29/30</td>
+          <td style='padding:0.4rem 0.6rem;'>
+            <div style='background:#F0F0F0;border-radius:2px;height:14px;width:100%;'>
+              <div style='background:#E94D3A;height:14px;width:97%;border-radius:2px;'></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style='padding:0.4rem 0.6rem;font-family:Consolas,SF Mono,monospace;font-size:0.85rem;'>TEXT_OVERFLOW</td>
+          <td style='padding:0.4rem 0.6rem;text-align:right;font-weight:700;color:#B8321F;'>28/30</td>
+          <td style='padding:0.4rem 0.6rem;'>
+            <div style='background:#F0F0F0;border-radius:2px;height:14px;width:100%;'>
+              <div style='background:#E94D3A;height:14px;width:93%;border-radius:2px;'></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style='padding:0.4rem 0.6rem;font-family:Consolas,SF Mono,monospace;font-size:0.85rem;'>MISSING_IMAGES</td>
+          <td style='padding:0.4rem 0.6rem;text-align:right;font-weight:700;color:#B8321F;'>16/30</td>
+          <td style='padding:0.4rem 0.6rem;'>
+            <div style='background:#F0F0F0;border-radius:2px;height:14px;width:100%;'>
+              <div style='background:#E94D3A;height:14px;width:53%;border-radius:2px;'></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style='padding:0.4rem 0.6rem;font-family:Consolas,SF Mono,monospace;font-size:0.85rem;'>GROUP_SHAPE_NOT_FILLED</td>
+          <td style='padding:0.4rem 0.6rem;text-align:right;font-weight:700;color:#1F6B33;'>4/30</td>
+          <td style='padding:0.4rem 0.6rem;'>
+            <div style='background:#F0F0F0;border-radius:2px;height:14px;width:100%;'>
+              <div style='background:#E94D3A;height:14px;width:13%;border-radius:2px;'></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style='padding:0.4rem 0.6rem;font-family:Consolas,SF Mono,monospace;font-size:0.85rem;'>TABLE_HARDCODED_OLD_FIRM</td>
+          <td style='padding:0.4rem 0.6rem;text-align:right;font-weight:700;color:#1F6B33;'>4/30</td>
+          <td style='padding:0.4rem 0.6rem;'>
+            <div style='background:#F0F0F0;border-radius:2px;height:14px;width:100%;'>
+              <div style='background:#E94D3A;height:14px;width:13%;border-radius:2px;'></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style='padding:0.4rem 0.6rem;font-family:Consolas,SF Mono,monospace;font-size:0.85rem;'>BROKEN_LAYOUT</td>
+          <td style='padding:0.4rem 0.6rem;text-align:right;font-weight:700;color:#1F6B33;'>4/30</td>
+          <td style='padding:0.4rem 0.6rem;'>
+            <div style='background:#F0F0F0;border-radius:2px;height:14px;width:100%;'>
+              <div style='background:#E94D3A;height:14px;width:13%;border-radius:2px;'></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style='padding:0.4rem 0.6rem;font-family:Consolas,SF Mono,monospace;font-size:0.85rem;'>WRONG_FIRM_FACTS</td>
+          <td style='padding:0.4rem 0.6rem;text-align:right;font-weight:700;color:#1F6B33;'>3/30</td>
+          <td style='padding:0.4rem 0.6rem;'>
+            <div style='background:#F0F0F0;border-radius:2px;height:14px;width:100%;'>
+              <div style='background:#E94D3A;height:14px;width:10%;border-radius:2px;'></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style='padding:0.4rem 0.6rem;font-family:Consolas,SF Mono,monospace;font-size:0.85rem;'>MISSING_FIRM_FACTS</td>
+          <td style='padding:0.4rem 0.6rem;text-align:right;font-weight:700;color:#1F6B33;'>1/30</td>
+          <td style='padding:0.4rem 0.6rem;'>
+            <div style='background:#F0F0F0;border-radius:2px;height:14px;width:100%;'>
+              <div style='background:#E94D3A;height:14px;width:3%;border-radius:2px;'></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style='padding:0.4rem 0.6rem;font-family:Consolas,SF Mono,monospace;font-size:0.85rem;'>REPETITION_WITHIN_SLIDE</td>
+          <td style='padding:0.4rem 0.6rem;text-align:right;font-weight:700;color:#1F6B33;'>1/30</td>
+          <td style='padding:0.4rem 0.6rem;'>
+            <div style='background:#F0F0F0;border-radius:2px;height:14px;width:100%;'>
+              <div style='background:#E94D3A;height:14px;width:3%;border-radius:2px;'></div>
+            </div>
+          </td>
+        </tr></tbody>
+</table>
+
+<h2>Rubric averages (1 = worst, 5 = best)</h2>
+<table>
+  <thead><tr><th>Dimension</th><th style='text-align:right;'>Average</th></tr></thead>
+  <tbody><tr><td style='padding:0.35rem 0.6rem;'>content / <strong>on_firm_accuracy</strong></td><td style='padding:0.35rem 0.6rem;text-align:right;font-weight:700;color:#14324E;'>2.63</td></tr><tr><td style='padding:0.35rem 0.6rem;'>content / <strong>strategic_substance</strong></td><td style='padding:0.35rem 0.6rem;text-align:right;font-weight:700;color:#14324E;'>2.63</td></tr><tr><td style='padding:0.35rem 0.6rem;'>content / <strong>tone_fit</strong></td><td style='padding:0.35rem 0.6rem;text-align:right;font-weight:700;color:#14324E;'>2.67</td></tr><tr><td style='padding:0.35rem 0.6rem;'>content / <strong>internal_consistency</strong></td><td style='padding:0.35rem 0.6rem;text-align:right;font-weight:700;color:#14324E;'>2.57</td></tr><tr><td style='padding:0.35rem 0.6rem;'>content / <strong>sibling_diversity</strong></td><td style='padding:0.35rem 0.6rem;text-align:right;font-weight:700;color:#14324E;'>2.37</td></tr><tr><td style='padding:0.35rem 0.6rem;'>format / <strong>layout_intact</strong></td><td style='padding:0.35rem 0.6rem;text-align:right;font-weight:700;color:#E94D3A;'>1.93</td></tr><tr><td style='padding:0.35rem 0.6rem;'>format / <strong>text_overflow</strong></td><td style='padding:0.35rem 0.6rem;text-align:right;font-weight:700;color:#E94D3A;'>1.2</td></tr><tr><td style='padding:0.35rem 0.6rem;'>format / <strong>tables_filled</strong></td><td style='padding:0.35rem 0.6rem;text-align:right;font-weight:700;color:#E94D3A;'>2.57</td></tr><tr><td style='padding:0.35rem 0.6rem;'>format / <strong>font_preserved</strong></td><td style='padding:0.35rem 0.6rem;text-align:right;font-weight:700;color:#E94D3A;'>2.97</td></tr><tr><td style='padding:0.35rem 0.6rem;'>format / <strong>images_preserved</strong></td><td style='padding:0.35rem 0.6rem;text-align:right;font-weight:700;color:#E94D3A;'>1.8</td></tr></tbody>
+</table>
+
+<h2>Per-firm scores (sorted best → worst on content+format)</h2>
+<table>
+  <thead><tr><th>Firm</th><th style='text-align:right;'>Content</th><th style='text-align:right;'>Format</th><th>Top 3 failure modes</th></tr></thead>
+  <tbody>
+    <tr style='background:#E1F2E5;'><td style='padding:0.35rem 0.6rem;'>Baloise Group</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#8B5A00;font-weight:700;'>3.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.4</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, TEXT_OVERFLOW, MISSING_IMAGES</td></tr><tr style='background:#E1F2E5;'><td style='padding:0.35rem 0.6rem;'>Helvetia Versicherungen</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#8B5A00;font-weight:700;'>3.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.4</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, TEXT_OVERFLOW, GROUP_SHAPE_NOT_FILLED</td></tr><tr style='background:#E1F2E5;'><td style='padding:0.35rem 0.6rem;'>Deutsche Bank AG</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#8B5A00;font-weight:700;'>3.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, BROKEN_LAYOUT, TEXT_OVERFLOW</td></tr><tr style='background:#E1F2E5;'><td style='padding:0.35rem 0.6rem;'>Holcim Ltd</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#8B5A00;font-weight:700;'>3.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, MISSING_IMAGES, TEXT_OVERFLOW</td></tr><tr style='background:#E1F2E5;'><td style='padding:0.35rem 0.6rem;'>Julius Baer Group</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#8B5A00;font-weight:700;'>3.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, BROKEN_LAYOUT, TEXT_OVERFLOW</td></tr>
+    <tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Lonza Group</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#8B5A00;font-weight:700;'>3.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, TEXT_OVERFLOW, MISSING_IMAGES</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>PostFinance</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#8B5A00;font-weight:700;'>3.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, TEXT_OVERFLOW, MISSING_IMAGES</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Raiffeisen Schweiz</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#8B5A00;font-weight:700;'>3.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, TEXT_OVERFLOW, BROKEN_LAYOUT</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Schindler Group</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#8B5A00;font-weight:700;'>3.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, MISSING_IMAGES, TEXT_OVERFLOW</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Sika AG</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#8B5A00;font-weight:700;'>3.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, WRONG_FIRM_FACTS, TEXT_OVERFLOW</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Sonova Holding</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#8B5A00;font-weight:700;'>3.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, MISSING_IMAGES, TEXT_OVERFLOW</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Swiss Life Holding</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#8B5A00;font-weight:700;'>3.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, MISSING_IMAGES, TEXT_OVERFLOW</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Avaloq</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.8</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, TEXT_OVERFLOW, GROUP_SHAPE_NOT_FILLED</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Bühler Group</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#8B5A00;font-weight:700;'>3.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.0</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, TEXT_OVERFLOW, MISSING_IMAGES</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Swiss Re</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.8</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, TEXT_OVERFLOW, WRONG_FIRM_FACTS</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Zuercher Kantonalbank</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.8</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, TEXT_OVERFLOW, REPETITION_WITHIN_SLIDE</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Zurich Insurance Group</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.8</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, TEXT_OVERFLOW, MISSING_IMAGES</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Temenos</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.6</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, TEXT_OVERFLOW, WRONG_FIRM_FACTS</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>UBS Group AG</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.6</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, TEXT_OVERFLOW, MISSING_IMAGES</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Galderma</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.8</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.0</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, TEXT_OVERFLOW, BROKEN_LAYOUT</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Goldman Sachs</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.8</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.0</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, MISSING_IMAGES, TEXT_OVERFLOW</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Boston Consulting Group</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>TABLE_HARDCODED_OLD_FIRM, CHART_TEXT_HARDCODED_OLD_FIRM, TEXT_OVERFLOW</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Nexthink</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.0</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, MISSING_IMAGES, TEXT_OVERFLOW</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Roche Holding</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>1.8</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, MISSING_IMAGES, TEXT_OVERFLOW</td></tr><tr style='background:white;'><td style='padding:0.35rem 0.6rem;'>Bain & Company</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>1.8</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>TABLE_HARDCODED_OLD_FIRM, TEXT_OVERFLOW, MISSING_IMAGES</td></tr>
+    <tr style='background:#FCE4DD;'><td style='padding:0.35rem 0.6rem;'>ABB Ltd</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>1.6</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, MISSING_IMAGES, TEXT_OVERFLOW</td></tr><tr style='background:#FCE4DD;'><td style='padding:0.35rem 0.6rem;'>Logitech International</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>1.6</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, MISSING_IMAGES, TEXT_OVERFLOW</td></tr><tr style='background:#FCE4DD;'><td style='padding:0.35rem 0.6rem;'>Novartis</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>1.6</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, TABLE_HARDCODED_OLD_FIRM, TEXT_OVERFLOW</td></tr><tr style='background:#FCE4DD;'><td style='padding:0.35rem 0.6rem;'>SoftwareOne</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>1.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.2</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>TABLE_HARDCODED_OLD_FIRM, CHART_TEXT_HARDCODED_OLD_FIRM, GROUP_SHAPE_NOT_FILLED</td></tr><tr style='background:#FCE4DD;'><td style='padding:0.35rem 0.6rem;'>McKinsey & Company</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>1.0</td><td style='padding:0.35rem 0.6rem;text-align:right;color:#B8321F;font-weight:700;'>2.0</td><td style='padding:0.35rem 0.6rem;color:#5B5D64;font-size:0.85rem;'>CHART_TEXT_HARDCODED_OLD_FIRM, GROUP_SHAPE_NOT_FILLED, MISSING_FIRM_FACTS</td></tr>
+  </tbody>
+</table>
+
+<footer class='bottom'>
+  Generated 26.04.2026 13:44 CET ·
+  <a href='https://districts-eau-habits-built.trycloudflare.com/' style='color:#E94D3A;text-decoration:none;'>Live tool URL</a> ·
+  <a href='https://github.com/Wilhofstrasse/deck-reverse-engineer' style='color:#E94D3A;text-decoration:none;'>Repo</a>
+</footer>
+
+</div>
+</body></html>
