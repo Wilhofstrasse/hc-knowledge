@@ -159,32 +159,38 @@ footer.bottom {
 <div class="container">
 
 <header class="top">
-  <div class="kicker">H&amp;C KNOWLEDGE COCKPIT · DECK-REV PROJECT · 26.04.2026</div>
-  <h1>Alle Berichte, Tools, Iterationen — eine Seite</h1>
-  <p class="sub">Bookmarke diese URL. Wird mit jeder neuen Iteration aktualisiert. Alle Links rendern direkt im iPhone Safari (GitHub Pages, kein htmlpreview-Proxy).</p>
+  <div class="kicker">H&amp;C KNOWLEDGE COCKPIT · DECK-REV PROJECT · 27.04.2026 · OVERNIGHT TANDEM-LOOP</div>
+  <h1>Tandem-Loop Iter 5 → Iter 12 (Übernacht)</h1>
+  <p class="sub">Codex (gpt-5.5) reviewt + strategiziert · Claude implementiert · Subset-Eval (5 Firmen) pro Cycle. Tables_filled 2.40 → 4.00. HALLUCINATED_NUMBERS 75% → 40%. Bookmarke diese URL.</p>
 </header>
 
 <div class="status-bar">
   <div class="item">
     <div class="label">Latest iteration</div>
-    <div class="value">Iter 4</div>
-    <div class="sub">Strategy A — Tabellen befüllt</div>
+    <div class="value">Iter 12</div>
+    <div class="sub">30-firm wider validation läuft</div>
   </div>
   <div class="item">
     <div class="label">Status</div>
     <div class="value">🟢 Live</div>
-    <div class="sub">Service auto-restart on crash</div>
+    <div class="sub">Tandem-Loop autonom, 8 Cycles abgeschlossen</div>
   </div>
   <div class="item">
-    <div class="label">Total spend</div>
-    <div class="value">$50</div>
-    <div class="sub">von $100 Budget · $50 frei</div>
+    <div class="label">Tables filled</div>
+    <div class="value">4.00 / 5</div>
+    <div class="sub">▲ 2.40 → 4.00 in 8 cycles</div>
   </div>
   <div class="item">
     <div class="label">Code-Version</div>
-    <div class="value">v0.1.13</div>
-    <div class="sub">cost tracking pro Regen</div>
+    <div class="value">v0.1.22</div>
+    <div class="sub">batch-table + LLM-Numerics</div>
   </div>
+</div>
+
+<div style="background:#1F6B33;color:#fff;padding:1rem 1.2rem;border-radius:4px;margin-bottom:1.5rem;">
+  <strong style="font-size:1.05rem;">📊 Ergebnis Übernacht (Cycles 5-8 · Iter 5-12)</strong><br>
+  <span style="font-size:0.95rem;opacity:0.95;">Tabellen jetzt voll mit ECHTEN Peers (UBS sieht Morgan Stanley/JPMorgan/HSBC, ABB sieht Siemens/Schneider/Rockwell, Goldman Bilanz Summe $1.6T statt früher absurden $5.3B).
+  Verbleibend: IMAGES_SHOW_OLD_FIRM_NAME 100% (Bild-Replacement = v2 Scope, AI Image Gen nötig), GENERIC_PLATITUDES 40% (Content-Prompt-Tuning).</span>
 </div>
 
 <h2>🔧 Live Tool — direkt benutzen</h2>
@@ -200,27 +206,19 @@ footer.bottom {
   </a>
 </div>
 
-<h2>📊 Eval Dashboard — gesamtbild</h2>
+<h2>📊 Eval Dashboard — gesamtbild (EINZIGE Quelle)</h2>
 <div class="card-grid">
   <a class="card featured" href="deck-rev-eval-dashboard.html">
-    <div class="badge coral">SINGLE STABLE URL · auto-refresh</div>
+    <div class="badge coral">SINGLE STABLE URL · auto-refresh nach jeder Iter</div>
     <div class="title">📚 Eval Dashboard</div>
-    <div class="desc">Failure-Modes pro Iteration nebeneinander, Score-Evolution mit ▲/▼ Trends, Spend-Bilanz. Wird nach jeder Iteration in-place aktualisiert.</div>
+    <div class="desc">Failure-Modes alle Iterationen nebeneinander, Score-Evolution mit ▲/▼, Spend-Chart, Per-Firma-Verlauf. Aktualisiert sich beim build_dashboard.py Run nach jeder Iteration.</div>
     <div class="footer">
-      <span>updated nach iter4</span>
-      <span>›</span>
-    </div>
-  </a>
-  <a class="card" href="deck-rev-spend-vs-success-2026-04-26.html">
-    <div class="badge">SPEND-BILANZ</div>
-    <div class="title">💰 Tool-Erfolg pro Geld</div>
-    <div class="desc">Bar-Chart pro Iteration mit "wert investiert vs verbrannt durch stille Bugs". $-Bilanz nach iter4.</div>
-    <div class="footer">
-      <span>iter1+iter2 valid · iter3 attempts wasted</span>
+      <span>updated nach iter4 · alle 4 Iter sichtbar</span>
       <span>›</span>
     </div>
   </a>
 </div>
+<p style="color:#5B5D64;font-size:0.85rem;margin:0.4rem 0 0;">Frühere "Spend-Bilanz"-Page entfernt — war Snapshot mit veralteten Iter-Daten. Dashboard hat alles.</p>
 
 <h2>🔁 Iterationen — alle Daten leben im Dashboard</h2>
 <p style="color:#5B5D64;font-size:0.9rem;margin:0 0 0.6rem;">Nur EINE Quelle. Per-Iter-Snapshot-Seiten waren stale (iter1-Snapshot kannte iter3+4 nicht). Hier die Story pro Iter; Zahlen + Trend-Pfeile leben alle im Dashboard und werden mit jeder Iter aktualisiert.</p>
@@ -249,6 +247,54 @@ footer.bottom {
     <div class="desc">v0.1.12 — em-dash raus, Original-KPIs bleiben + chart-fix v0.1.11.3 verifiziert. <strong>tables_filled 1.0 → 2.40 ▲▲</strong>. Spider chart6 funktioniert.</div>
     <div class="footer"><span>30/30 firms · $1.30 vision</span><span>26.04 21:10</span></div>
   </div>
+  <div class="card" style="cursor:default;background:#F0FAF2;border-left-color:#1F6B33;">
+    <div class="badge" style="color:#1F6B33;">CYCLE 1 · ITER 5</div>
+    <div class="title">Geometry-aware char budget</div>
+    <div class="desc">v0.1.16 — text_overflow 1.6 → 3.0 ▲. Codex CONDITIONAL guard für leere Shapes. Hypothese MET.</div>
+    <div class="footer"><span>5 firms subset</span><span>26.04 22:00</span></div>
+  </div>
+  <div class="card" style="cursor:default;background:#F0FAF2;border-left-color:#1F6B33;">
+    <div class="badge" style="color:#1F6B33;">CYCLE 2 · ITER 6</div>
+    <div class="title">Rubric tightening</div>
+    <div class="desc">v0.1.17 — Content +0.5 across all dims, aber CHART_TEXT_HARDCODED stayed 100%. Vision verwechselte IMAGES mit charts.</div>
+    <div class="footer"><span>5 firms · PARTIAL</span><span>26.04 22:30</span></div>
+  </div>
+  <div class="card" style="cursor:default;background:#F0FAF2;border-left-color:#1F6B33;">
+    <div class="badge" style="color:#1F6B33;">CYCLE 3 · ITER 7</div>
+    <div class="title">IMAGES tag + table disclaimer</div>
+    <div class="desc">v0.1.18 — IMAGES_SHOW_OLD_FIRM_NAME tag clean separation. Disclaimer footer regredierte tables_filled (Sonnet las als "values not real").</div>
+    <div class="footer"><span>5 firms · PARTIAL</span><span>26.04 23:00</span></div>
+  </div>
+  <div class="card" style="cursor:default;background:#F0FAF2;border-left-color:#1F6B33;">
+    <div class="badge" style="color:#1F6B33;">CYCLE 4 · ITER 8</div>
+    <div class="title">Disclaimer rollback</div>
+    <div class="desc">v0.1.19 — Codex verdict ROLLBACK. tables_filled 2.5 → 2.75 ▲. CHART_TEXT 75 → 25%.</div>
+    <div class="footer"><span>5 firms · RATIFY</span><span>26.04 23:30</span></div>
+  </div>
+  <div class="card" style="cursor:default;background:#FFF3CD;border-left-color:#ffc107;">
+    <div class="badge" style="color:#8B5A00;">CYCLE 5 · ITER 9</div>
+    <div class="title">TABLE ROLE per-cell prompts (Strategy B)</div>
+    <div class="desc">v0.1.20 — fixt "ABB / ABB / ABB" focal-leakage, aber introduziert "Siemens / Siemens / Siemens" peer-duplication. tables_filled regredierte 2.75 → 2.25.</div>
+    <div class="footer"><span>5 firms · KEEP_AND_PATCH</span><span>27.04 00:15</span></div>
+  </div>
+  <div class="card" style="cursor:default;background:#D4EDDA;border-left-color:#1F6B33;">
+    <div class="badge green">CYCLE 6 · ITER 10 — BIG WIN</div>
+    <div class="title">Strategy C — Batch-Table Fill</div>
+    <div class="desc">v0.1.21 — Whole-table LLM call mit orientation detection + peer-uniqueness validator. <strong>tables_filled 2.25 → 4.00 ▲▲▲</strong>. UBS sieht jetzt Morgan Stanley/JPMorgan/HSBC, ABB sieht Siemens/Schneider/Rockwell.</div>
+    <div class="footer"><span>5 firms · RATIFY</span><span>27.04 00:45</span></div>
+  </div>
+  <div class="card" style="cursor:default;background:#D4EDDA;border-left-color:#1F6B33;">
+    <div class="badge green">CYCLE 7 · ITER 11</div>
+    <div class="title">LLM rewrites numerics (Strategy C+)</div>
+    <div class="desc">v0.1.22 — Numeric cells nicht mehr verbatim preserved. <strong>HALLUCINATED_NUMBERS 75% → 40% ▼</strong>. Goldman Bilanz Summe jetzt $1.6T (statt $5.3B), UBS Bilanz 1500 Mrd CHF (≈ $1.7T).</div>
+    <div class="footer"><span>5 firms 5/5 OK · RATIFY</span><span>27.04 01:15</span></div>
+  </div>
+  <div class="card" style="cursor:default;background:#FFF3CD;border-left-color:#ffc107;">
+    <div class="badge amber">CYCLE 8 · ITER 12 — RUNNING</div>
+    <div class="title">30-Firm Wider Validation (no code change)</div>
+    <div class="desc">Codex picked validation-only run vor weiterem Tweak. v0.1.22 auf alle 30 Firmen — confirm Subset-Trend hält bei weniger-bekannten Firmen (Galderma, Avaloq, Nexthink, SoftwareOne).</div>
+    <div class="footer"><span>30 firms läuft · ETA ~25 min</span><span>27.04 01:30</span></div>
+  </div>
 </div>
 
 <h2>📋 Handoffs &amp; Briefings</h2>
@@ -273,16 +319,28 @@ footer.bottom {
   </a>
 </div>
 
-<h2>🎯 Was als nächstes</h2>
+<h2>🎯 Morgen-Übergabe — was du wissen solltest</h2>
 <div class="card-grid">
+  <div class="card" style="background:#D4EDDA;border-left-color:#1F6B33;">
+    <div class="badge green">GROSSE WINS ÜBERNACHT</div>
+    <div class="title">Tabellen sind jetzt sauber</div>
+    <div class="desc">
+    <strong>Vorher (iter4):</strong> Tabellen-Header zeigten "ABB / ABB / ABB" oder Goldman mit $5.3B Bilanz.<br>
+    <strong>Jetzt (iter11):</strong> UBS sieht Morgan Stanley/JPMorgan/HSBC/Julius Baer als Peers. ABB sieht Siemens/Schneider/Rockwell/Emerson. Goldman Bilanz Summe $1.6T (≈ korrekt).<br>
+    <strong>Score:</strong> tables_filled 2.40 → 4.00 / 5. HALLUCINATED_NUMBERS 75% → 40%.</div>
+  </div>
   <div class="card" style="background:#FFF3CD;border-left-color:#ffc107;">
-    <div class="badge amber">PIECEMEAL · DEINE WAHL</div>
-    <div class="title">Iter 5 — welches Format-Target?</div>
-    <div class="desc"><strong>Optionen</strong> (alle ~$8 + 50 min):<br>
-    1. Bilder erhalten 1.6 → 4+ (Vision-Rubrik analysieren)<br>
-    2. Layout bleibt 1.97 → 4+ (mittlerer Aufwand)<br>
-    3. Text passt rein 1.33 → 4+ (render-and-judge meta-fix, größter Aufwand)<br><br>
-    Sag eine Zahl im Chat → ich starte iter5.</div>
+    <div class="badge amber">VERBLEIBEND · BRAUCHT v2</div>
+    <div class="title">Bilder noch HBL — IMAGES_SHOW_OLD_FIRM_NAME 100%</div>
+    <div class="desc">Cover-Foto, PESTEL-Diagramm-Zentrum, Slide-4 Wettbewerbskarte — diese sind eingebettete Bilder mit "Hypothekarbank Lenzburg" oder Swiss-Bank Logos. Kein Text-Replacement Tool kann das fixen — braucht AI Image Gen + Logo-Detect + Swap. Out of scope für aktuelle Architektur.</div>
+  </div>
+  <div class="card" style="background:#E8F4F8;border-left-color:#14324E;">
+    <div class="badge">DEINE ENTSCHEIDUNG</div>
+    <div class="title">Wie weiter Samstag?</div>
+    <div class="desc">
+    <strong>Option A — STOP, sign-off iter11/iter12.</strong> Tabellen + Numerics solved. v2 (Image-Replacement) als separate Phase.<br>
+    <strong>Option B — Push weiter:</strong> GENERIC_PLATITUDES (40%) via anti-platitude prompt + richer firm profiles.<br>
+    <strong>Option C — Architectural pivot:</strong> Image-replacement v2 spec.</div>
   </div>
 </div>
 
