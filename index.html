@@ -222,44 +222,33 @@ footer.bottom {
   </a>
 </div>
 
-<h2>🔁 Iterationen — was wurde wann gemacht</h2>
+<h2>🔁 Iterationen — alle Daten leben im Dashboard</h2>
+<p style="color:#5B5D64;font-size:0.9rem;margin:0 0 0.6rem;">Nur EINE Quelle. Per-Iter-Snapshot-Seiten waren stale (iter1-Snapshot kannte iter3+4 nicht). Hier die Story pro Iter; Zahlen + Trend-Pfeile leben alle im Dashboard und werden mit jeder Iter aktualisiert.</p>
 <div class="card-grid">
-  <a class="card" href="deck-rev-eval-iter1-2026-04-26.html">
+  <div class="card" style="cursor:default;">
     <div class="badge"><span class="iter-pill i1">ITER 1</span>BASELINE</div>
-    <div class="title">Iter 1 · Baseline ohne Fixes</div>
-    <div class="desc">Erste Messung. 30 Firmen durchgespielt. Alle Failure-Modes etabliert. Content avg ~2.65/5, Format avg ~2.20/5. Spend $10.</div>
-    <div class="footer">
-      <span>30/30 firms · $1.39 vision</span>
-      <span>26.04 13:30</span>
-    </div>
-  </a>
-  <a class="card" href="deck-rev-eval-iter2-2026-04-26.html">
+    <div class="title">Baseline ohne Fixes</div>
+    <div class="desc">30 Firmen durchgespielt. Failure-Modes etabliert. Content ~2.65/5, Format ~2.20/5.</div>
+    <div class="footer"><span>30/30 firms · $1.39 vision</span><span>26.04 13:30</span></div>
+  </div>
+  <div class="card" style="cursor:default;">
     <div class="badge"><span class="iter-pill i2">ITER 2</span>TABLE FIX DEPLOYED</div>
-    <div class="title">Iter 2 · Tabellen werden befüllt</div>
-    <div class="desc">v0.1.8.2 — extract emittet 36 Tabellenzellen als child-records. Tabellen +13% gefüllt; ABER: HALLUCINATED_NUMBERS neu (37%, AI erfindet KPIs).</div>
-    <div class="footer">
-      <span>30/30 firms · $1.39 vision</span>
-      <span>26.04 15:20</span>
-    </div>
-  </a>
-  <a class="card" href="deck-rev-eval-dashboard.html#iter3">
+    <div class="title">Tabellen werden befüllt</div>
+    <div class="desc">v0.1.8.2 — extract emittet 36 Tabellenzellen. Tabellen gefüllt ✓ aber HALLUCINATED_NUMBERS neu (37% — AI erfindet KPIs).</div>
+    <div class="footer"><span>30/30 firms · $1.39 vision</span><span>26.04 15:20</span></div>
+  </div>
+  <div class="card" style="cursor:default;">
     <div class="badge"><span class="iter-pill i3">ITER 3 v4</span>BUNDLE — partial</div>
-    <div class="title">Iter 3 · Text-Overflow + Numeric-Guard + Chart-XML</div>
-    <div class="desc">v0.1.10 + v0.1.11.x. Numeric guard funktioniert (HALLUCINATED 0%); Chart-Fix nur partiell (3 silent bugs unterwegs gefixt). Tables_filled regressiert auf 1.0.</div>
-    <div class="footer">
-      <span>30/30 firms · $1.25 vision</span>
-      <span>26.04 18:25</span>
-    </div>
-  </a>
-  <a class="card" href="deck-rev-eval-dashboard.html#iter4">
+    <div class="title">Text-Overflow + Numeric-Guard + Chart-XML</div>
+    <div class="desc">v0.1.10 + v0.1.11.x. Numeric guard funktioniert (HALLUCINATED 0%); Chart-Fix erst nach 3 silent bugs verifiziert (v0.1.11.3). Tables_filled em-dash regressiert auf 1.0.</div>
+    <div class="footer"><span>30/30 firms · $1.25 vision</span><span>26.04 18:25</span></div>
+  </div>
+  <div class="card" style="cursor:default;">
     <div class="badge"><span class="iter-pill i4">ITER 4</span>STRATEGY A — TARGETED</div>
-    <div class="title">Iter 4 · Tabellen Original-Werte zurück</div>
-    <div class="desc">v0.1.12 — em-dash raus, Original-KPIs bleiben. <strong>tables_filled 1.0 → 2.40 ▲▲</strong>. Chart-Fix nun verifiziert (chart6 spider funktioniert).</div>
-    <div class="footer">
-      <span>30/30 firms · $1.30 vision</span>
-      <span>26.04 21:10</span>
-    </div>
-  </a>
+    <div class="title">Tabellen Original-Werte zurück</div>
+    <div class="desc">v0.1.12 — em-dash raus, Original-KPIs bleiben + chart-fix v0.1.11.3 verifiziert. <strong>tables_filled 1.0 → 2.40 ▲▲</strong>. Spider chart6 funktioniert.</div>
+    <div class="footer"><span>30/30 firms · $1.30 vision</span><span>26.04 21:10</span></div>
+  </div>
 </div>
 
 <h2>📋 Handoffs &amp; Briefings</h2>
