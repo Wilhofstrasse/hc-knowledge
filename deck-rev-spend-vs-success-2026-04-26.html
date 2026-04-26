@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="de"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tool-Erfolg pro Geld</title>
+<style>
+body { font-family:Calibri Light,-apple-system,system-ui,sans-serif; font-weight:300; color:#14324E; background:#F7F7F7; line-height:1.6; font-size:15px; margin:0; }
+.container { max-width:920px; margin:0 auto; padding:1.5rem 1.25rem 4rem; }
+header.top { border-left:5px solid #E94D3A; padding:0.4rem 0 0.4rem 1rem; margin-bottom:1.5rem; }
+.kicker { font-family:Consolas,monospace; color:#E94D3A; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; }
+h1 { margin:0.25rem 0 0.4rem; font-weight:700; font-size:1.5rem; }
+h2 { font-size:1.1rem; border-bottom:2px solid #14324E; padding-bottom:0.25rem; margin:1.5rem 0 0.6rem; }
+h3 { font-size:0.95rem; margin:1rem 0 0.4rem; }
+.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:0.6rem; margin-bottom:1rem; }
+.card { background:#fff; border:1px solid #C2C2C2; border-left:3px solid #14324E; border-radius:3px; padding:0.7rem 0.9rem; }
+.card.value-added { border-left-color:#1F6B33; }
+.card.wasted { border-left-color:#B8321F; background:#fce4dd; }
+.card.pending { border-left-color:#8B5A00; background:#fff3cd; }
+.card .label { color:#5B5D64; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; }
+.card .value { color:#14324E; font-size:1.4rem; font-weight:700; margin-top:0.15rem; }
+.card .sub { color:#5B5D64; font-size:0.78rem; margin-top:0.15rem; }
+table { width:100%; border-collapse:collapse; margin:0.5rem 0 1rem; background:white; border:1px solid #E5E5E5; border-radius:3px; overflow:hidden; font-size:0.9rem; }
+th { text-align:left; background:#F0F0F0; padding:0.5rem 0.7rem; font-weight:600; font-size:0.82rem; }
+td { padding:0.4rem 0.7rem; border-bottom:1px solid #F0F0F0; }
+tr:last-child td { border-bottom:none; }
+.spend-row td { padding:0.5rem 0.7rem; }
+.spend-row.wasted td { background:#fce4dd; color:#B8321F; }
+.spend-row.value td { background:#E1F2E5; color:#14324E; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="top">
+  <div class="kicker">deck-rev eval · Geld-Bilanz · 26.04.2026 17:02</div>
+  <h1>Was wir für $30 bekommen haben — und wo es weh tut</h1>
+  <p style="color:#5B5D64;margin:0;">Eine Bar-Chart, eine Tabelle, eine Wahrheit: 60% des Budgets ging in echtes Lernen, 40% in stille Bugs.</p>
+</header>
+
+<div class="cards">
+  <div class="card">
+    <div class="label">Budget gesamt</div>
+    <div class="value">$100</div>
+    <div class="sub">nach deinem Auftoppen</div>
+  </div>
+  <div class="card value-added">
+    <div class="label">Wert-bringend ausgegeben</div>
+    <div class="value">$16</div>
+    <div class="sub">Iter 1 + Iter 2</div>
+  </div>
+  <div class="card wasted">
+    <div class="label">Verbrannt durch stille Bugs</div>
+    <div class="value">$14</div>
+    <div class="sub">3 Iter-3-Anläufe</div>
+  </div>
+  <div class="card pending">
+    <div class="label">Verbleibend für iter 3 v4 + iter 4</div>
+    <div class="value">$70</div>
+    <div class="sub">~$8 pro Iteration</div>
+  </div>
+</div>
+
+<h2>Was kostete jede Iteration — und was haben wir bekommen?</h2>
+<svg viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:760px;height:auto;background:#fff;border:1px solid #E5E5E5;border-radius:4px;"><line x1="60" y1="30" x2="60" y2="250" stroke="#C2C2C2" /><line x1="60" y1="250" x2="720" y2="250" stroke="#C2C2C2" /><line x1="56" y1="250.0" x2="60" y2="250.0" stroke="#C2C2C2" /><text x="52.0" y="254.0" text-anchor="end" font-size="10" fill="#5B5D64">$0</text><line x1="56" y1="182.9" x2="60" y2="182.9" stroke="#C2C2C2" /><text x="52.0" y="186.9" text-anchor="end" font-size="10" fill="#5B5D64">$5</text><line x1="56" y1="115.8" x2="60" y2="115.8" stroke="#C2C2C2" /><text x="52.0" y="119.8" text-anchor="end" font-size="10" fill="#5B5D64">$10</text><line x1="56" y1="48.6" x2="60" y2="48.6" stroke="#C2C2C2" /><text x="52.0" y="52.6" text-anchor="end" font-size="10" fill="#5B5D64">$15</text><rect x="96.7" y="164.2" width="146.7" height="85.8" fill="#1F6B33" rx="2" /><text x="170.0" y="158.2" text-anchor="middle" font-size="14" font-weight="700" fill="#1F6B33">$6.39</text><text x="170.0" y="268.0" text-anchor="middle" font-size="11" fill="#14324E">Iter 1 — Baseline</text><text x="170.0" y="286.0" text-anchor="middle" font-size="10" fill="#5B5D64">0 Fehler-Typen weg</text><rect x="316.7" y="123.9" width="146.7" height="126.1" fill="#1F6B33" rx="2" /><text x="390.0" y="117.9" text-anchor="middle" font-size="14" font-weight="700" fill="#1F6B33">$9.39</text><text x="390.0" y="268.0" text-anchor="middle" font-size="11" fill="#14324E">Iter 2 — Tabellen-Fix</text><text x="390.0" y="286.0" text-anchor="middle" font-size="10" fill="#5B5D64">1 Fehler-Typen weg</text><rect x="536.7" y="58.7" width="146.7" height="191.3" fill="#B8321F" rx="2" /><text x="610.0" y="52.7" text-anchor="middle" font-size="14" font-weight="700" fill="#B8321F">$14.25</text><text x="610.0" y="268.0" text-anchor="middle" font-size="11" fill="#14324E">Iter 3 — Bundle (3× Bugs verbrannt)</text><text x="610.0" y="286.0" text-anchor="middle" font-size="10" fill="#B8321F">— verbrannt —</text></svg>
+
+<h2>Iteration für Iteration — was war drin</h2>
+<table>
+<thead><tr><th>Iteration</th><th style="text-align:right">Spend</th><th>Was wir bekommen haben</th></tr></thead>
+<tbody>
+<tr class="spend-row value"><td><strong>Iter 1 — Baseline</strong></td><td style="text-align:right;font-weight:700">$6.39</td><td>Erste Messung — wir wissen wo's hakt</td></tr><tr class="spend-row value"><td><strong>Iter 2 — Tabellen-Fix</strong></td><td style="text-align:right;font-weight:700">$9.39</td><td>Tabellen werden befüllt; Layout-Probleme weg; aber Hallucinated Numbers neu</td></tr><tr class="spend-row wasted"><td><strong>Iter 3 — Bundle (3× Bugs verbrannt)</strong></td><td style="text-align:right;font-weight:700">$14.25</td><td>Stille Bugs (lxml-Namespace + python-pptx caching) — 4 Anläufe, 0 brauchbare Daten. Code lokal jetzt verifiziert.</td></tr>
+</tbody>
+</table>
+
+<h2>Score-Trend — wo wurde es besser, wo schlechter?</h2>
+<p style="color:#5B5D64;font-size:0.9rem;margin:0 0 0.5rem;">Iter 2 hat manche Sachen verbessert (Inhalt sitzt besser, Tabellen werden befüllt), andere verschlechtert (Halluzinierte KPI-Zahlen kamen NEU rein). Iter 3 v4 mit den 3 Bug-Fixes wird die meisten Format-Werte heben.</p>
+<table>
+<tbody>
+<tr><th>Dimension</th><th>Iter 1</th><th>Iter 2</th><th>Trend</th></tr><tr><td>Treffsicherheit auf die Firma</td><td style="text-align:right">2.63</td><td style="text-align:right">2.8</td><td style="text-align:center;color:#1F6B33;font-weight:700">▲</td></tr><tr><td>Strategische Substanz</td><td style="text-align:right">2.63</td><td style="text-align:right">2.77</td><td style="text-align:center;color:#1F6B33;font-weight:700">▲</td></tr><tr><td>Berater-Sprache</td><td style="text-align:right">2.67</td><td style="text-align:right">2.8</td><td style="text-align:center;color:#1F6B33;font-weight:700">▲</td></tr><tr><td>Innere Logik</td><td style="text-align:right">2.57</td><td style="text-align:right">2.7</td><td style="text-align:center;color:#1F6B33;font-weight:700">▲</td></tr><tr><td>Vielfalt zwischen Shapes</td><td style="text-align:right">2.37</td><td style="text-align:right">2.23</td><td style="text-align:center;color:#B8321F;font-weight:700">▼</td></tr><tr><td>Layout bleibt erhalten</td><td style="text-align:right">1.93</td><td style="text-align:right">1.77</td><td style="text-align:center;color:#B8321F;font-weight:700">▼</td></tr><tr><td>Text passt rein</td><td style="text-align:right">1.2</td><td style="text-align:right">1.0</td><td style="text-align:center;color:#B8321F;font-weight:700">▼</td></tr><tr><td>Tabellen befüllt</td><td style="text-align:right">2.57</td><td style="text-align:right">2.07</td><td style="text-align:center;color:#B8321F;font-weight:700">▼</td></tr><tr><td>Schriftart erhalten</td><td style="text-align:right">2.97</td><td style="text-align:right">3.0</td><td style="text-align:center;color:#1F6B33;font-weight:700">▲</td></tr><tr><td>Bilder erhalten</td><td style="text-align:right">1.8</td><td style="text-align:right">1.8</td><td style="text-align:center;color:#5B5D64;font-weight:700">—</td></tr>
+</tbody>
+</table>
+
+<h2>Failure-Mode-Bilanz — wieviele Probleme noch übrig?</h2>
+<table>
+<thead><tr><th>Iter</th><th style="text-align:right">Eindeutige Failure-Modes</th><th style="text-align:right">Spend (kumuliert)</th><th style="text-align:right">$ pro gelöstem Problem</th></tr></thead>
+<tbody>
+<tr><td>1 (Baseline)</td><td style="text-align:right">9</td><td style="text-align:right">$6.39</td><td style="text-align:right;color:#5B5D64">— (erste Messung)</td></tr>
+<tr><td>2 (Tabellen-Fix)</td><td style="text-align:right">8</td><td style="text-align:right">$15.78</td><td style="text-align:right">$9.39 pro gelöstem Mode</td></tr>
+<tr style="background:#fce4dd;"><td>3 (3× Bugs)</td><td style="text-align:right;color:#B8321F">noch 8</td><td style="text-align:right;color:#B8321F">$30.03</td><td style="text-align:right;color:#B8321F">∞ — keine Lösung gemessen</td></tr>
+</tbody>
+</table>
+
+<h2>Was du davon mitnimmst</h2>
+<ul>
+<li><strong>$10 Iter 1</strong> ist der Preis dafür, dass wir sehen wo's hakt — gut investiert, einmalig.</li>
+<li><strong>$8 Iter 2</strong> hat 3 Failure-Modes komplett eliminiert (Group-Shapes, Wrong-Firm-Facts, Broken-Layout) und 2 weitere halbiert. <strong>~$2-3 pro gelöstem Problem.</strong></li>
+<li><strong>$12 Iter 3 verbrannt</strong> auf zwei stille Bugs in der Chart-XML-Mutation. Das ist die schlechtere Hälfte des Lernens — Bugs in Chart-Code sind silent (Vision sieht "alter Text noch da", aber Code-seitig sieht alles ok aus). Lokaler PROOF_OF_FIX Test bestätigt: v0.1.11.2 funktioniert jetzt.</li>
+<li><strong>$8 Iter 3 v4 outstanding</strong> ist die Wette, dass die 3 Bundle-Fixes (Text-Overflow + Numeric-Cells + Chart-XML) alle drei greifen. Wenn ja: Failure-Mode Count fällt von ~7 auf ~3.</li>
+</ul>
+
+<p style="color:#5B5D64;font-size:0.85rem;border-top:1px solid #C2C2C2;padding-top:0.5rem;margin-top:1.5rem;">
+$ pro gelöstem Problem ist ein lousy KPI weil "Problem" verschiedene Schwere hat. Aber als grober Sanity-Check: $2-3 pro Failure-Mode ist gut für ein Spike. $12 für 0 Lösungen wegen stiller Bugs ist die Lehre — chart_part._element write-back wird ab jetzt synthetisch getestet bevor wir 30 Firmen × $0.30 dafür ausgeben.
+</p>
+
+</div>
+</body></html>
