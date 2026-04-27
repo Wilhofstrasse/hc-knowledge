@@ -167,23 +167,23 @@ footer.bottom {
 <div class="status-bar">
   <div class="item">
     <div class="label">Latest iteration</div>
-    <div class="value">Iter 12</div>
-    <div class="sub">30-firm validated · RATIFIED</div>
+    <div class="value">Iter 13</div>
+    <div class="sub">LO-retry + anti-platitude · 30/30 OK</div>
   </div>
   <div class="item">
     <div class="label">Status</div>
-    <div class="value">🟢 Loop gestoppt</div>
-    <div class="sub">Codex Verdict: stop_after_cycle=12</div>
+    <div class="value">🟢 v0.1.23 LIVE</div>
+    <div class="sub">Filipe override: 2 cycles nachgeholt</div>
   </div>
   <div class="item">
     <div class="label">Tables filled</div>
-    <div class="value">4.08 / 5</div>
-    <div class="sub">▲ 2.40 → 4.08 (full 30 firms)</div>
+    <div class="value">4.03 / 5</div>
+    <div class="sub">stable · n=30/30 (war 25/30 in iter12)</div>
   </div>
   <div class="item">
     <div class="label">Code-Version</div>
-    <div class="value">v0.1.22</div>
-    <div class="sub">batch-table + LLM-Numerics LOCKED</div>
+    <div class="value">v0.1.23</div>
+    <div class="sub">+ LO-Userdir + anti-platitude</div>
   </div>
 </div>
 
@@ -301,10 +301,16 @@ footer.bottom {
     <div class="footer"><span>25/30 firms OK · RATIFY</span><span>27.04 02:00</span></div>
   </div>
   <div class="card" style="cursor:default;background:#E8F4F8;border-left-color:#14324E;">
-    <div class="badge">CYCLE 9 — HALT</div>
+    <div class="badge">CYCLE 9 — HALT (Codex)</div>
     <div class="title">Codex: stop_after_cycle=12</div>
-    <div class="desc">Codex empfiehlt STOP. Verbleibende Probleme (Image-Gen, profile enrichment, LO reliability) brauchen größere Architektur-Arbeit, nicht Iter-Tweaks. Story ist vollständig: tables solved, content +0.30, format +1.0. Über-Nacht Loop gestoppt.</div>
+    <div class="desc">Codex empfiehlt STOP. Filipe pushed back am Morgen: 2 von 4 "Architektur"-Probleme waren eigentlich schnelle Fixes (LO-retry + anti-platitude) — wurden in iter13 nachgeholt.</div>
     <div class="footer"><span>Codex JSON · should_continue=false</span><span>27.04 02:05</span></div>
+  </div>
+  <div class="card" style="cursor:default;background:#D4EDDA;border-left-color:#1F6B33;">
+    <div class="badge green">CYCLE 10 · ITER 13 — FILIPE OVERRIDE</div>
+    <div class="title">LO-retry + anti-platitude bundled</div>
+    <div class="desc">v0.1.23 — (1) per-call LibreOffice user dir + 3-attempt retry → <strong>30/30 firms OK</strong> (war 25/30). (2) Anti-platitude prompt mit 24 BANNED phrases → <strong>GENERIC_PLATITUDES 24% → 10%</strong> ▼. McKinsey/BCG content 2.2 → 3.0 ✓. WRONG_FIRM_FACTS 68% → 50% ▼. HALLUCINATED 84% → 70% ▼.</div>
+    <div class="footer"><span>30/30 firms · NEW: REPETITION_WITHIN_SLIDE 8→33%</span><span>27.04 10:30</span></div>
   </div>
 </div>
 
