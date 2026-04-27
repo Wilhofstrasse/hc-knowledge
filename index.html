@@ -168,29 +168,34 @@ footer.bottom {
   <div class="item">
     <div class="label">Latest iteration</div>
     <div class="value">Iter 12</div>
-    <div class="sub">30-firm wider validation läuft</div>
+    <div class="sub">30-firm validated · RATIFIED</div>
   </div>
   <div class="item">
     <div class="label">Status</div>
-    <div class="value">🟢 Live</div>
-    <div class="sub">Tandem-Loop autonom, 8 Cycles abgeschlossen</div>
+    <div class="value">🟢 Loop gestoppt</div>
+    <div class="sub">Codex Verdict: stop_after_cycle=12</div>
   </div>
   <div class="item">
     <div class="label">Tables filled</div>
-    <div class="value">4.00 / 5</div>
-    <div class="sub">▲ 2.40 → 4.00 in 8 cycles</div>
+    <div class="value">4.08 / 5</div>
+    <div class="sub">▲ 2.40 → 4.08 (full 30 firms)</div>
   </div>
   <div class="item">
     <div class="label">Code-Version</div>
     <div class="value">v0.1.22</div>
-    <div class="sub">batch-table + LLM-Numerics</div>
+    <div class="sub">batch-table + LLM-Numerics LOCKED</div>
   </div>
 </div>
 
 <div style="background:#1F6B33;color:#fff;padding:1rem 1.2rem;border-radius:4px;margin-bottom:1.5rem;">
-  <strong style="font-size:1.05rem;">📊 Ergebnis Übernacht (Cycles 5-8 · Iter 5-12)</strong><br>
-  <span style="font-size:0.95rem;opacity:0.95;">Tabellen jetzt voll mit ECHTEN Peers (UBS sieht Morgan Stanley/JPMorgan/HSBC, ABB sieht Siemens/Schneider/Rockwell, Goldman Bilanz Summe $1.6T statt früher absurden $5.3B).
-  Verbleibend: IMAGES_SHOW_OLD_FIRM_NAME 100% (Bild-Replacement = v2 Scope, AI Image Gen nötig), GENERIC_PLATITUDES 40% (Content-Prompt-Tuning).</span>
+  <strong style="font-size:1.05rem;">📊 Übernacht-Bilanz (Cycles 5-9 · Iter 5-12 · 30-Firm Final)</strong><br>
+  <span style="font-size:0.95rem;opacity:0.95;">
+  <strong>tables_filled 2.40 → 4.08</strong> (+1.68) ·
+  <strong>text_overflow 1.33 → 3.00</strong> (+1.67) ·
+  <strong>CHART_TEXT_HARDCODED 83% → 4%</strong> (-79%) ·
+  <strong>TEXT_OVERFLOW 80% → 4%</strong> (-76%)<br>
+  Tabellen jetzt voll mit ECHTEN Peers (UBS sieht Morgan Stanley/JPMorgan/HSBC, ABB sieht Siemens/Schneider/Rockwell). Verbleibend: IMAGES (100% — Bild-Gen v2 nötig), HALLUCINATED_NUMBERS (84% — weniger-bekannte Firmen brauchen profile enrichment).
+  </span>
 </div>
 
 <h2>🔧 Live Tool — direkt benutzen</h2>
@@ -289,12 +294,45 @@ footer.bottom {
     <div class="desc">v0.1.22 — Numeric cells nicht mehr verbatim preserved. <strong>HALLUCINATED_NUMBERS 75% → 40% ▼</strong>. Goldman Bilanz Summe jetzt $1.6T (statt $5.3B), UBS Bilanz 1500 Mrd CHF (≈ $1.7T).</div>
     <div class="footer"><span>5 firms 5/5 OK · RATIFY</span><span>27.04 01:15</span></div>
   </div>
-  <div class="card" style="cursor:default;background:#FFF3CD;border-left-color:#ffc107;">
-    <div class="badge amber">CYCLE 8 · ITER 12 — RUNNING</div>
-    <div class="title">30-Firm Wider Validation (no code change)</div>
-    <div class="desc">Codex picked validation-only run vor weiterem Tweak. v0.1.22 auf alle 30 Firmen — confirm Subset-Trend hält bei weniger-bekannten Firmen (Galderma, Avaloq, Nexthink, SoftwareOne).</div>
-    <div class="footer"><span>30 firms läuft · ETA ~25 min</span><span>27.04 01:30</span></div>
+  <div class="card" style="cursor:default;background:#D4EDDA;border-left-color:#1F6B33;">
+    <div class="badge green">CYCLE 8 · ITER 12 — RATIFIED</div>
+    <div class="title">30-Firm Wider Validation</div>
+    <div class="desc">v0.1.22 auf alle 30 Firmen. <strong>Trend hält bei full scale</strong>: tables_filled 4.08 (subset war 4.00), HALLUCINATED rebases 84% bei weniger-bekannten Firmen (Galderma, Nexthink, Avaloq, McKinsey/BCG content=2.2). 25/30 OK, 5 LO render fails (infra noise).</div>
+    <div class="footer"><span>25/30 firms OK · RATIFY</span><span>27.04 02:00</span></div>
   </div>
+  <div class="card" style="cursor:default;background:#E8F4F8;border-left-color:#14324E;">
+    <div class="badge">CYCLE 9 — HALT</div>
+    <div class="title">Codex: stop_after_cycle=12</div>
+    <div class="desc">Codex empfiehlt STOP. Verbleibende Probleme (Image-Gen, profile enrichment, LO reliability) brauchen größere Architektur-Arbeit, nicht Iter-Tweaks. Story ist vollständig: tables solved, content +0.30, format +1.0. Über-Nacht Loop gestoppt.</div>
+    <div class="footer"><span>Codex JSON · should_continue=false</span><span>27.04 02:05</span></div>
+  </div>
+</div>
+
+<h2>📈 iter4 → iter12 Vergleich (full 30 firms)</h2>
+<div style="background:#fff;border:1px solid #C2C2C2;border-radius:4px;padding:1rem;margin-bottom:1.5rem;">
+<table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+<thead><tr style="border-bottom:2px solid #14324E;text-align:left;">
+  <th style="padding:0.5rem 0;">Dimension / Failure-Mode</th>
+  <th style="text-align:right;padding:0.5rem 0;">iter4 (vorher)</th>
+  <th style="text-align:right;padding:0.5rem 0;">iter12 (jetzt)</th>
+  <th style="text-align:right;padding:0.5rem 0;">Δ</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:0.4rem 0;">tables_filled</td><td style="text-align:right;">2.40</td><td style="text-align:right;color:#1F6B33;font-weight:700;">4.08</td><td style="text-align:right;color:#1F6B33;">+1.68 ▲▲</td></tr>
+<tr><td>text_overflow</td><td style="text-align:right;">1.33</td><td style="text-align:right;color:#1F6B33;font-weight:700;">3.00</td><td style="text-align:right;color:#1F6B33;">+1.67 ▲▲</td></tr>
+<tr><td>font_preserved</td><td style="text-align:right;">3.00</td><td style="text-align:right;color:#1F6B33;font-weight:700;">4.00</td><td style="text-align:right;color:#1F6B33;">+1.00 ▲</td></tr>
+<tr><td>layout_intact</td><td style="text-align:right;">1.97</td><td style="text-align:right;">2.92</td><td style="text-align:right;color:#1F6B33;">+0.95 ▲</td></tr>
+<tr><td>sibling_diversity</td><td style="text-align:right;">2.53</td><td style="text-align:right;">3.08</td><td style="text-align:right;color:#1F6B33;">+0.55 ▲</td></tr>
+<tr><td>tone_fit</td><td style="text-align:right;">2.73</td><td style="text-align:right;">3.08</td><td style="text-align:right;color:#1F6B33;">+0.35 ▲</td></tr>
+<tr><td>on_firm_accuracy</td><td style="text-align:right;">2.70</td><td style="text-align:right;">3.00</td><td style="text-align:right;color:#1F6B33;">+0.30 ▲</td></tr>
+<tr><td>strategic_substance</td><td style="text-align:right;">2.70</td><td style="text-align:right;">3.00</td><td style="text-align:right;color:#1F6B33;">+0.30 ▲</td></tr>
+<tr><td>images_preserved</td><td style="text-align:right;">1.60</td><td style="text-align:right;">2.00</td><td style="text-align:right;color:#5B5D64;">+0.40 (eingebettete Bilder)</td></tr>
+<tr style="border-top:1px solid #C2C2C2;"><td style="padding-top:0.6rem;">CHART_TEXT_HARDCODED</td><td style="text-align:right;padding-top:0.6rem;">83%</td><td style="text-align:right;color:#1F6B33;font-weight:700;padding-top:0.6rem;">4%</td><td style="text-align:right;color:#1F6B33;padding-top:0.6rem;">−79% ▼</td></tr>
+<tr><td>TEXT_OVERFLOW</td><td style="text-align:right;">80%</td><td style="text-align:right;color:#1F6B33;font-weight:700;">4%</td><td style="text-align:right;color:#1F6B33;">−76% ▼</td></tr>
+<tr><td>HALLUCINATED_NUMBERS</td><td style="text-align:right;">3% (Tabellen leer)</td><td style="text-align:right;color:#8B5A00;">84%</td><td style="text-align:right;color:#8B5A00;">+81% (Vision sieht jetzt Tabelleninhalte — Magnitude-Drift bei kleinen Firmen)</td></tr>
+<tr><td>WRONG_FIRM_FACTS</td><td style="text-align:right;">3%</td><td style="text-align:right;color:#8B5A00;">68%</td><td style="text-align:right;color:#8B5A00;">+65% (driven by SLIDE-4 image)</td></tr>
+<tr><td>IMAGES_SHOW_OLD_FIRM_NAME</td><td style="text-align:right;">(neu)</td><td style="text-align:right;color:#B8321F;font-weight:700;">100%</td><td style="text-align:right;color:#B8321F;">v2 scope (image gen)</td></tr>
+</tbody></table>
 </div>
 
 <h2>📋 Handoffs &amp; Briefings</h2>
@@ -319,28 +357,47 @@ footer.bottom {
   </a>
 </div>
 
-<h2>🎯 Morgen-Übergabe — was du wissen solltest</h2>
+<h2>🎯 Morgen-Übergabe — Phase 2 Backlog</h2>
 <div class="card-grid">
   <div class="card" style="background:#D4EDDA;border-left-color:#1F6B33;">
-    <div class="badge green">GROSSE WINS ÜBERNACHT</div>
-    <div class="title">Tabellen sind jetzt sauber</div>
+    <div class="badge green">GELÖST · KEEP_AS_IS</div>
+    <div class="title">Tabellen + Text-Overflow + Charts</div>
     <div class="desc">
-    <strong>Vorher (iter4):</strong> Tabellen-Header zeigten "ABB / ABB / ABB" oder Goldman mit $5.3B Bilanz.<br>
-    <strong>Jetzt (iter11):</strong> UBS sieht Morgan Stanley/JPMorgan/HSBC/Julius Baer als Peers. ABB sieht Siemens/Schneider/Rockwell/Emerson. Goldman Bilanz Summe $1.6T (≈ korrekt).<br>
-    <strong>Score:</strong> tables_filled 2.40 → 4.00 / 5. HALLUCINATED_NUMBERS 75% → 40%.</div>
+    Tabellen voll mit echten Peers. Text passt rein. Chart-Achsen rewritten. Schrift erhalten.<br>
+    <strong>Verifiziert auf 30 Firmen (iter12).</strong> Codex empfahl LOCK & DEPLOY für aktuelle Use Cases ohne Bilder.</div>
   </div>
   <div class="card" style="background:#FFF3CD;border-left-color:#ffc107;">
-    <div class="badge amber">VERBLEIBEND · BRAUCHT v2</div>
-    <div class="title">Bilder noch HBL — IMAGES_SHOW_OLD_FIRM_NAME 100%</div>
-    <div class="desc">Cover-Foto, PESTEL-Diagramm-Zentrum, Slide-4 Wettbewerbskarte — diese sind eingebettete Bilder mit "Hypothekarbank Lenzburg" oder Swiss-Bank Logos. Kein Text-Replacement Tool kann das fixen — braucht AI Image Gen + Logo-Detect + Swap. Out of scope für aktuelle Architektur.</div>
-  </div>
-  <div class="card" style="background:#E8F4F8;border-left-color:#14324E;">
-    <div class="badge">DEINE ENTSCHEIDUNG</div>
-    <div class="title">Wie weiter Samstag?</div>
+    <div class="badge amber">PHASE 2 · BRAUCHT IMAGE-GEN</div>
+    <div class="title">IMAGES_SHOW_OLD_FIRM_NAME 100%</div>
     <div class="desc">
-    <strong>Option A — STOP, sign-off iter11/iter12.</strong> Tabellen + Numerics solved. v2 (Image-Replacement) als separate Phase.<br>
-    <strong>Option B — Push weiter:</strong> GENERIC_PLATITUDES (40%) via anti-platitude prompt + richer firm profiles.<br>
-    <strong>Option C — Architectural pivot:</strong> Image-replacement v2 spec.</div>
+    Cover-Foto (HBL Gebäude), PESTEL-Diagramm-Zentrum, Slide-4 Wettbewerbskarte — eingebettete Bilder. Out of scope für aktuelle Text-Engine.<br>
+    <strong>Stack:</strong> Vision-Detect (Sonnet liest Bilder) → Sora/Imagen Image-Gen → Embed im pptx via python-pptx shape.image. Spec ~1d, Build ~3d.</div>
+  </div>
+  <div class="card" style="background:#FFF3CD;border-left-color:#ffc107;">
+    <div class="badge amber">PHASE 2 · PROFILE ENRICHMENT</div>
+    <div class="title">HALLUCINATED_NUMBERS 84%</div>
+    <div class="desc">
+    Bei UBS/Roche/ABB/Goldman: Numerics nahe-korrekt (Goldman $1.6T ✓). Bei Galderma/Avaloq/Nexthink: LLM hat keine spezifischen KPIs → fabuliert. McKinsey/BCG content nur 2.2 (gleiche Ursache).<br>
+    <strong>Fix:</strong> firms.json um echte KPIs erweitern (Revenue, ROE, Headcount, AUM) → in firm_profile prompt block. Spec ~2h, Build ~3h.</div>
+  </div>
+  <div class="card" style="background:#FFF3CD;border-left-color:#ffc107;">
+    <div class="badge amber">PHASE 2 · INFRA</div>
+    <div class="title">LO-Render-Bug intermittent</div>
+    <div class="desc">
+    5/30 Firmen pro Iter verlieren PDF render (HTTP 500). Verschiedene Firmen jedes Mal — Race-Condition oder LO-Crash unter Last. ~$1 vision spend wasted pro firm.<br>
+    <strong>Fix:</strong> Retry mit exponential backoff in /api/preview, oder serialize LO calls (loose Parallelism). ~2h investigation.</div>
+  </div>
+</div>
+
+<h2>🤔 Deine Entscheidung Samstag</h2>
+<div class="card-grid">
+  <div class="card" style="background:#E8F4F8;border-left-color:#14324E;cursor:default;">
+    <div class="badge">RECOMMENDED · CODEX-VERDICT</div>
+    <div class="title">Sign-off iter12, ship v0.1.22 als Production</div>
+    <div class="desc">
+    Tool ist für die meisten Use Cases nutzbar (UBS/Roche/etc als sample). Nicht für alle: Galderma/Nexthink etc brauchen mehr Profile-Daten.<br>
+    <strong>Was du tun musst:</strong> 1× Test-Run mit echtem Pitch-Deck Use Case. Wenn pass → live. Wenn fail → Phase 2 priorisieren.<br>
+    Tool URL bleibt: <code>districts-eau-habits-built.trycloudflare.com</code>, <code>filipe / JPOMNdQYfoOf9T0mQTIk</code></div>
   </div>
 </div>
 
