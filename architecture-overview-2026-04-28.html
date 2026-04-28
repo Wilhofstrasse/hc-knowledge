@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>H&amp;C Corporate PPT Tool — Architecture overview (plain English)</title>
+<style>
+  :root {
+    --hc-navy: #14324E;
+    --hc-navy-soft: #3A5C7A;
+    --hc-coral: #E94D3A;
+    --hc-coral-safe: #B8321F;
+    --hc-gray-1: #C2C2C2;
+    --hc-gray-3: #87878B;
+    --hc-gray-4: #5B5D64;
+    --hc-bg: #F7F7F7;
+    --hc-bg-alt: #F0F0F0;
+    --hc-white: #FFFFFF;
+    --hc-green: #1F6B33;
+    --hc-amber: #8B5A00;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Calibri Light", -apple-system, system-ui, "Segoe UI", sans-serif;
+    font-weight: 300;
+    color: var(--hc-navy);
+    background: var(--hc-bg);
+    line-height: 1.55;
+    font-size: 15px;
+  }
+  .container { max-width: 980px; margin: 0 auto; padding: 1.5rem 1.2rem 4rem; }
+  header.top {
+    border-left: 5px solid var(--hc-coral);
+    padding: 0.4rem 0 0.4rem 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .kicker {
+    font-family: Consolas, "SF Mono", monospace;
+    color: var(--hc-coral);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  h1 { margin: 0.25rem 0 0.4rem; font-weight: 700; font-size: 1.5rem; line-height: 1.25; }
+  .sub { margin: 0; color: var(--hc-gray-4); font-size: 0.95rem; }
+
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    border-bottom: 2px solid var(--hc-navy);
+    padding-bottom: 0.3rem;
+    margin: 2.2rem 0 0.8rem;
+  }
+  h3 {
+    font-size: 1.0rem;
+    font-weight: 700;
+    margin: 1.4rem 0 0.5rem;
+    color: var(--hc-navy);
+  }
+
+  .inbox-banner {
+    background: var(--hc-white);
+    border: 1px solid var(--hc-gray-1);
+    border-left: 3px solid var(--hc-coral);
+    padding: 0.8rem 1rem;
+    margin-bottom: 1.8rem;
+    border-radius: 3px;
+    font-size: 0.92rem;
+  }
+  .inbox-banner a {
+    color: var(--hc-coral);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .inbox-banner a:hover { text-decoration: underline; }
+
+  .so-what {
+    background: #DDE5EE;
+    border-left: 4px solid var(--hc-navy);
+    padding: 0.9rem 1.1rem;
+    margin: 0.6rem 0 1.4rem;
+    border-radius: 3px;
+    font-size: 0.97rem;
+  }
+  .so-what strong { color: var(--hc-navy); }
+
+  /* Module card */
+  .module {
+    background: var(--hc-white);
+    border: 1px solid var(--hc-gray-1);
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    margin: 0.8rem 0 1.4rem;
+  }
+  .module h3 { margin-top: 0; color: var(--hc-coral); }
+  .module .role {
+    font-family: Consolas, "SF Mono", monospace;
+    color: var(--hc-gray-4);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .module ul { margin: 0.4rem 0; padding-left: 1.3rem; }
+  .module li { margin: 0.25rem 0; }
+  .module .tag {
+    display: inline-block;
+    background: var(--hc-bg-alt);
+    color: var(--hc-gray-4);
+    font-size: 0.72rem;
+    padding: 0.12rem 0.55rem;
+    border-radius: 11px;
+    margin-right: 0.35rem;
+    margin-top: 0.4rem;
+  }
+
+  /* Layered diagram */
+  .stack {
+    background: var(--hc-white);
+    border: 1px solid var(--hc-gray-1);
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 1rem 0 1.5rem;
+  }
+  .layer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.7rem 0.7rem 0.5rem;
+    margin: 0.3rem 0;
+    border-radius: 3px;
+    align-items: stretch;
+  }
+  .layer-label {
+    flex: 0 0 100%;
+    font-family: Consolas, "SF Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.2rem;
+    color: var(--hc-gray-4);
+  }
+  .layer-input { background: #FCE4DD; }
+  .layer-process { background: #DDE5EE; }
+  .layer-trust { background: #FFF3CD; }
+  .layer-ui { background: #E1F2E5; }
+  .layer-input .layer-label { color: var(--hc-coral-safe); }
+  .layer-process .layer-label { color: var(--hc-navy); }
+  .layer-trust .layer-label { color: var(--hc-amber); }
+  .layer-ui .layer-label { color: var(--hc-green); }
+
+  .box {
+    background: var(--hc-white);
+    border: 1px solid var(--hc-gray-1);
+    border-radius: 3px;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+    flex: 1 1 auto;
+    min-width: 130px;
+    text-align: center;
+  }
+  .box strong { display: block; color: var(--hc-navy); font-weight: 700; }
+  .box small { color: var(--hc-gray-4); font-size: 0.74rem; }
+
+  .arrow {
+    text-align: center;
+    color: var(--hc-gray-3);
+    font-size: 1.3rem;
+    line-height: 1;
+    margin: 0.2rem 0;
+  }
+
+  /* Connection table */
+  table.conn {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 0.6rem 0 1.4rem;
+  }
+  table.conn th, table.conn td {
+    border-bottom: 1px solid var(--hc-gray-1);
+    padding: 0.55rem 0.7rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  table.conn th {
+    background: var(--hc-bg-alt);
+    font-weight: 700;
+    color: var(--hc-navy);
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  table.conn td:first-child { font-weight: 700; color: var(--hc-coral); white-space: nowrap; }
+
+  /* Status pills (used in module cards) */
+  .pill {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: 11px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-left: 0.4rem;
+    vertical-align: middle;
+  }
+  .pill-locked { background: #E1F2E5; color: var(--hc-green); }
+  .pill-spec { background: #DDE5EE; color: var(--hc-navy); }
+  .pill-build { background: #FFF3CD; color: var(--hc-amber); }
+
+  footer.bottom {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--hc-gray-1);
+    color: var(--hc-gray-3);
+    font-size: 0.85rem;
+  }
+
+  .comment-link {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.25rem 0.7rem;
+    background: var(--hc-coral);
+    color: var(--hc-white);
+    border-radius: 3px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .comment-link:hover { background: var(--hc-coral-safe); }
+  .comment-link::before { content: "\1F4AC  "; }
+  .section-comment-row { display: flex; justify-content: flex-end; margin-top: 0.4rem; }
+  .inbox-banner {
+    background: linear-gradient(90deg, var(--hc-coral) 0%, var(--hc-coral-safe) 100%);
+    color: var(--hc-white);
+    padding: 0.85rem 1.2rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .inbox-banner strong { font-size: 1rem; }
+  .inbox-banner a {
+    color: var(--hc-white);
+    background: rgba(255,255,255,0.18);
+    padding: 0.4rem 0.9rem;
+    border-radius: 3px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.88rem;
+  }
+  .inbox-banner a:hover { background: rgba(255,255,255,0.28); }
+
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="top">
+  <div class="kicker">H&amp;C Corporate PPT Tool · Architecture Overview · 28.04.2026</div>
+  <h1>Modules + how they connect (plain English)</h1>
+  <p class="sub">Comment line-by-line via the buttons under each section. iPhone-friendly: no scrolling chat needed.</p>
+</header>
+
+<h2 id="so-what">So what?</h2><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7So+what%3F&body=Comment+on+%C2%A7So+what%3F%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §So what?</a></div>
+<div class="so-what">
+The tool has <strong>9 modules</strong>. Three are user-facing (libraries, the add-in panel, the cockpit). Six work behind the scenes to make sure nothing the AI writes is improvised — every fact, every image, every claim must trace back to a real source or get blocked. <strong>This page explains each module in plain English and shows how they connect.</strong>
+</div>
+
+<h2 id="the-big-picture-in-4-layers">The big picture in 4 layers</h2><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7The+big+picture+in+4+layers&body=Comment+on+%C2%A7The+big+picture+in+4+layers%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §The big picture in 4 layers</a></div>
+<p>Bottom layer = where data comes from. Middle = how it gets processed. Then = the trust layer that protects everyone. Top = what you actually see and click on in PowerPoint.</p>
+
+<div class="stack">
+
+  <div class="layer layer-input">
+    <div class="layer-label">Layer 1 — Data Sources (where stuff comes from)</div>
+    <div class="box"><strong>SEC EDGAR</strong><small>US public filings, free</small></div>
+    <div class="box"><strong>Annual Reports</strong><small>PDFs from firm IR pages</small></div>
+    <div class="box"><strong>GLEIF + Companies House</strong><small>legal entity data</small></div>
+    <div class="box"><strong>Stock Photo APIs</strong><small>Shutterstock / Getty</small></div>
+    <div class="box"><strong>User uploads</strong><small>your own PDFs / images</small></div>
+    <div class="box"><strong>Library Templates</strong><small>H&amp;C designed slides</small></div>
+  </div>
+
+  <div class="arrow">↓ feeds into ↓</div>
+
+  <div class="layer layer-process">
+    <div class="layer-label">Layer 2 — Processing (turns data into deck content)</div>
+    <div class="box"><strong>Source Store</strong><small>holds all uploaded sources, broken into paragraphs</small></div>
+    <div class="box"><strong>Claim Ledger</strong><small>every statement → which source</small></div>
+    <div class="box"><strong>Asset Ledger</strong><small>every image → which license</small></div>
+    <div class="box"><strong>Cover Photo Picker</strong><small>chooses sector-appropriate cover</small></div>
+    <div class="box"><strong>Grounding Engine</strong><small>forces every claim to cite a source</small></div>
+    <div class="box"><strong>Library</strong><small>3 partitions: Corporate / Office / Personal</small></div>
+  </div>
+
+  <div class="arrow">↓ wrapped in ↓</div>
+
+  <div class="layer layer-trust">
+    <div class="layer-label">Layer 3 — Trust &amp; Safety (protects everyone)</div>
+    <div class="box"><strong>Tenant Isolation</strong><small>H&amp;C-CH ≠ H&amp;C-DE data</small></div>
+    <div class="box"><strong>External Audit Log</strong><small>tamper-proof cloud, 7-10y</small></div>
+    <div class="box"><strong>Disclaimer Flag</strong><small>"AI was here" stamp</small></div>
+    <div class="box"><strong>Encryption + KMS</strong><small>keys in Azure Key Vault</small></div>
+    <div class="box"><strong>GDPR Right-to-Forget</strong><small>purge on request</small></div>
+    <div class="box"><strong>EU Data Residency</strong><small>EU clients = EU servers</small></div>
+  </div>
+
+  <div class="arrow">↓ surfaced through ↓</div>
+
+  <div class="layer layer-ui">
+    <div class="layer-label">Layer 4 — Add-in UI (what you see in PowerPoint)</div>
+    <div class="box"><strong>Library Panel</strong><small>browse + stamp templates</small></div>
+    <div class="box"><strong>Fill Flows F1-F6</strong><small>edit shape / fill slide / etc.</small></div>
+    <div class="box"><strong>Traffic Lights</strong><small>green/yellow/orange/red per shape</small></div>
+    <div class="box"><strong>Source Click-through</strong><small>tap shape → see source</small></div>
+    <div class="box"><strong>Grounding Cockpit</strong><small>full audit + bulk actions</small></div>
+    <div class="box"><strong>Disclaimer Banner</strong><small>"AI-assisted, reviewed" badge</small></div>
+  </div>
+
+</div>
+
+<p style="text-align:center;font-size:0.9rem;color:var(--hc-gray-4);">
+Each box above is a <strong>module</strong>. Below: each module explained in plain English.
+</p>
+
+<h2 id="the-9-modules-one-by-one">The 9 modules — one by one</h2><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7The+9+modules+%E2%80%94+one+by+one&body=Comment+on+%C2%A7The+9+modules+%E2%80%94+one+by+one%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §The 9 modules — one by one</a></div>
+
+<h3 id="1-library-locked-v2-0">1. Library <span class="pill pill-locked">Locked v2.0</span></h3><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A71.+Library+Locked+v2.0&body=Comment+on+%C2%A71.+Library+Locked+v2.0%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §1. Library Locked v2.0</a></div>
+<div class="module">
+  <div class="role">What it is</div>
+  <p>The shelf of pre-designed H&amp;C slides you stamp + fill. Three shelves stacked together:</p>
+  <ul>
+    <li><strong>Corporate</strong> — official H&amp;C templates, vetted by the design team</li>
+    <li><strong>Office (Tenant)</strong> — your office's templates (H&amp;C Switzerland, H&amp;C Germany, etc. — separated)</li>
+    <li><strong>Personal (UserLibrary)</strong> — your own "Killer-Slides," your favorites</li>
+  </ul>
+  <div class="role" style="margin-top:0.7rem;">How it connects</div>
+  <ul>
+    <li>You pick from it → tool stamps the template into your deck</li>
+    <li>You can author a new slide and "Add to Personal Library" (the StartFresh flow)</li>
+    <li>Promote path: Personal → Office → Corporate (Corporate needs admin approval)</li>
+    <li>When you leave H&amp;C: Personal Library archives to H&amp;C, you can request a personal copy with legal sign-off</li>
+  </ul>
+  <div class="role" style="margin-top:0.7rem;">How it shows up in the add-in</div>
+  <ul><li>"Library Panel" — the main browse-and-stamp surface, top-left of add-in</li></ul>
+  <span class="tag">build phase: MA-B (~4 weeks)</span>
+  <span class="tag">UserLibrary added: v2.0</span>
+</div>
+
+<h3 id="2-claim-ledger-locked-v2-0">2. Claim Ledger <span class="pill pill-locked">Locked v2.0</span></h3><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A72.+Claim+Ledger+Locked+v2.0&body=Comment+on+%C2%A72.+Claim+Ledger+Locked+v2.0%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §2. Claim Ledger Locked v2.0</a></div>
+<div class="module">
+  <div class="role">What it is</div>
+  <p>An invisible spreadsheet living inside every deck. One row per fact. Every row says: "the deck claims X; the source is Y; here's the quote." If a fact has no source, the row says "blocked" and that cell renders as <code>[unverified]</code> in the deck.</p>
+  <div class="role" style="margin-top:0.7rem;">Four states a claim can be in</div>
+  <ul>
+    <li><strong>Source-backed</strong> — points to a real document (SEC filing, annual report). Confidence 85-99%.</li>
+    <li><strong>Estimate-band</strong> — "between $5bn and $10bn" range. Marked clearly.</li>
+    <li><strong>Consultant-attested</strong> — you said "I know this from client work last week." Free-text reason. Partner has to co-sign before client send.</li>
+    <li><strong>Blocked</strong> — no source, no attestation. Shows as <code>[unverified]</code>.</li>
+  </ul>
+  <div class="role" style="margin-top:0.7rem;">How it connects</div>
+  <ul>
+    <li>Reads from Source Store to find supporting quotes</li>
+    <li>Writes to External Audit Log every time a claim is created or changed</li>
+    <li>Wrapped in Tenant Isolation (H&amp;C-CH claims invisible to H&amp;C-DE)</li>
+    <li>Feeds the Traffic Light colors and the Source Click-through panel</li>
+  </ul>
+  <div class="role" style="margin-top:0.7rem;">How it shows up in the add-in</div>
+  <ul>
+    <li>Traffic light dot on every shape (green/yellow/orange/red)</li>
+    <li>Click any shape → side panel shows the source URL + exact quote</li>
+    <li>Full Cockpit shows every claim across the deck, filterable by tier</li>
+  </ul>
+  <span class="tag">build: BE-A0 backend (~8d) + MA-A traffic-light stub (~part of 12-15d)</span>
+</div>
+
+<h3 id="3-asset-ledger-v2-1-spec-d-today">3. Asset Ledger <span class="pill pill-spec">v2.1 spec'd today</span></h3><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A73.+Asset+Ledger+v2.1+spec%27d+today&body=Comment+on+%C2%A73.+Asset+Ledger+v2.1+spec%27d+today%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §3. Asset Ledger v2.1 spec'd today</a></div>
+<div class="module">
+  <div class="role">What it is</div>
+  <p>Same idea as Claim Ledger but for <strong>images</strong>, not facts. One row per image used in the deck. Each row says: where the image came from, what license it has, who owns the rights, when the license expires. No image gets into the deck without a row.</p>
+  <div class="role" style="margin-top:0.7rem;">Why it's separate from Claim Ledger</div>
+  <p>Claims are about <em>truth</em> (was the number right?). Images are about <em>rights</em> (do we have permission?). Different lifecycles, different rules. Codex flagged that mixing them would pollute both.</p>
+  <div class="role" style="margin-top:0.7rem;">How it connects</div>
+  <ul>
+    <li>Cover Photo Picker writes to it for every cover photo decision</li>
+    <li>Logo Swap and Peer-Map Rebuild (later modules) will also write here</li>
+    <li>Wrapped in Tenant Isolation</li>
+    <li>Feeds External Audit Log</li>
+  </ul>
+  <div class="role" style="margin-top:0.7rem;">How it shows up in the add-in</div>
+  <ul><li>Mostly invisible — but if a license expires within 30 days, you get a notification in the Cockpit</li></ul>
+  <span class="tag">build: DR-4a (Phase 2)</span>
+</div>
+
+<h3 id="4-source-store-v2-1-spec-d-today">4. Source Store <span class="pill pill-spec">v2.1 spec'd today</span></h3><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A74.+Source+Store+v2.1+spec%27d+today&body=Comment+on+%C2%A74.+Source+Store+v2.1+spec%27d+today%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §4. Source Store v2.1 spec'd today</a></div>
+<div class="module">
+  <div class="role">What it is</div>
+  <p>A per-firm filing cabinet for every PDF, web page, and dataset the tool reads. The tool breaks each source into paragraphs and indexes them. When the AI writes a claim, it has to point to a specific paragraph in this cabinet.</p>
+  <div class="role" style="margin-top:0.7rem;">What goes in</div>
+  <ul>
+    <li>SEC EDGAR filings (free, US public firms — most reliable)</li>
+    <li>Annual reports / 10-Ks (PDF, parsed via docling)</li>
+    <li>Investor relations pages (HTML)</li>
+    <li>Companies House (UK) and GLEIF (legal entity identifiers)</li>
+    <li>PDFs you upload yourself</li>
+  </ul>
+  <div class="role" style="margin-top:0.7rem;">How it connects</div>
+  <ul>
+    <li>Feeds Claim Ledger (every claim points to a paragraph here)</li>
+    <li>Feeds Grounding Engine (the LLM gets these paragraphs as context)</li>
+    <li>Wrapped in Tenant Isolation + EU Data Residency</li>
+  </ul>
+  <div class="role" style="margin-top:0.7rem;">How it shows up in the add-in</div>
+  <ul><li>You upload PDFs via the JumpStart flow</li><li>The Cockpit shows which sources are stale (older than 14 days, or 404 now)</li></ul>
+  <span class="tag">build: BE-A0 (part of grounding ~3d)</span>
+</div>
+
+<h3 id="5-grounding-engine-v2-1-spec-d-today">5. Grounding Engine <span class="pill pill-spec">v2.1 spec'd today</span></h3><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A75.+Grounding+Engine+v2.1+spec%27d+today&body=Comment+on+%C2%A75.+Grounding+Engine+v2.1+spec%27d+today%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §5. Grounding Engine v2.1 spec'd today</a></div>
+<div class="module">
+  <div class="role">What it is</div>
+  <p>The thing that <strong>forces every statement to cite a source</strong>. Built on Anthropic's native Citations API — when the AI writes, the citation pointers are produced server-side, not by the model. The model literally cannot make up sources anymore.</p>
+  <div class="role" style="margin-top:0.7rem;">Two safety nets</div>
+  <ul>
+    <li><strong>Anthropic Citations</strong> — guarantees every quoted text is a real substring of the source document (server-parsed)</li>
+    <li><strong>Pydantic validator + re-ask</strong> — if the model still slips a wrong quote, validation fails and it re-asks. After 3 failed retries, the claim gets blocked.</li>
+  </ul>
+  <div class="role" style="margin-top:0.7rem;">How it connects</div>
+  <ul>
+    <li>Reads from Source Store (paragraphs as context)</li>
+    <li>Writes to Claim Ledger (every claim with its source pointer)</li>
+    <li>Writes to External Audit Log</li>
+  </ul>
+  <div class="role" style="margin-top:0.7rem;">How it shows up in the add-in</div>
+  <ul>
+    <li>Traffic light per shape</li>
+    <li>Click shape → source panel slides open</li>
+    <li>Toggle: "highlight all claims by confidence" across the deck</li>
+    <li>Full Cockpit (separate larger view): filter, bulk-attest, audit export</li>
+  </ul>
+  <span class="tag">build: BE-A0 backend (~3d ingest + 3d Citations + 2d validator) + MA-A UI stub + MA-F full Cockpit (~5d)</span>
+</div>
+
+<h3 id="6-cover-photo-picker-v2-1-spec-d-today">6. Cover Photo Picker <span class="pill pill-spec">v2.1 spec'd today</span></h3><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A76.+Cover+Photo+Picker+v2.1+spec%27d+today&body=Comment+on+%C2%A76.+Cover+Photo+Picker+v2.1+spec%27d+today%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §6. Cover Photo Picker v2.1 spec'd today</a></div>
+<div class="module">
+  <div class="role">What it is</div>
+  <p>Picks the right cover photo when you regenerate a deck. Six tiers, tried in order — first one that works wins:</p>
+  <ol>
+    <li><strong>Your own upload</strong> (most defensible)</li>
+    <li><strong>The firm's official press kit</strong> (their own brand-controlled image)</li>
+    <li><strong>H&amp;C internal sector library</strong> (80-120 hand-curated images, one-time $3k seed)</li>
+    <li><strong>Licensed stock</strong> (Shutterstock primary, Getty fallback)</li>
+    <li><strong>AI-generated abstract image</strong> ONLY if your office opted in. NEVER fake a real firm's HQ. Hard regex block at server.</li>
+    <li><strong>Plain placeholder</strong> if all else fails (visible signal, not a silent fallback)</li>
+  </ol>
+  <div class="role" style="margin-top:0.7rem;">Why this design</div>
+  <p>Most consultant decks today get sued for using unlicensed photos. This module makes that structurally impossible. Every image has rights tracking from minute one.</p>
+  <div class="role" style="margin-top:0.7rem;">How it connects</div>
+  <ul>
+    <li>Writes to Asset Ledger (license + provenance per image)</li>
+    <li>Writes to External Audit Log</li>
+    <li>Wrapped in Tenant Isolation + EU Data Residency</li>
+  </ul>
+  <div class="role" style="margin-top:0.7rem;">How it shows up in the add-in</div>
+  <ul><li>Cover slide gets the chosen image with a small license badge in the audit pane</li><li>If tier 6 (placeholder) fires, slide is visibly tagged so you know to fix it</li></ul>
+  <span class="tag">build: DR-4a Phase 2 (~9-10d)</span>
+</div>
+
+<h3 id="7-tenant-isolation-locked-v2-0">7. Tenant Isolation <span class="pill pill-locked">Locked v2.0</span></h3><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A77.+Tenant+Isolation+Locked+v2.0&body=Comment+on+%C2%A77.+Tenant+Isolation+Locked+v2.0%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §7. Tenant Isolation Locked v2.0</a></div>
+<div class="module">
+  <div class="role">What it is</div>
+  <p>The wall between H&amp;C-Switzerland, H&amp;C-Germany, and any future external customer. Even if you're co-editing a deck and you accidentally email it to the wrong office, their tool can't read your claim ledger or audit trail. Encrypted with keys only your office holds.</p>
+  <div class="role" style="margin-top:0.7rem;">How it connects</div>
+  <ul><li>Wraps every other module — every Claim, Asset, Source, Audit row carries a tenant ID and is encrypted with that office's key</li></ul>
+  <div class="role" style="margin-top:0.7rem;">How it shows up in the add-in</div>
+  <ul><li>Mostly invisible — but if you open someone else's deck from a different office, you'll see "Read-only — different tenant" instead of editable claims</li></ul>
+  <span class="tag">foundational — every module reads/writes through this</span>
+</div>
+
+<h3 id="8-external-audit-log-locked-v2-0">8. External Audit Log <span class="pill pill-locked">Locked v2.0</span></h3><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A78.+External+Audit+Log+Locked+v2.0&body=Comment+on+%C2%A78.+External+Audit+Log+Locked+v2.0%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §8. External Audit Log Locked v2.0</a></div>
+<div class="module">
+  <div class="role">What it is</div>
+  <p>A tamper-proof cloud diary. Every fill, every image swap, every consultant attestation, every disclaimer click — gets duplicated to a Cloudflare R2 bucket with Object Lock COMPLIANCE retention. Even an admin can't delete a row. Default retention: 7 years (banking 10y, pharma 10y).</p>
+  <div class="role" style="margin-top:0.7rem;">Why it matters</div>
+  <p>Compliance. If a partner-meeting goes sideways and a claim gets disputed, you can pull the exact source the AI saw at the time. Plus encrypted prompt storage means a leaked .pptx doesn't expose strategy text — a journalist couldn't reverse-engineer the audit.</p>
+  <div class="role" style="margin-top:0.7rem;">How it shows up in the add-in</div>
+  <ul><li>Cockpit has "Export Audit Report" → PDF + CSV for partner review</li></ul>
+  <span class="tag">foundational — every module writes here</span>
+</div>
+
+<h3 id="9-disclaimer-flag-locked-v2-0">9. Disclaimer Flag <span class="pill pill-locked">Locked v2.0</span></h3><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A79.+Disclaimer+Flag+Locked+v2.0&body=Comment+on+%C2%A79.+Disclaimer+Flag+Locked+v2.0%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §9. Disclaimer Flag Locked v2.0</a></div>
+<div class="module">
+  <div class="role">What it is</div>
+  <p>The "AI was here, reviewed by a human" stamp. Two layers:</p>
+  <ul>
+    <li><strong>Inside the add-in</strong> — hard gate when you click "Send to client" (blocks until you've acknowledged AI use)</li>
+    <li><strong>Inside the deck itself</strong> — small footer "AI-assisted, user-reviewed" rendered into the .pptx, so the recipient sees it no matter how the file arrived</li>
+  </ul>
+  <p><em>Why two layers:</em> Office.js can detect when you click the add-in's Send button, but it can NOT detect File→Save As, AirDrop, drag to email, etc. So we render the footer right into the deck — it travels with the file regardless.</p>
+  <div class="role" style="margin-top:0.7rem;">How it shows up in the add-in</div>
+  <ul><li>Banner at top of pane: "This deck was AI-assisted. You acknowledged review on DD.MM.YYYY"</li></ul>
+  <span class="tag">build: MA-A (part of foundation)</span>
+</div>
+
+<h2 id="the-connection-table">The connection table</h2><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7The+connection+table&body=Comment+on+%C2%A7The+connection+table%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §The connection table</a></div>
+<p>Same picture as the 4-layer diagram, but in table form. Each row reads "module X feeds into Y."</p>
+
+<table class="conn">
+<thead><tr><th>From</th><th>To</th><th>What flows</th></tr></thead>
+<tbody>
+<tr><td>SEC EDGAR / IR / GLEIF</td><td>Source Store</td><td>raw filings + filings broken into paragraphs</td></tr>
+<tr><td>User PDF uploads</td><td>Source Store</td><td>your uploaded sources, parsed via docling</td></tr>
+<tr><td>Source Store</td><td>Grounding Engine</td><td>relevant paragraphs as LLM context</td></tr>
+<tr><td>Grounding Engine</td><td>Claim Ledger</td><td>one row per claim with source pointer</td></tr>
+<tr><td>Claim Ledger</td><td>Add-in Traffic Lights</td><td>confidence color per shape</td></tr>
+<tr><td>Claim Ledger</td><td>Source Click-through</td><td>quote + URL when you tap a shape</td></tr>
+<tr><td>Cover Photo Picker</td><td>Asset Ledger</td><td>image source + license details</td></tr>
+<tr><td>Asset Ledger</td><td>Add-in license badges</td><td>visible if license expiring soon</td></tr>
+<tr><td>Library</td><td>Stamp/Fill flows</td><td>chosen template stamped into deck</td></tr>
+<tr><td>Every module</td><td>External Audit Log</td><td>row per action (fill, swap, attest, purge)</td></tr>
+<tr><td>Every module</td><td>Tenant Isolation</td><td>encryption + tenant_id wrap before any write</td></tr>
+<tr><td>Disclaimer Flag</td><td>Add-in pane + deck footer</td><td>AI-use acknowledgment, two layers</td></tr>
+</tbody>
+</table>
+
+<h2 id="what-lives-where-in-the-add-in-panel">What lives where in the add-in panel</h2><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7What+lives+where+in+the+add-in+panel&body=Comment+on+%C2%A7What+lives+where+in+the+add-in+panel%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §What lives where in the add-in panel</a></div>
+<p>Concretely, when you open PowerPoint with the add-in installed:</p>
+
+<table class="conn">
+<thead><tr><th>Pane region</th><th>Module(s) feeding it</th></tr></thead>
+<tbody>
+<tr><td>Top tabs (Library / Mode / Settings)</td><td>Library + tenant config</td></tr>
+<tr><td>Main body — current slide editor</td><td>Fill flows F1-F6 (P1 fill / P2 stamp / P3 detect / P4 match / P5 restructure / P6 annotate)</td></tr>
+<tr><td>Grounding sub-panel (collapsible, bottom of main pane)</td><td>Claim Ledger + Source Store + Grounding Engine</td></tr>
+<tr><td>5 quick-buttons in sub-panel</td><td>Highlight / Filter / Attest / Open Source / Open Cockpit</td></tr>
+<tr><td>Corner badges on each shape (toggleable)</td><td>Traffic light from Claim Ledger</td></tr>
+<tr><td>Top banner (when AI was used)</td><td>Disclaimer Flag</td></tr>
+<tr><td>Full Grounding Cockpit (separate larger window)</td><td>Claim Ledger + Source Store + Audit Log (filter / bulk-attest / export)</td></tr>
+<tr><td>Future: Library Cockpit (separate window)</td><td>Library partitions / promote workflow</td></tr>
+</tbody>
+</table>
+
+<h2 id="status-of-each-module-today-28-04-2026">Status of each module today (28.04.2026)</h2><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Status+of+each+module+today+%2828.04.2026%29&body=Comment+on+%C2%A7Status+of+each+module+today+%2828.04.2026%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Status of each module today (28.04.2026)</a></div>
+<table class="conn">
+<thead><tr><th>Module</th><th>Status</th><th>Where</th></tr></thead>
+<tbody>
+<tr><td>Library</td><td>v2.0 LOCKED</td><td>build: MA-B Phase 1 (~4w)</td></tr>
+<tr><td>Claim Ledger</td><td>v2.0 LOCKED + v2.1 extended</td><td>build: BE-A0 + MA-A</td></tr>
+<tr><td>Asset Ledger</td><td>v2.1 LOCKED today</td><td>build: DR-4a Phase 2</td></tr>
+<tr><td>Source Store</td><td>v2.1 LOCKED today</td><td>build: BE-A0 part of grounding</td></tr>
+<tr><td>Grounding Engine</td><td>v2.1 LOCKED today</td><td>build: BE-A0 + MA-A + MA-F</td></tr>
+<tr><td>Cover Photo Picker</td><td>v2.1 LOCKED today</td><td>build: DR-4a Phase 2</td></tr>
+<tr><td>Tenant Isolation</td><td>v2.0 LOCKED</td><td>build: foundational, all phases</td></tr>
+<tr><td>External Audit Log</td><td>v2.0 LOCKED</td><td>build: BE-A0 (8d MVP-blocking)</td></tr>
+<tr><td>Disclaimer Flag</td><td>v2.0 LOCKED</td><td>build: MA-A foundation</td></tr>
+</tbody>
+</table>
+
+<h2 id="what-s-still-missing-modules-not-yet-specced">What's still missing (modules not yet specced)</h2><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7What%27s+still+missing+%28modules+not+yet+specced%29&body=Comment+on+%C2%A7What%27s+still+missing+%28modules+not+yet+specced%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §What's still missing (modules not yet specced)</a></div>
+<ul>
+  <li><strong>Logo Swap</strong> — body-slide logo replacement (DR-4b, ~3d). Same Asset Ledger machinery, applied to non-cover slides.</li>
+  <li><strong>Peer-Map Native Rebuild</strong> — turn raster peer-map images into editable PowerPoint shapes (DR-4c, ~5d). The slide-4 problem from the deck-rev tool.</li>
+  <li><strong>PESTEL Center Logo</strong> — replace the diagram's center logo (DR-4d, ~2d).</li>
+  <li><strong>Cross-deck Fact Registry</strong> — same firm, two decks 3 months apart, same SEC filing. Avoids re-fetching, flags stale facts. (Phase 2)</li>
+  <li><strong>Voice input</strong> — STT for JumpStart. Cut from MVP. (Phase D+)</li>
+  <li><strong>Interview mode</strong> — AI asks you clarifying questions before generating. (Phase D+)</li>
+</ul>
+<p>These are noted in the open questions and decisions log. Not blocking the core architecture.</p>
+
+<h2 id="open-questions-for-you-sign-off-needed-before-buil">Open questions for you (sign-off needed before building)</h2><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Open+questions+for+you+%28sign-off+needed+before+building%29&body=Comment+on+%C2%A7Open+questions+for+you+%28sign-off+needed+before+building%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Open questions for you (sign-off needed before building)</a></div>
+<p>23 open questions today (8 cover photo + 15 grounding) — each has a sensible default. You can override any one with a single decisions-log entry. The defaults are listed in <code>open-questions.md</code> and the relevant module specs.</p>
+<p>Most likely to want your direct call before phase kickoff:</p>
+<ul>
+  <li><strong>Q-CPS-01</strong> Stock photo vendor — default Shutterstock + Getty. Adobe possible alternative.</li>
+  <li><strong>Q-CPS-02</strong> Allow AI-generated cover photos at all? Default OFF.</li>
+  <li><strong>Q-V20-04</strong> External audit retention — default 7 years (10y for banking/pharma).</li>
+  <li><strong>Q-V20-09</strong> What happens to Personal Library when consultant leaves H&amp;C? Default: archive to H&amp;C, request personal copy with legal sign-off.</li>
+  <li><strong>Q-V20-12</strong> KMS choice — default Azure Key Vault (matches Azure AD).</li>
+  <li><strong>Q-V20-13</strong> Data Protection Officer assignment — TBD.</li>
+</ul>
+
+<footer class="bottom">
+Generated 28.04.2026 · v2.0 LOCKED 27.04 · v2.1 LOCKED 28.04 (Cover Photo + Grounding) ·
+Underlying canonical .md files: <code>architecture-notes/cover-photo-selection-module-v1.md</code>,
+<code>grounding-module-v1.md</code>, <code>fill-architecture-v2.md</code>, <code>decisions-log.md</code>, <code>open-questions.md</code> in
+<code>Wilhofstrasse/corporate-ppt-tool-v2</code> (private).
+</footer>
+
+</div>
+</body>
+</html>
