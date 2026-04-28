@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cockpit — Module × Phase Progress</title>
+<style>
+  body { font-family: 'Calibri', 'Calibri Light', sans-serif; font-weight: 300; color: #000; background: #FFFFFF; margin: 0; padding: 32px 24px; max-width: 1200px; margin: 0 auto; line-height: 1.55; font-size: 15px; }
+  h1 { color: #14324E; font-size: 28px; font-weight: 700; margin: 0 0 8px 0; }
+  h2 { color: #14324E; font-size: 22px; font-weight: 700; margin-top: 36px; padding-bottom: 6px; border-bottom: 2px solid #14324E; }
+  h3 { color: #14324E; font-size: 17px; font-weight: 600; margin-top: 24px; }
+  .subtitle { color: #5B5D64; font-size: 17px; font-weight: 300; margin-bottom: 24px; }
+  .level-bar { display: flex; gap: 8px; padding: 12px 16px; background: #F0F0F0; border-radius: 4px; margin-bottom: 24px; font-size: 13px; flex-wrap: wrap; }
+  .level-bar a { color: #14324E; text-decoration: none; padding: 4px 10px; border-radius: 3px; }
+  .level-bar a.active { background: #E94D3A; color: white; font-weight: 600; }
+  .level-bar a:hover:not(.active) { background: #C2C2C2; }
+  .accent { color: #E94D3A; font-weight: 600; }
+
+  /* Matrix table */
+  .matrix-wrap { overflow-x: auto; margin: 16px 0; }
+  table.matrix { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 900px; font-size: 14px; }
+  table.matrix th { background: #14324E; color: white; padding: 12px 10px; text-align: center; font-weight: 600; font-size: 13px; letter-spacing: 0.5px; }
+  table.matrix th.module-col { background: #1F2937; text-align: left; padding-left: 16px; min-width: 130px; }
+  table.matrix td { padding: 14px 10px; text-align: center; vertical-align: middle; border-bottom: 1px solid #E0E0E0; position: relative; }
+  table.matrix td.module-name { background: #F0F0F0; text-align: left; font-weight: 700; color: #14324E; padding-left: 16px; min-width: 130px; }
+  table.matrix td.module-name small { display: block; font-weight: 400; color: #5B5D64; font-size: 12px; margin-top: 2px; }
+
+  /* Cell status visual */
+  .bar-cell { display: inline-block; width: 100%; max-width: 90px; height: 24px; border-radius: 4px; position: relative; }
+  .bar-done { background: #2E7D32; }
+  .bar-progress { background: linear-gradient(90deg, #2E7D32 0%, #2E7D32 var(--pct,50%), #FFE5E0 var(--pct,50%), #FFE5E0 100%); }
+  .bar-planned { background: #F0F0F0; border: 1px dashed #C2C2C2; }
+  .bar-blocked { background: #E94D3A; }
+  .bar-pct { font-size: 11px; color: white; font-weight: 600; line-height: 24px; }
+  .bar-progress .bar-pct { color: #14324E; }
+  .bar-planned .bar-pct { color: #5B5D64; }
+
+  /* MVP marker */
+  td.mvp-target { box-shadow: inset 0 -4px 0 0 #E94D3A; }
+  .mvp-flag { display: inline-block; background: #E94D3A; color: white; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 3px; letter-spacing: 0.5px; margin-top: 4px; }
+  .mvp-line-explainer { background: #FFE5E0; border-left: 4px solid #E94D3A; padding: 12px 16px; border-radius: 4px; font-size: 14px; margin: 16px 0; }
+
+  /* Overall MVP progress */
+  .overall-mvp { background: #E8EDF3; padding: 20px 24px; border-radius: 4px; margin: 24px 0; }
+  .overall-mvp h3 { margin-top: 0; }
+  .progress-track { background: #FFFFFF; border: 1px solid #C2C2C2; border-radius: 4px; height: 28px; position: relative; overflow: hidden; margin: 12px 0; }
+  .progress-fill { background: linear-gradient(90deg, #2E7D32, #14324E); height: 100%; transition: width 0.3s; }
+  .progress-label { position: absolute; top: 0; left: 0; right: 0; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #14324E; font-size: 14px; }
+  .progress-fill + .progress-label { color: white; }
+
+  /* Legend */
+  .legend { background: #F0F0F0; padding: 14px 18px; border-radius: 4px; font-size: 13px; margin: 16px 0; }
+  .legend-row { display: flex; gap: 24px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 16px; height: 16px; border-radius: 3px; }
+
+  /* Detail tables */
+  table.detail { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  table.detail th { background: #14324E; color: white; padding: 8px 10px; text-align: left; font-weight: 600; }
+  table.detail td { padding: 8px 10px; border-bottom: 1px solid #C2C2C2; vertical-align: top; }
+  table.detail tr:nth-child(even) td { background: #F0F0F0; }
+
+  .nav-down { background: #14324E; color: white; padding: 16px 20px; border-radius: 4px; margin-top: 32px; }
+  .nav-down h3 { color: white; margin-top: 0; }
+  .nav-down a { color: #fff; text-decoration: underline; }
+  .footer-note { color: #5B5D64; font-size: 12px; margin-top: 32px; padding-top: 16px; border-top: 1px solid #C2C2C2; }
+</style>
+</head>
+<body>
+
+<div class="level-bar">
+  <span style="color:#5B5D64;">Levels:</span>
+  <a href="architecture-reader.html">L3 Reader (plain English)</a>
+  <a href="flow.html">L2 Map (visual flow)</a>
+  <a href="cockpit.html" class="active">Cockpit (progress)</a>
+  <a href="architecture-overview-2026-04-28.html">L1 Atlas (curated)</a>
+  <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/tree/main/architecture-notes" target="_blank">L0 Spec (raw)</a>
+</div>
+
+<h1>Cockpit — Module × Phase Progress</h1>
+<p class="subtitle">Where each module stands and where its <span class="accent">individual MVP line</span> sits.</p>
+
+<div class="mvp-line-explainer">
+  <strong>Reading the MVP line.</strong> Each module has its own MVP threshold marked with a red bottom-bar + flag. Different modules cross different columns at MVP cutover — Imagery and Plumbing only need to reach <strong>BUILD</strong>; Trust and Grounding need to reach <strong>TEST</strong> (user-facing trust contract requires the eval pipeline to be green). <strong>Overall MVP achieved</strong> when every module has crossed its own line.
+</div>
+
+<div class="legend">
+  <div class="legend-row">
+    <div class="legend-item"><span class="legend-swatch" style="background:#2E7D32"></span> done</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:linear-gradient(90deg,#2E7D32 50%,#FFE5E0 50%)"></span> in progress</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#F0F0F0;border:1px dashed #C2C2C2"></span> not started</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#E94D3A"></span> blocked</div>
+    <div class="legend-item"><span style="border-bottom:4px solid #E94D3A; padding-bottom:2px; font-weight:600;">red underline</span> = module MVP threshold</div>
+    <div class="legend-item"><span class="mvp-flag">MVP</span> = MVP cell marker</div>
+  </div>
+</div>
+
+<h2>The cockpit</h2>
+
+<div class="matrix-wrap">
+<table class="matrix">
+  <thead>
+    <tr>
+      <th class="module-col">Module</th>
+      <th>SPEC<br><small style="font-weight:400;color:#C2C2C2;">architecture locked</small></th>
+      <th>SCHEMA<br><small style="font-weight:400;color:#C2C2C2;">contracts published</small></th>
+      <th>BUILD<br><small style="font-weight:400;color:#C2C2C2;">code shipped</small></th>
+      <th>TEST<br><small style="font-weight:400;color:#C2C2C2;">eval green</small></th>
+      <th>SHIP<br><small style="font-weight:400;color:#C2C2C2;">prod cutover</small></th>
+      <th>OPERATE<br><small style="font-weight:400;color:#C2C2C2;">monitored, audited</small></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="module-name">⚖️ Trust<br><small>Library + Claim Ledger + Audit + Disclaimer</small></td>
+      <td><div class="bar-cell bar-done"><span class="bar-pct">100%</span></div></td>
+      <td><div class="bar-cell bar-progress" style="--pct:30%"><span class="bar-pct">30%</span></div></td>
+      <td><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div></td>
+      <td class="mvp-target"><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div><div class="mvp-flag">MVP</div></td>
+      <td><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div></td>
+      <td><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div></td>
+    </tr>
+    <tr>
+      <td class="module-name">🖼️ Imagery<br><small>Cover + Logos + Flags + Icons</small></td>
+      <td><div class="bar-cell bar-done"><span class="bar-pct">100%</span></div></td>
+      <td><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div></td>
+      <td class="mvp-target"><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div><div class="mvp-flag">MVP</div></td>
+      <td><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div></td>
+      <td><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div></td>
+      <td><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div></td>
+    </tr>
+    <tr>
+      <td class="module-name">🔍 Grounding<br><small>Sources + Adapters + Entailment + Walker</small></td>
+      <td><div class="bar-cell bar-progress" style="--pct:90%"><span class="bar-pct">90%</span></div></td>
+      <td><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div></td>
+      <td><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div></td>
+      <td class="mvp-target"><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div><div class="mvp-flag">MVP</div></td>
+      <td><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div></td>
+      <td><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div></td>
+    </tr>
+    <tr>
+      <td class="module-name">🔐 Plumbing<br><small>Tenant + Encryption + Schema + Region</small></td>
+      <td><div class="bar-cell bar-done"><span class="bar-pct">100%</span></div></td>
+      <td><div class="bar-cell bar-progress" style="--pct:60%"><span class="bar-pct">60%</span></div></td>
+      <td class="mvp-target"><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div><div class="mvp-flag">MVP</div></td>
+      <td><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div></td>
+      <td><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div></td>
+      <td><div class="bar-cell bar-planned"><span class="bar-pct">0%</span></div></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class="overall-mvp">
+  <h3>Overall MVP progress</h3>
+  <p style="margin:4px 0 12px 0; font-size:14px;">MVP achieved = every module has crossed its own MVP line. Currently: <strong>specs locked across all 4 modules; schema + build phases just kicking off; no module has crossed its MVP line yet.</strong></p>
+  <div class="progress-track">
+    <div class="progress-fill" style="width: 32%;"></div>
+    <div class="progress-label">~32% — spec phase done; schema phase in progress on Trust + Plumbing</div>
+  </div>
+  <p style="margin:12px 0 0 0; font-size:14px;">
+    <strong>Honest target:</strong> 13-14 weeks (Filipe Q1=B locked 28.04.2026 — full multi-vendor + semantic entailment in MVP).
+    <strong>Current week:</strong> Pre-Phase A (still in spec lock + scaffolding).
+    <strong>Critical path:</strong> BE-A0 (~14d, inflated from 8d to absorb Filipe #3 cascade) → MA-A close gate → MA-S1 v0.3.0 bundle → DR-1..3 + Grounding T0/1/2 in parallel.
+  </p>
+</div>
+
+<h2>Per-module MVP threshold detail</h2>
+
+<table class="detail">
+  <thead>
+    <tr><th>Module</th><th>MVP threshold</th><th>Why</th><th>Post-MVP (Ship + Operate)</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Trust</strong></td>
+      <td>TEST (eval suite green)</td>
+      <td>User-facing trust contract. Partner-grade reliability required before first non-Filipe consultant. claim_ledger + audit + revision_log + disclaimer all need eval coverage.</td>
+      <td>Ship to first client deck (legal §6 sign-off), then to first regulated tenant (DR drill, hash-chain Merkle WORM seal, eDiscovery export, legal-hold states).</td>
+    </tr>
+    <tr>
+      <td><strong>Imagery</strong></td>
+      <td>BUILD (code shipped)</td>
+      <td>Lighter scope. License enforcement + AI-gen blocks tested as part of build. No deep eval pipeline like Grounding.</td>
+      <td>Ship: Logo.dev contract + Shutterstock API key in prod. Operate: license-renewal cadence, asset-cache GC.</td>
+    </tr>
+    <tr>
+      <td><strong>Grounding</strong></td>
+      <td>TEST (full eval pipeline)</td>
+      <td>The proof layer. Multi-vendor adapter set + NLI semantic entailment must clear regression on 30-claim eval corpus before MVP. Re-ask budget + region eligibility + fail-closed paths all gated.</td>
+      <td>Ship: source-store substrate decision (R2+SQLite OK ≤25 tenants; D1/Postgres before tenant #2). Operate: Tier 4 audit walker + claim-coverage CI weekly + decay alarm.</td>
+    </tr>
+    <tr>
+      <td><strong>Plumbing</strong></td>
+      <td>BUILD (code shipped)</td>
+      <td>Foundation layer. Tenant isolation + AAD encryption + Cloud Run sidecar + schema versioning need to work. Doesn't need user-facing eval.</td>
+      <td>Ship: Azure AD app reg + admin consent + manifest WebApplicationInfo. Operate: KMS rotation cadence, multi-cloud KMS adapter (BE-A1), DR drill monthly.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>What's blocking each module right now</h2>
+
+<table class="detail">
+  <thead>
+    <tr><th>Module</th><th>Current state</th><th>Next blocker</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Trust</td>
+      <td>Spec done v2.1.1; schema-package v0.3.0 in design (revision_log types just added 28.04 evening)</td>
+      <td>MA-S1 v0.3.0 publish + atomicity rollback contract ticket</td>
+    </tr>
+    <tr>
+      <td>Imagery</td>
+      <td>Spec done v2.1; schema-package v0.3.0 bundle pending</td>
+      <td>Logo.dev legal/IP review (capability-flag split allows Cover Photo to ship later within v0.3.0)</td>
+    </tr>
+    <tr>
+      <td>Grounding</td>
+      <td>Spec amended v2.1.1 (Tier 1 rewritten model-agnostic 28.04 evening); adapter contract NEW</td>
+      <td>Cloud Run sidecar setup (NLI + docling + instructor) + Anthropic adapter + Google adapter implementations</td>
+    </tr>
+    <tr>
+      <td>Plumbing</td>
+      <td>Spec done v2.1; AAD encryption proven; Cloud Run inversion just locked 28.04 evening</td>
+      <td>Azure AD tenant setup (5-step IT ops checklist) + 6-row legal sign-off form</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Auto-sync sources of truth</h2>
+
+<p><strong>Status currently set by:</strong> manual annotation in this file (snapshot 28.04.2026 evening). <strong>Should be auto-derived from:</strong></p>
+
+<ul>
+  <li><a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/decisions-log.md" target="_blank"><code>decisions-log.md</code></a> — every "LOCKED" entry advances spec progress</li>
+  <li><a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/architecture-notes/fill-architecture-v2.md" target="_blank"><code>fill-architecture-v2.md</code> §"Build sequence"</a> — planned MA-A.0 / MA-S0 / MA-A / BE-A0 / DR-1..4 / MA-B / MA-C / MA-D / MA-E / MA-F / MA-S1 / OPS phases</li>
+  <li>Git tags (<code>v0.x.0</code>) — release shipping</li>
+  <li>Test files in <code>schema-package/test/</code> + <code>addin/tests/</code> — test phase progress</li>
+  <li>Cloudflare Worker deploy logs — ship phase progress</li>
+</ul>
+
+<p><strong>Auto-sync tool TODO:</strong> Python script <code>tools/sync-cockpit.py</code> parses these sources, regenerates the matrix HTML, runs in launchd nightly. Manual override flags allowed for exceptions. Without auto-sync, this page goes stale within 2 weeks.</p>
+
+<div class="nav-down">
+  <h3>Where to go next</h3>
+  <ul style="color:white;">
+    <li><strong>Plain-English landing:</strong> <a href="architecture-reader.html">L3 Reader</a> — what each module does</li>
+    <li><strong>How they connect:</strong> <a href="flow.html">L2 Map</a> — Mermaid flow + sequence diagram</li>
+    <li><strong>Curated technical:</strong> <a href="architecture-overview-2026-04-28.html">L1 Atlas</a> — full overview with reviewer verdicts and comment buttons</li>
+    <li><strong>Locked specs:</strong> <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/tree/main/architecture-notes" target="_blank">L0 architecture-notes/</a> — actual locked specs</li>
+    <li><strong>Decisions log:</strong> <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/decisions-log.md" target="_blank">decisions-log.md</a> — every locked decision with date + reviewer</li>
+  </ul>
+</div>
+
+<p class="footer-note">
+  Snapshot: 28.04.2026 evening — post v2.1.1 amendment lock. <strong>Auto-sync not yet implemented;</strong> this is a manual snapshot. <strong>MVP target:</strong> 13-14 weeks honest (Filipe Q1=B locked) once Phase A.0 sub-spike + MA-S0 + BE-A0/MA-A start.
+</p>
+
+</body>
+</html>
