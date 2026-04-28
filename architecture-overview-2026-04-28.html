@@ -1015,7 +1015,24 @@ Each box above is a <strong>module</strong>. Below: each module explained in pla
 </ul>
 </div>
 
-<h3 id="stage-3-amendments">Stage 3 implementation amendments (proposed)</h3>
+<h3 id="stage-3-amendments">Stage 3 implementation amendments — status as of 28.04 evening</h3>
+
+<div class="module" style="background:#e8f5e9; border-left:4px solid #2e7d32;">
+<p><strong>What landed since Stage 3 review (28.04 evening, autonomous):</strong></p>
+<ul>
+  <li><strong>v2.1.1 amendment LOCKED</strong> — Filipe Q1=B (multi-vendor MVP 13-14w) + Q2=B (revision logbook dual-write WORM) + Q3 (headcount commit) — applied to grounding-module + fill-architecture + open-questions + decisions-log + feedback-log <span class="status-pill" style="background:#2e7d32;color:white;padding:2px 6px;border-radius:3px;font-size:11px;">B6+B7 APPLIED</span></li>
+  <li><strong>production-cutover-v1.1</strong> drafted + 3-agent reviewed + patched (security RED → YELLOW with patches; SRE YELLOW; consultant POV YELLOW) — see <code>architecture-notes/production-cutover-v1.md</code> <span class="status-pill" style="background:#f57c00;color:white;padding:2px 6px;border-radius:3px;font-size:11px;">B8 DRAFTED</span></li>
+  <li><strong>op-a-observability-v1.0</strong> drafted (10 components, 9-10d build, parallel to BE-A0; closes "audit-lag SLO contractual lie") — see <code>architecture-notes/op-a-observability-v1.md</code> <span class="status-pill" style="background:#f57c00;color:white;padding:2px 6px;border-radius:3px;font-size:11px;">B2 DRAFTED</span></li>
+  <li><strong>4 incident runbook skeletons</strong> (KMS offline #1, cross-tenant DEK leak, audit-lag breach, deck corruption) + INDEX — see <code>architecture-notes/incident-runbooks/</code></li>
+  <li><strong>Cockpit (modules × phases with per-module MVP zigzag)</strong> live at <a href="cockpit.html">cockpit.html</a> per Filipe directive</li>
+  <li><strong>L3 Reader landings + L2 Mermaid flow</strong> live (3-module structure: Trust apparatus + Imagery + Grounding; Plumbing skipped from L3) per Filipe regrouping</li>
+  <li><strong>Codex re-runs blocked</strong> by anchor-spec read budget; relying on multi-agent verdicts; will retry with smaller-context strategy</li>
+</ul>
+<p><strong>Pending Filipe sign-off:</strong> production-cutover v1.1, OP-A v1.0 (both DRAFT, waiting for Codex review). Once both GREEN, lock in <code>decisions-log.md</code>.</p>
+<p><strong>Filipe directive in flight 28.04 evening:</strong> assess possibly-missing "prompting module" (3-level deck/slide/shape cascade + 10-part Anthropic prompt structure + prompt registry + caching). Codex + 2 agents currently assessing.</p>
+</div>
+
+<h4 style="color:#14324E; margin-top:24px;">Original Stage 3 amendment table (B1-B15)</h4>
 <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Stage+3+implementation+amendments+%28proposed%29&body=Comment+on+%C2%A7Stage+3+implementation+amendments+%28proposed%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Stage 3 implementation amendments (proposed)</a></div>
 <div class="module" style="background:#f3f4f6;">
 <table>
