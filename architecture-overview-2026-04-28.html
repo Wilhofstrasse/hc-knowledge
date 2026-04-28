@@ -585,8 +585,44 @@ Each box above is a <strong>module</strong>. Below: each module explained in pla
   <li><strong>Q-V20-13</strong> Data Protection Officer assignment — TBD.</li>
 </ul>
 
+<h2 id="open-architecture-questions-routed-to-codex-and-ag">Open architecture questions (routed to Codex + agents, awaiting Filipe "go")</h2><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Open+architecture+questions&body=Comment+on+%C2%A7Open+architecture+questions%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Open architecture questions</a></div>
+
+<p>Items Filipe raised today that are NOT yet folded into the architecture. Each will be assessed by Codex + multiple specialist agents in parallel before any spec change. Sequenced by priority of decision.</p>
+
+<div class="module">
+  <div class="role">Filipe 28.04 — Item #1</div>
+  <h3 id="model-agnostic">Architecture must be model-agnostic <span class="pill pill-build">Pending review</span></h3>
+  <p><strong>Filipe verbatim:</strong> "things like this, which I need to comment that it is bullshit because it needs to be model agnostic: 'Built on Anthropic's native Citations API as the spine — the model can't make up source pointers anymore'"</p>
+  <p><strong>The drift:</strong> Grounding module v1 (locked today) named Anthropic Citations API as the "architectural spine." That's a vendor lock. Filipe's rule: every module checks the "is this model-agnostic?" box. Provider features = optimizations, not architecture.</p>
+  <p><strong>Likely fix:</strong> the model-agnostic spine is <em>structured-output validator + re-ask on validation failure</em> (the Pydantic/instructor layer). Anthropic Citations / Gemini grounding / OpenAI citations become provider-specific optimizations plugged in below the spine. Tenant config: any approved provider configurable; not just Claude vs Gemini binary.</p>
+  <p><strong>Status:</strong> spec change drafted in feedback-log; awaiting "go" to push through Codex + agent review and amend grounding module v1 → v2.</p>
+</div>
+
+<div class="module">
+  <div class="role">Filipe 28.04 — Item #2</div>
+  <h3 id="revision-logbook">Revision logbook for AI-vs-user changes <span class="pill pill-build">Pending review</span></h3>
+  <p><strong>Filipe verbatim:</strong> "what happens if users do not agree with the answer from AI and manipulate it or if they don't like it and click for AI to update it. we need for presentation a kind of logbook. I'm not sure if that should be part of the claim ledger maybe what do you think? This is something to be assessed by the agent in Codex and to flow into the main architecture"</p>
+  <p><strong>The two cases:</strong></p>
+  <ul>
+    <li>User manipulates the AI's answer (overrides text directly)</li>
+    <li>User asks AI to regenerate (with or without feedback)</li>
+  </ul>
+  <p><strong>The gap:</strong> Claim Ledger today tracks <em>current state</em> per claim. External Audit Log records actions per fill event. Neither gives a clean "show me the full revision history of this one bullet, version by version, with reason per version."</p>
+
+  <p><strong>Three architectural options to assess:</strong></p>
+  <table class="conn">
+    <thead><tr><th>Option</th><th>What</th><th>Pro</th><th>Con</th></tr></thead>
+    <tbody>
+      <tr><td>A. Extend Claim Ledger</td><td><code>revision_history[]</code> field per claim with snapshot + reason per version</td><td>One-stop-shop, simple to query</td><td>Bloats every claim row</td></tr>
+      <tr><td>B. New "claim history" namespace</td><td>Separate <code>urn:hc-deck-claim-history/v1</code>, append-only, FK to claim_id</td><td>Clean separation: state vs history</td><td>Another namespace to maintain</td></tr>
+      <tr><td>C. Reuse External Audit Log</td><td>Add <code>before_text_hash</code> + <code>after_text_hash</code> + <code>change_reason</code> to existing audit rows; query by claim_id</td><td>Reuses tamper-proof 7-10y storage; no new namespace</td><td>Querying revision history per claim = walking audit log (O(n))</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Status:</strong> NOT decided. Filipe explicitly routes this to Codex + multi-agent review before architectural change. Awaiting "go" to launch the assessment.</p>
+</div>
+
 <footer class="bottom">
-Generated 28.04.2026 · v2.0 LOCKED 27.04 · v2.1 LOCKED 28.04 (Cover Photo + Grounding) ·
+Generated 28.04.2026 · v2.0 LOCKED 27.04 · v2.1 LOCKED 28.04 (Cover Photo + Grounding) · Pending Filipe items #1 + #2 above ·
 Underlying canonical .md files: <code>architecture-notes/cover-photo-selection-module-v1.md</code>,
 <code>grounding-module-v1.md</code>, <code>fill-architecture-v2.md</code>, <code>decisions-log.md</code>, <code>open-questions.md</code> in
 <code>Wilhofstrasse/corporate-ppt-tool-v2</code> (private).
