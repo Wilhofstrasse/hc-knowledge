@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Imagery — L3 Reader</title>
+<style>
+  body { font-family: 'Calibri', 'Calibri Light', sans-serif; font-weight: 300; color: #000; background: #FFFFFF; margin: 0; padding: 32px 24px; max-width: 900px; margin: 0 auto; line-height: 1.65; font-size: 16px; }
+  h1 { color: #14324E; font-size: 28px; font-weight: 700; margin: 0 0 8px 0; }
+  h2 { color: #14324E; font-size: 22px; font-weight: 700; margin-top: 36px; padding-bottom: 6px; border-bottom: 2px solid #14324E; }
+  h3 { color: #14324E; font-size: 18px; font-weight: 600; margin-top: 24px; }
+  .subtitle { color: #5B5D64; font-size: 18px; font-weight: 300; margin-bottom: 24px; }
+  .level-bar { display: flex; gap: 8px; padding: 12px 16px; background: #F0F0F0; border-radius: 4px; margin-bottom: 32px; font-size: 14px; flex-wrap: wrap; }
+  .level-bar a { color: #14324E; text-decoration: none; padding: 4px 10px; border-radius: 3px; }
+  .level-bar a.active { background: #E94D3A; color: white; font-weight: 600; }
+  .level-bar a:hover:not(.active) { background: #C2C2C2; }
+  .accent { color: #E94D3A; font-weight: 600; }
+  .what-block { background: #FFF4E0; padding: 20px 24px; border-radius: 4px; border-left: 4px solid #F57C00; margin: 16px 0; }
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 13px; font-weight: 600; }
+  .status-locked { background: #2E7D32; color: white; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 15px; }
+  th { background: #14324E; color: white; padding: 10px 12px; text-align: left; font-weight: 600; }
+  td { padding: 10px 12px; border-bottom: 1px solid #C2C2C2; vertical-align: top; }
+  tr:nth-child(even) td { background: #F0F0F0; }
+  .open-decision { background: #FFE5E0; padding: 16px 20px; border-radius: 4px; border-left: 4px solid #E94D3A; margin: 12px 0; }
+  .open-decision strong { color: #14324E; }
+  .nav-down { background: #14324E; color: white; padding: 16px 20px; border-radius: 4px; margin-top: 32px; }
+  .nav-down h3 { color: white; margin-top: 0; }
+  .nav-down a { color: #fff; text-decoration: underline; }
+  .footer-note { color: #5B5D64; font-size: 13px; margin-top: 48px; padding-top: 16px; border-top: 1px solid #C2C2C2; }
+  ul { padding-left: 24px; }
+  li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<div class="level-bar">
+  <span style="color:#5B5D64;">Levels:</span>
+  <a href="../architecture-reader.html">L3 Reader (plain English)</a>
+  <a href="../flow.html">L2 Map (visual flow)</a>
+  <a href="../architecture-overview-2026-04-28.html#cover-photo">L1 Atlas (curated)</a>
+  <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/architecture-notes/cover-photo-selection-module-v1.md" target="_blank">L0 Spec (raw)</a>
+</div>
+
+<h1>Imagery <span class="status-pill status-locked">LOCKED v2.1</span></h1>
+<p class="subtitle">All <span class="accent">non-text visual content</span> the AI fetches or proposes for a deck.</p>
+
+<div class="what-block">
+  <strong>Plain-English summary.</strong> Whenever a deck needs a picture, logo, flag, or icon — not text — this module decides what to use, where to get it from, and whether the consultant can legally include it. One module covers cover photos, competitor logos for peer analysis, country flags for PESTEL slides, peer-map firm icons, and PESTEL center sector logos. The narrow "Cover Photo" name in the locked spec undersells the scope; the spec actually splits into 4 sub-modules covering all visual non-text content.
+</div>
+
+<h2>What it does</h2>
+
+<ul>
+  <li><strong>Picks an image when the consultant asks for one</strong> — cover photo, competitor logo, country flag, sector icon — using a 6-tier decision tree (user upload first, AI-gen last).</li>
+  <li><strong>Tracks the license for every image</strong> — a separate ledger records source URL, license type, attribution, expiry, and whether the consultant can legally use it for this client engagement.</li>
+  <li><strong>Refuses to fake real-firm visuals</strong> — server-side regex blocks AI-generated photos of real company buildings, employees, or HQs. AI-gen is allowed for abstract/illustrative imagery only.</li>
+  <li><strong>Surfaces in the add-in</strong> — every image shape gets a license badge in the trust pane, just like text shapes get a traffic-light claim verdict.</li>
+</ul>
+
+<h2>How the picker works (6-tier decision tree)</h2>
+
+<table>
+  <thead>
+    <tr><th>Tier</th><th>Source</th><th>Use case</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>User-uploaded</td><td>Consultant has a specific image and uploads it directly. Highest priority.</td></tr>
+    <tr><td>2</td><td>Firm IR press kit</td><td>For cover photos: scrape investor relations sites for officially-sanctioned firm imagery (logos, building shots, product photos).</td></tr>
+    <tr><td>3</td><td>H&C curated library</td><td>~$3k seed for 80-120 sector images. Pre-vetted, license-clean, brand-safe. Recommended default.</td></tr>
+    <tr><td>4</td><td>Licensed stock</td><td>Shutterstock Unlimited (primary) + Getty editorial (fallback for news-style imagery).</td></tr>
+    <tr><td>5</td><td>AI-gen</td><td>DALL-E 3 / Imagen — abstract/illustrative ONLY. Server-side regex blocks "brand+building", "brand+HQ", "brand+employees" prompts. Tenant opt-in.</td></tr>
+    <tr><td>6</td><td>H&C placeholder</td><td>Generic graceful fallback when nothing else works.</td></tr>
+  </tbody>
+</table>
+
+<h2>The 4 sub-modules (locked spec)</h2>
+
+<h3>DR-4a Cover Photo (~9-10d build)</h3>
+<p>The 6-tier picker for the title-slide cover image. Most engineering effort lives here. Per-tier license persistence; click-to-trace UX in the trust pane.</p>
+
+<h3>DR-4b Logo Swap (~3d build)</h3>
+<p>Replace consultant-uploaded firm-logo placeholders with real logos via Logo.dev (Clearbit successor) or licensed alternatives. Validates rights-of-use field; fail-closed if no license.</p>
+
+<h3>DR-4c Peer-Map Native Rebuild (~5d build)</h3>
+<p>For peer-analysis slides (e.g., "X vs competitors A/B/C"). Generates a native PowerPoint shape map with firm icons placed by industry segment. Not a pasted image.</p>
+
+<h3>DR-4d PESTEL Center Logo (~2d build)</h3>
+<p>For PESTEL slides (Political/Economic/Social/Technological/Environmental/Legal). The center logo + surrounding country flags + sector icons. Reuses Tier 3 H&C library + Tier 4 stock.</p>
+
+<h2>Image classification cascade (4-tier)</h2>
+
+<p>Behind the scenes, every image gets classified to decide what to do with it (replace? swap? keep?). The cascade goes cheapest-first:</p>
+
+<ul>
+  <li><strong>Heuristics</strong> — file size, dimensions, aspect ratio, EXIF data. Free.</li>
+  <li><strong>OCR</strong> — extract text from logos and brand marks. Cheap.</li>
+  <li><strong>CLIP</strong> — semantic similarity matching for "is this a logo?" or "is this a building?". Cheap-ish.</li>
+  <li><strong>Vision LLM</strong> — Gemini Flash for cost-sensitive, Sonnet 4.5 for hard cases. ~$150/year for 130K images at scale.</li>
+</ul>
+
+<h2>What's deliberately out of scope</h2>
+
+<div class="open-decision">
+  <strong>Employee photos / people headshots.</strong> Privacy + GDPR + ethics concern. The system never auto-fetches photos of real people. Consultants can manually upload (e.g., from a client-provided org chart), but the AI will not propose them. Confirm with Filipe before relaxing.
+</div>
+
+<h2>Current status</h2>
+
+<p>Architecture locked at v2.1 (28.04.2026). 4 rounds of /iterate review with Codex (gpt-5.5 xhigh) + 6 specialist agents reached GREEN consensus before lock. Stage 1+2+3 meta-review (28.04.2026 evening) raised no module-specific issues — the implementation-approach concerns are about backend phase scope, not Imagery.</p>
+
+<p><strong>One Stage 2 amendment proposed (A12):</strong> add Tier 0 — "preserve existing source-deck cover if license/attestation is already valid" — for the case where the consultant is editing a deck that already has a vetted cover photo. Currently the picker treats the existing cover as Tier 1 (user-uploaded), which works but isn't explicit. Pending Filipe approval.</p>
+
+<h2>Open decisions for Filipe</h2>
+
+<div class="open-decision">
+  <strong>Q-CPS-01 to Q-CPS-08.</strong> 8 open default-locked questions: H&C library seed budget, Shutterstock vs Getty primary, AI-gen tenant opt-in policy, license expiry refresh cadence, peer-map data source, PESTEL flag library, asset_swap audit retention, employee-photo policy.<br>
+  <strong>Recommendation:</strong> auto-adopt Round-3 defaults at phase kickoff unless overridden within 48h. Same rule as Q-V20.
+</div>
+
+<div class="open-decision">
+  <strong>Stage 2 amendment A12 — Tier 0 existing-cover preservation.</strong> Approve to make the locked-cover behavior explicit in the spec, or defer to v2.2.
+</div>
+
+<div class="nav-down">
+  <h3>Where to go next</h3>
+  <ul style="color:white;">
+    <li><strong>See it visually:</strong> <a href="../flow.html">L2 Map</a> — Imagery in the orange subgraph</li>
+    <li><strong>Curated technical:</strong> <a href="../architecture-overview-2026-04-28.html#cover-photo">L1 Atlas — Cover Photo section</a></li>
+    <li><strong>Raw spec:</strong> <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/architecture-notes/cover-photo-selection-module-v1.md" target="_blank">cover-photo-selection-module-v1.md</a></li>
+    <li><strong>Open questions:</strong> <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/open-questions.md" target="_blank">open-questions.md</a> — Q-CPS-01 to Q-CPS-08</li>
+  </ul>
+</div>
+
+<p class="footer-note">Last updated: 28.04.2026 · Reviewers: 7 (4 rounds /iterate Codex gpt-5.5 xhigh + 6 specialist agents). Architecture LOCKED at v2.1.</p>
+
+</body>
+</html>
