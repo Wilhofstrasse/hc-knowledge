@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L2 — Architecture Flow Map</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  body { font-family: 'Calibri', 'Calibri Light', sans-serif; font-weight: 300; color: #000; background: #FFFFFF; margin: 0; padding: 32px 24px; max-width: 1200px; margin: 0 auto; }
+  h1 { color: #14324E; font-size: 28px; font-weight: 700; margin: 0 0 8px 0; }
+  h2 { color: #14324E; font-size: 22px; font-weight: 700; margin-top: 32px; }
+  .subtitle { color: #5B5D64; font-size: 18px; font-weight: 300; margin-bottom: 24px; }
+  .level-bar { display: flex; gap: 8px; padding: 12px 16px; background: #F0F0F0; border-radius: 4px; margin-bottom: 32px; font-size: 14px; }
+  .level-bar a { color: #14324E; text-decoration: none; padding: 4px 10px; border-radius: 3px; }
+  .level-bar a.active { background: #E94D3A; color: white; font-weight: 600; }
+  .level-bar a:hover:not(.active) { background: #C2C2C2; }
+  .legend { background: #F0F0F0; padding: 16px; border-radius: 4px; margin: 24px 0; font-size: 15px; }
+  .legend strong { color: #14324E; }
+  .mermaid { background: #FFFFFF; border: 1px solid #C2C2C2; border-radius: 4px; padding: 24px; margin: 16px 0; overflow-x: auto; }
+  .nav-down { background: #14324E; color: white; padding: 16px 20px; border-radius: 4px; margin-top: 32px; }
+  .nav-down h3 { color: white; margin-top: 0; }
+  .nav-down a { color: #fff; text-decoration: underline; }
+  .accent { color: #E94D3A; }
+  ul { line-height: 1.7; }
+  .footer-note { color: #5B5D64; font-size: 13px; margin-top: 48px; padding-top: 16px; border-top: 1px solid #C2C2C2; }
+</style>
+</head>
+<body>
+
+<div class="level-bar">
+  <span style="color:#5B5D64;">Levels:</span>
+  <a href="index.html">L3 Reader (plain English)</a>
+  <a href="flow.html" class="active">L2 Map (visual flow)</a>
+  <a href="architecture-overview-2026-04-28.html">L1 Atlas (curated)</a>
+  <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/tree/main/architecture-notes" target="_blank">L0 Spec (raw)</a>
+</div>
+
+<h1>L2 — Architecture Flow Map</h1>
+<p class="subtitle">How the modules talk to each other. <span class="accent">One diagram, no jargon.</span></p>
+
+<div class="legend">
+  <strong>Reading the diagram:</strong> Solid arrows = data flow. Dotted arrows = "wraps everything" (security/plumbing layer that sits underneath every other module). The four user-facing groupings sit on top of one invisible foundation.
+</div>
+
+<h2>The full picture</h2>
+
+<div class="mermaid">
+flowchart TB
+
+  subgraph SOURCES["📁 Source materials (what AI reads)"]
+    S1[Client decks the consultant uploaded]
+    S2[Firm IR PDFs and EDGAR filings]
+    S3[H&C eval corpus + reference data]
+    S4[Consultant attestations + override notes]
+  end
+
+  subgraph GROUNDING["🔍 Grounding — the proof layer"]
+    G1[Source ingestion: docling parses PDFs into chunks]
+    G2[Provider adapters: Anthropic / Google / OpenAI]
+    G3[Semantic entailment: small NLI model verifies citation actually supports the claim]
+    G4[Audit walker: catches drift, stale sources, orphan claims]
+  end
+
+  subgraph TRUST["⚖️ Trust apparatus — what the consultant actually sees"]
+    T1[Library: vetted templates, partner / tenant / corporate scopes]
+    T2[Claim Ledger: current truth per shape — green / yellow / orange / red]
+    T3[External Audit: action log, 7-10 year retention, tamper-evident]
+    T4[Disclaimer Flag: known gaps + footer fallback for offline shares]
+  end
+
+  subgraph IMAGERY["🖼️ Imagery — non-text visual content"]
+    I1[Cover photos: 6-tier picker, IR press kit primary]
+    I2[Competitor / peer-firm logos]
+    I3[Country flags + sector icons for PESTEL]
+    I4[Peer-map: firm icons placed on industry maps]
+  end
+
+  subgraph ADDIN["📊 PowerPoint add-in — consultant surface"]
+    A1[Click shape → see Trust verdict]
+    A2[Cockpit: Stage reviews + open decisions]
+    A3[Send / export gates fire if trust contract violated]
+  end
+
+  PLUMBING["🔐 Plumbing layer<br/>Tenant isolation · AES-256-GCM with AAD<br/>Per-tenant keys via Azure Key Vault<br/>Schema versioning · Region routing"]
+
+  SOURCES -->|ingest at deck open| GROUNDING
+  GROUNDING -->|citations + confidence tier| TRUST
+  TRUST -->|render verdict per shape| ADDIN
+  IMAGERY -->|fill visual shapes| ADDIN
+  ADDIN -->|every action writes| T3
+  ADDIN -->|every revision writes| T2
+
+  PLUMBING -.->|wraps every payload| TRUST
+  PLUMBING -.->|wraps every payload| GROUNDING
+  PLUMBING -.->|wraps every payload| IMAGERY
+
+  classDef sourceNode fill:#F0F0F0,stroke:#5B5D64,color:#000
+  classDef groundingNode fill:#FFE5E0,stroke:#E94D3A,color:#000
+  classDef trustNode fill:#E8EDF3,stroke:#14324E,color:#000
+  classDef imageryNode fill:#FFF4E0,stroke:#F57C00,color:#000
+  classDef addinNode fill:#E8F5E9,stroke:#2E7D32,color:#000
+  classDef plumbingNode fill:#1F2937,stroke:#000,color:#fff
+
+  class S1,S2,S3,S4 sourceNode
+  class G1,G2,G3,G4 groundingNode
+  class T1,T2,T3,T4 trustNode
+  class I1,I2,I3,I4 imageryNode
+  class A1,A2,A3 addinNode
+  class PLUMBING plumbingNode
+</div>
+
+<h2>How a single AI fill flows through the system</h2>
+
+<div class="mermaid">
+sequenceDiagram
+  autonumber
+  participant Consultant
+  participant Addin as PowerPoint add-in
+  participant Backend as H&C Backend
+  participant Sources as Source store (R2)
+  participant LLM as Provider adapter
+  participant Trust as Claim Ledger
+  participant Audit as External Audit (WORM)
+
+  Consultant->>Addin: clicks shape, types intent
+  Addin->>Backend: shape + intent + shape thumbnail
+  Backend->>Sources: retrieve relevant chunks
+  Sources-->>Backend: top-N chunks with citations
+  Backend->>LLM: grounded prompt + chunks
+  LLM-->>Backend: text + citations array
+  Backend->>Backend: instructor Pydantic validation
+  Backend->>Backend: semantic entailment check
+  Note over Backend: re-ask up to 3× if entailment fails
+  Backend->>Trust: write claim_ledger row (green/yellow/orange/red)
+  Backend->>Audit: write WORM audit row + revision log
+  Backend-->>Addin: shape text + verdict
+  Addin->>Consultant: render shape + traffic-light pill
+</div>
+
+<h2>What's outside this flow (deliberately)</h2>
+
+<ul>
+  <li><strong>People photos / employee headshots</strong> — never auto-fetched. Privacy + GDPR + ethics. Manual upload only.</li>
+  <li><strong>Real-time data feeds</strong> — sources are snapshotted at deck open, not live. Avoids "deck looked different yesterday" confusion.</li>
+  <li><strong>Cross-tenant content sharing</strong> — explicit re-keying ceremony required (M&A scenario).</li>
+  <li><strong>Send-side detection</strong> — Office.js can't intercept Save As / AirDrop / email-attach. Disclaimer footer is rendered into the deck as a fallback.</li>
+</ul>
+
+<div class="nav-down">
+  <h3>Where to go next</h3>
+  <ul style="color:white;">
+    <li><strong>Plain-English (L3 Reader):</strong> Click any subgraph in the diagram to read what that module does without jargon — <a href="index.html">start at the L3 reader landing</a></li>
+    <li><strong>Curated technical (L1 Atlas):</strong> The full architecture overview with reviewer verdicts, comment buttons, and module detail — <a href="architecture-overview-2026-04-28.html">go to L1 Atlas</a></li>
+    <li><strong>Raw spec (L0):</strong> The actual locked architecture notes (10 invariants, 6 primitives, schema definitions) — <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/tree/main/architecture-notes" target="_blank">browse architecture-notes/</a></li>
+  </ul>
+</div>
+
+<p class="footer-note">Last updated: 28.04.2026 · 3-stage meta-review complete (Stage 1+2 YELLOW, Stage 3 RED→YELLOW with rescope). Architecture LOCKED at v2.1; v2.1.1 amendment proposal pending Filipe sign-off.</p>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      fontFamily: '"Calibri", "Calibri Light", sans-serif',
+      fontSize: '15px',
+      primaryColor: '#E8EDF3',
+      primaryBorderColor: '#14324E',
+      primaryTextColor: '#000',
+      lineColor: '#14324E',
+      secondaryColor: '#FFE5E0',
+      tertiaryColor: '#FFF4E0'
+    }
+  });
+</script>
+
+</body>
+</html>
