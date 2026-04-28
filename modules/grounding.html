@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grounding — L3 Reader</title>
+<style>
+  body { font-family: 'Calibri', 'Calibri Light', sans-serif; font-weight: 300; color: #000; background: #FFFFFF; margin: 0; padding: 32px 24px; max-width: 900px; margin: 0 auto; line-height: 1.65; font-size: 16px; }
+  h1 { color: #14324E; font-size: 28px; font-weight: 700; margin: 0 0 8px 0; }
+  h2 { color: #14324E; font-size: 22px; font-weight: 700; margin-top: 36px; padding-bottom: 6px; border-bottom: 2px solid #14324E; }
+  h3 { color: #14324E; font-size: 18px; font-weight: 600; margin-top: 24px; }
+  .subtitle { color: #5B5D64; font-size: 18px; font-weight: 300; margin-bottom: 24px; }
+  .level-bar { display: flex; gap: 8px; padding: 12px 16px; background: #F0F0F0; border-radius: 4px; margin-bottom: 32px; font-size: 14px; flex-wrap: wrap; }
+  .level-bar a { color: #14324E; text-decoration: none; padding: 4px 10px; border-radius: 3px; }
+  .level-bar a.active { background: #E94D3A; color: white; font-weight: 600; }
+  .level-bar a:hover:not(.active) { background: #C2C2C2; }
+  .accent { color: #E94D3A; font-weight: 600; }
+  .what-block { background: #FFE5E0; padding: 20px 24px; border-radius: 4px; border-left: 4px solid #E94D3A; margin: 16px 0; }
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 13px; font-weight: 600; }
+  .status-locked { background: #2E7D32; color: white; }
+  .status-amend { background: #E94D3A; color: white; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 15px; }
+  th { background: #14324E; color: white; padding: 10px 12px; text-align: left; font-weight: 600; }
+  td { padding: 10px 12px; border-bottom: 1px solid #C2C2C2; vertical-align: top; }
+  tr:nth-child(even) td { background: #F0F0F0; }
+  .verdict-tier { display: inline-block; width: 14px; height: 14px; border-radius: 50%; vertical-align: middle; margin-right: 6px; }
+  .tier-green { background: #2E7D32; }
+  .tier-yellow { background: #F57C00; }
+  .tier-orange { background: #E94D3A; }
+  .tier-red { background: #B71C1C; }
+  .open-decision { background: #FFE5E0; padding: 16px 20px; border-radius: 4px; border-left: 4px solid #E94D3A; margin: 12px 0; }
+  .open-decision strong { color: #14324E; }
+  .nav-down { background: #14324E; color: white; padding: 16px 20px; border-radius: 4px; margin-top: 32px; }
+  .nav-down h3 { color: white; margin-top: 0; }
+  .nav-down a { color: #fff; text-decoration: underline; }
+  .footer-note { color: #5B5D64; font-size: 13px; margin-top: 48px; padding-top: 16px; border-top: 1px solid #C2C2C2; }
+  ul { padding-left: 24px; }
+  li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<div class="level-bar">
+  <span style="color:#5B5D64;">Levels:</span>
+  <a href="../architecture-reader.html">L3 Reader (plain English)</a>
+  <a href="../flow.html">L2 Map (visual flow)</a>
+  <a href="../architecture-overview-2026-04-28.html#grounding-engine">L1 Atlas (curated)</a>
+  <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/architecture-notes/grounding-module-v1.md" target="_blank">L0 Spec (raw)</a>
+</div>
+
+<h1>Grounding <span class="status-pill status-locked">LOCKED v2.1</span> <span class="status-pill status-amend">v2.1.1 amendment pending</span></h1>
+<p class="subtitle">The <span class="accent">proof layer</span> for every textual statement in the deck. Every claim has a citation. Every citation gets verified.</p>
+
+<div class="what-block">
+  <strong>Plain-English summary.</strong> When the AI writes a number or statement on a slide, where did it come from? The grounding module is the answer. It ingests source materials at deck open (PDFs, EDGAR filings, IR docs, client uploads), retrieves the relevant chunks for each shape, asks the AI to write text grounded in those chunks, and validates that the AI's output is actually backed by the cited source — not just "looks like a citation." Every claim that survives this gate gets a green / yellow / orange / red traffic-light in the consultant's add-in pane.
+</div>
+
+<h2>What it does</h2>
+
+<ul>
+  <li><strong>Reads the consultant's source materials</strong> — at deck open, parses every uploaded PDF and external feed into searchable chunks with full provenance.</li>
+  <li><strong>Retrieves chunks for every fill</strong> — when the consultant clicks a shape and asks the AI to fill it, the right source chunks get surfaced via search.</li>
+  <li><strong>Validates the AI's output</strong> — the AI writes text and citations; the validator checks (a) citations point to real chunks, (b) the cited text is verbatim in the source, and (c) the chunk semantically supports the claim (not just substring-match).</li>
+  <li><strong>Re-asks if validation fails</strong> — up to 3 retries; if all 3 fail, claim gets blocked (RED tier) and the consultant is told why.</li>
+  <li><strong>Surfaces traffic-lights in the add-in</strong> — every shape gets a confidence-tier badge: <span class="verdict-tier tier-green"></span>green / <span class="verdict-tier tier-yellow"></span>yellow / <span class="verdict-tier tier-orange"></span>orange / <span class="verdict-tier tier-red"></span>red. Click for paragraph-level citations like Claude.ai or ChatGPT.</li>
+</ul>
+
+<h2>The 4-tier architecture</h2>
+
+<h3>Tier 0 — Source ingestion (~3-5d build)</h3>
+<p>Uses <strong>docling</strong> (MIT license, viable for SaaS resale; deliberately NOT marker-pdf which is GPL+commercial). Parses PDFs, DOCX, HTML into structured chunks at paragraph granularity. Each chunk gets a content hash, page reference, and full provenance. Encrypted at rest in tenant-scoped R2 with FTS5 full-text-search index.</p>
+
+<h3>Tier 1 — LLM call with grounded prompt (~3-5d per provider adapter)</h3>
+<p><strong>Filipe's #3 feedback reshapes this tier.</strong> Original spec made Anthropic's native Citations API the architectural spine — meaning the architecture was vendor-locked to Anthropic. Filipe flagged this as wrong: <em>"it needs to be model agnostic."</em></p>
+<p>Amended (pending v2.1.1 sign-off): the spine becomes the universal CitationEnvelope contract that every provider adapter must produce. Anthropic Citations API, Google groundingSupports, OpenAI Structured Outputs — all become adapter optimizations. When the active provider supports them, the adapter uses them; when not, the adapter falls fully through to the entailment validator. The architecture doesn't depend on any one provider.</p>
+
+<h3>Tier 2 — Validation + re-ask (~2d build)</h3>
+<p>Wraps every LLM call with Pydantic schemas via the <strong>instructor</strong> library. Two checks run on each citation:</p>
+<ul>
+  <li><strong>Substring match (cheap):</strong> is the cited_text actually verbatim in the chunk?</li>
+  <li><strong>Semantic entailment (NEW per v2.1.1):</strong> a small NLI cross-encoder (e.g., cross-encoder/nli-deberta-v3-base) verifies the chunk semantically <em>supports</em> the claim, not just contains the words. Threshold 0.70 default; tenant-configurable.</li>
+</ul>
+<p>If either fails, instructor re-asks the LLM with corrective feedback. Up to 3 retries. After 3 fails: claim → state: blocked, tier: RED, audit row written, consultant sees why.</p>
+
+<h3>Tier 3 — Add-in pane UX (~3-4d build)</h3>
+<p>Always-visible sub-pane in the add-in shows: traffic-light per shape, source URL, paragraph excerpt, citation snapshot. 5 quick-buttons (regenerate, override, attest, refresh source, show full Cockpit). Full Grounding Cockpit modal (~900×600) for partner review pane with revision history, send-gate enforcement, source freshness alerts.</p>
+
+<h3>Tier 4 — Audit walker (~2d build, OPS phase)</h3>
+<p>Background process that periodically walks every deck checking for: orphan claims (text changed but no revision-log row), stale sources (citation URL returns 404 or content hash drift), broken citation pointers, expired licenses on Imagery. Surfaces RED in Cockpit; doesn't block fills, but flags drift.</p>
+
+<h2>Confidence tiers</h2>
+
+<table>
+  <thead>
+    <tr><th>Tier</th><th>When</th><th>What the consultant sees</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><span class="verdict-tier tier-green"></span>GREEN</td><td>source_backed AND confidence &gt;0.85</td><td>"Use as-is. Real source, high confidence."</td></tr>
+    <tr><td><span class="verdict-tier tier-yellow"></span>YELLOW</td><td>source_backed 0.50-0.85 OR estimate_band</td><td>"Source exists but soft. Review before send."</td></tr>
+    <tr><td><span class="verdict-tier tier-orange"></span>ORANGE</td><td>consultant_attested without partner co-sign</td><td>"You said so but no partner co-signed. Get sign-off."</td></tr>
+    <tr><td><span class="verdict-tier tier-red"></span>RED</td><td>blocked OR no source</td><td>"Cannot ship. Add source or attestation."</td></tr>
+  </tbody>
+</table>
+
+<p>Aggregation per shape/slide/deck = MIN of constituent tiers. <strong>Stage 2 amendment A11:</strong> show distribution alongside MIN ("1 RED, 4 ORANGE, 38 GREEN") so one minor blocker doesn't make the whole deck look unusable.</p>
+
+<h2>Cost</h2>
+
+<p>~$0.50-1.00 per deck for grounding alone (Anthropic adapter). ~$2.5-5K per tenant per year dominated by Anthropic API costs. Per-provider variance after v2.1.1: Gemini ~$0.50-1.20/deck (cited text counted as output tokens, unlike Anthropic); OpenAI ~$0.80-1.80/deck. Per-deck budget cap in cost-governance §G.</p>
+
+<h2>Critical caveats</h2>
+
+<ul>
+  <li><strong>Anthropic Citations API and Structured Outputs are mutually exclusive</strong> — confirmed at API level. Anthropic adapter outputs plain text + citations array; structured-shape parsing happens in Tier 2 instructor, not Anthropic JSON-schema-mode.</li>
+  <li><strong>Gemini grounding is public-web only</strong> — Gemini's groundingSupports[] doesn't cover private corpora. For private chunks, Google adapter falls through to Tier 2 entailment validator. Architecturally clean; cost goes up.</li>
+  <li><strong>EU-only tenants route via Anthropic Bedrock EU geo</strong> — never silent failover to US (per v2.0 §I).</li>
+  <li><strong>F2 latency budget:</strong> ≤200ms p95 with session-trust ON (cached); ≤2.5s p95 classifier; ≤8s p95 full pipeline. Session-trust default ON for F2 edits.</li>
+</ul>
+
+<h2>Current status</h2>
+
+<p>Architecture locked at v2.1 (28.04.2026). 4 rounds of /iterate review with Codex (gpt-5.5 xhigh) + 6 specialist agents reached GREEN consensus before lock. <strong>Filipe's #3 feedback (model-agnostic mandatory) reopens Tier 1</strong> — proposed v2.1.1 amendment drafted, pending sign-off.</p>
+
+<p>Stage 2 + Stage 3 reviewers (28.04.2026 evening, 10 reviewers across 3 stages) confirmed Filipe #3 is the correct architectural call — amendment goes ahead. Stage 3 honest day estimate: ~14d cascade (Stage 2's 7d was too optimistic).</p>
+
+<h2>Open decisions for Filipe</h2>
+
+<div class="open-decision">
+  <strong>Q1 — Multi-vendor MVP scope.</strong> See main reader Q1. Two paths: (A) Anthropic-only adapter at MVP, multi-vendor in BE-A1 — preserves 12-week target; (B) full multi-vendor + entailment in MVP — slips to ~14w but architecture isn't aspirational.<br>
+  <strong>Recommendation: B</strong> — multi-billion target needs honest model-agnostic from day 1.
+</div>
+
+<div class="open-decision">
+  <strong>Q-GR-01 to Q-GR-15.</strong> 15 open default-locked questions: source ingestion thresholds, retrieval algorithm choice, entailment NLI model, re-ask retry budget, EU-region inference profile, vendor cost-cap defaults, etc.<br>
+  <strong>Recommendation:</strong> auto-adopt Round-3 defaults at phase kickoff unless overridden within 48h.
+</div>
+
+<div class="open-decision">
+  <strong>Cloudflare Python Workers vs Cloud Run for NLI sidecar.</strong> Stage 3 reviewers suggest Cloud Run primary (instructor + docling + NLI cross-encoder) with CF Worker as TS-only edge/auth shim — more memory, GA SLA, CPython 3.12. +1d to BE-A0.<br>
+  <strong>Recommendation: invert default to Cloud Run primary.</strong>
+</div>
+
+<div class="nav-down">
+  <h3>Where to go next</h3>
+  <ul style="color:white;">
+    <li><strong>See it visually:</strong> <a href="../flow.html">L2 Map</a> — Grounding in the red subgraph + sequence diagram</li>
+    <li><strong>Curated technical:</strong> <a href="../architecture-overview-2026-04-28.html#grounding-engine">L1 Atlas — Grounding Engine section</a></li>
+    <li><strong>Raw spec:</strong> <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/architecture-notes/grounding-module-v1.md" target="_blank">grounding-module-v1.md</a></li>
+    <li><strong>v2.1.1 amendment proposal:</strong> <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/architecture-notes/v2.1-pending/v2.1.1-amendment-proposal.md" target="_blank">Part A — Model-agnostic spine</a></li>
+    <li><strong>Open questions:</strong> <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/open-questions.md" target="_blank">Q-GR-01 to Q-GR-15</a></li>
+  </ul>
+</div>
+
+<p class="footer-note">Last updated: 28.04.2026 · Reviewers: 12 (4 rounds /iterate Codex gpt-5.5 xhigh + 6 specialist agents on initial lock + 10 reviewers across 3 stages of meta-review). Architecture LOCKED at v2.1; v2.1.1 amendment pending Filipe sign-off.</p>
+
+</body>
+</html>
