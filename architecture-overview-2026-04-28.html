@@ -701,6 +701,127 @@ Each box above is a <strong>module</strong>. Below: each module explained in pla
   <li><strong>Q-V20-13</strong> Data Protection Officer assignment — TBD.</li>
 </ul>
 
+<h2 id="stage-1-project-handling-review-5-reviewer-audit-2">Stage 1 — Project handling review (5-reviewer audit, 28.04)</h2>
+<p>Per Filipe directive: 3-stage meta-review. Stage 1 = how we are handling the project itself. 5 reviewers ran in parallel: methodology rigor stress-test · CIO procurement audit · process-gap audit · Plan agent (governance integration) · Codex (gpt-5.5 xhigh).</p>
+
+<div class="so-what">
+<strong>Consensus verdict: YELLOW (one RED on CIO procurement lens).</strong> The architecture work is genuinely strong — better than 90% of pre-Series-B vendors. The GAP between spec quality and operational maturity is unsustainable. Bus-factor=1, no human external review, 6 of 10 v2.0 invariants not yet in code, schema-package files referenced but don't exist, your chat feedback #3 + #4 already invalidate v2.1 locks (locks contradict your latest words RIGHT NOW).
+</div>
+
+<h3 id="stage-1-top-must-fix">Top must-fix items (ranked by impact, all 5 reviewers convergent)</h3>
+<table class="conn">
+<thead><tr><th>#</th><th>Item</th><th>Severity</th><th>Effort</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><strong>Apply your feedback #3 (model-agnostic) + #4 (revision logbook)</strong> — these chat comments contradict v2.1 locks. The Anthropic Citations API as architectural spine is vendor lock-in; needs amendment before Stage 2 review can be meaningful.</td><td>P1</td><td>1d (amendment) + 1d (re-iterate Codex)</td></tr>
+<tr><td>2</td><td><strong>Build the 6 missing schema-package types now</strong> (tenant.ts, claim-ledger.ts, disclaimer.ts, external-audit.ts, source-store.ts, asset-ledger.ts + namespaces.ts canonical registry). Spec references files that don't exist; "same-PR rule" is unenforceable until they exist.</td><td>P1</td><td>3d (MA-S0 must be amended to deliver these)</td></tr>
+<tr><td>3</td><td><strong>Generate <code>architecture-notes/CURRENT.md</code></strong> rendered from latest decisions-log entry. Today: a new reader following PLAN.md → latest.md sees pre-v2.0 state. The 3-day stale canon is the biggest "make me look unprofessional" risk.</td><td>P1</td><td>1d setup + auto-regen on each lock</td></tr>
+<tr><td>4</td><td><strong>Named external human reviewer, paid, monthly</strong> (Bain/KPMG retiree or McKinsey TMT partner tier, 4-8h/month). Highest-leverage single fix per Methodology agent. ~$3-8k/month buys diversity that 4 Codex rounds cannot.</td><td>P1</td><td>~$5k/mo + 0.5d to scope contract</td></tr>
+<tr><td>5</td><td><strong>CI rule: namespace registry must include every new <code>urn:hc-*</code> in same PR.</strong> Today the rule is prose-only. Plan agent + Process Gaps agree this is a "drift bomb" that goes off the first time MA-A merges without updating <code>addin/src/invariants.ts:254</code>.</td><td>P1</td><td>2d (GitHub Actions workflow)</td></tr>
+<tr><td>6</td><td><strong>DPIA + threat model + incident runbook</strong> bundle. GDPR Art 35 DPIA is non-optional before any EU production tenant. Threat model consolidates security posture across modules. Incident runbook for "wrong number landed in client deck."</td><td>P1</td><td>~6.5d total</td></tr>
+<tr><td>7</td><td><strong>Definition of Done + rollback procedure per phase.</strong> Today phases close on "Codex GREEN" but DoD is undefined. Rollback policy is undefined. First production push has no escape hatch.</td><td>P1</td><td>1.5d</td></tr>
+<tr><td>8</td><td><strong>Onboarding doc + project glossary + succession plan.</strong> Bus-factor=1 with 110KB of canonical reading. First contracted dev would quit by lunch. Filipe-out-for-2-weeks → project freezes.</td><td>P1</td><td>3d</td></tr>
+<tr><td>9</td><td><strong>Termination/exit clause in architecture</strong> — CIO procurement audit: NO contract signed without portable data export (claim_ledger + UserLibrary + audit trail in vendor-neutral JSON/CSV). Currently nowhere in spec.</td><td>P1</td><td>2d spec + 5d build (Phase OPS)</td></tr>
+<tr><td>10</td><td><strong>Differentiated lock fidelity for UX vs invariants.</strong> Stop running 4 Codex rounds on keyboard-shortcut hex codes. Reserve 4-round /iterate for invariants/contracts/encryption. UX details get 1-round principle-lock + build-time detail-lock.</td><td>P2</td><td>0d (process change, not artifact)</td></tr>
+</tbody>
+</table>
+
+<p><strong>Total ~20 dev-days for top 5 + ~$5k/month for #4.</strong> Most can run in parallel with Stage 2/3 reviews.</p>
+
+<h3 id="stage-1-reviewer-1">Reviewer 1: Methodology rigor stress-test — verdict YELLOW</h3>
+<details class="module">
+<summary><strong>Click to expand</strong> — 10-section critique (1500 words)</summary>
+<p><strong>Top 3 to CUT:</strong> 4-round-on-UX-modules ceremony (UX details should detail-lock at build time) · "multi-billion / no AI slop" rhetoric in spec headers (rewards over-engineering) · keyboard shortcuts and color hex codes inside architecture specs.</p>
+<p><strong>Top 3 to ADD:</strong> Named external reviewer ~$3-8k/month · <code>architecture-state.md</code> rendered derived doc · phase-kickoff Q-checkpoint gate.</p>
+<p><strong>Key insight:</strong> "The architecture is exceptional. Audit trail and drift discipline genuinely impress. But the gap between spec quality and organizational maturity is wider than any contract clause can bridge." Methodology rounds delivered monotonic value through R3 of v2.0 — R4 was polish. v2.1 R1 was application step, not review.</p>
+<p><strong>Reviewer monoculture risk (HIGH):</strong> All reviewers in Anthropic + OpenAI/GPT family. No Gemini, no Llama, no human external. Filipe's "model-agnostic" feedback (#3) was caught by Filipe (human), NOT by 6 specialist agents + Codex who all said GREEN.</p>
+</details>
+
+<h3 id="stage-1-reviewer-2">Reviewer 2: CIO procurement audit — verdict RED (would not sign 3-year)</h3>
+<details class="module">
+<summary><strong>Click to expand</strong> — 15-question audit (2000 words)</summary>
+<p><strong>Score: 6 FAIL · 7 CONDITIONAL · 2 PASS.</strong></p>
+<p><strong>FAILs:</strong> Reviewer independence (all AI) · Spec-vs-delivery (no working multi-tenant SaaS yet) · Modularity proof (claimed additive but not built) · Architect bus-factor (Filipe sole architect) · Multi-billion claim (zero evidence beyond aspiration) · Termination provisions (no data export path documented).</p>
+<p><strong>10 minimum changes for me to sign 1-year pilot:</strong></p>
+<ol>
+<li>Named second architect (real human, named in contract)</li>
+<li>Independent external review by named third-party security firm</li>
+<li>SOC 2 Type II in progress with named audit firm</li>
+<li>Working BE-A0 deployed to EU region with one live tenant</li>
+<li>One additive module (Cover Photo) shipped against locked v2.0 baseline</li>
+<li>DPO assigned and named (close Q-V20-13)</li>
+<li>Termination clause in architecture (portable data export)</li>
+<li>Filipe's 6-row sign-off form CLOSED (decisions-log:99-106 all ticks)</li>
+<li>Strike "multi-billion solution" language from customer-facing materials</li>
+<li>Real incident response runbook + one fire-drill report on file</li>
+</ol>
+<p><strong>Verbatim:</strong> "I'm being asked to bet brand on a one-architect, all-AI-reviewed, no-built-backend, no-certifications, no-exit-clause vendor with a 'multi-billion' self-assessment. No."</p>
+</details>
+
+<h3 id="stage-1-reviewer-3">Reviewer 3: Process gaps audit (31-point checklist) — top 5 to add this week</h3>
+<details class="module">
+<summary><strong>Click to expand</strong> — 31 process artifacts checked, 23 absent</summary>
+<p><strong>Top 5 to add this week (~20.5 dev-days):</strong></p>
+<ol>
+<li><strong>DPIA + threat model + incident runbook bundle</strong> (6.5d) — GDPR Art 35 DPIA is legal blocker for EU production; cheaper to write before code than after</li>
+<li><strong>CI for spec/schema-package + benchmark suite</strong> (8d) — schema migrations land MA-S1; without CI they silently break. F2 ≤8s p95 budget needs benchmark before BE-A0</li>
+<li><strong>Definition of Done + rollback per phase</strong> (1.5d) — MA-A.0 next; without DoD, "PASS" is opinion</li>
+<li><strong>Onboarding doc + glossary + succession plan</strong> (3d) — bus-factor=1; first contracted dev currently un-onboardable</li>
+<li><strong>Generalized sign-off ceremony with pre-authorization defaults</strong> (1.5d) — Filipe is bottleneck on 26 open Q's; reframe defaults as pre-authorized to unblock phases when remote</li>
+</ol>
+<p><strong>Verbatim:</strong> "Architecture maturity is at v2.1 LOCKED with multi-round Codex consensus. Engineering process maturity is at ad-hoc, single-operator, partner notebook. For a documented multi-billion-EUR target with regulated-sector tenants — that gap is the project's largest unmanaged risk."</p>
+</details>
+
+<h3 id="stage-1-reviewer-4">Reviewer 4: Plan agent (governance integration) — verdict YELLOW</h3>
+<details class="module">
+<summary><strong>Click to expand</strong> — most damning specifics</summary>
+<p><strong>Most damning finding: 6 of 10 v2.0 invariants ABSENT from <code>addin/src/invariants.ts</code>.</strong> Today the code implements only v1.2's 4 invariants (shape_guid, hc_filled_by, hc-deck-audit, hc-deck-purge). Tenant_id, claim_ledger, external_audit_log, disclaimer_flag, vendor_region, schema_versioned all absent. Schema-package files referenced by spec do not exist (<code>tenant.ts</code>, <code>claim-ledger.ts</code>, <code>disclaimer.ts</code>, <code>external-audit.ts</code>, <code>source-store.ts</code>, <code>asset-ledger.ts</code>, <code>grounding.ts</code>, <code>namespaces.ts</code> — none of these files exist).</p>
+<p><strong>Backend Worker directory does NOT exist.</strong> BE-A0 is the entire backend — 8d estimate to scaffold + Azure AD + Object Lock + DLQ — nothing started.</p>
+<p><strong>Document hierarchy broken:</strong> <code>latest.md</code> dated 25.04 still shows v1.2 / Phase 2; <code>PLAN.md</code> still says Phase 0 is next. New reader following PLAN.md → latest.md sees a pre-v2.0 project. Need <code>architecture-notes/CURRENT.md</code> rendered from latest lock.</p>
+<p><strong>Filipe feedback intake loop already broken:</strong> chat items #3 + #4 contradict already-LOCKED v2.1 defaults. No "amendment-in-place" protocol exists; only full re-lock. Says: "the lock and the feedback contradict each other right now."</p>
+<p><strong>Codex bus-factor:</strong> single adversarial reviewer for R3+R4 of v2.0 and most of v2.1. If Codex gpt-5.5 model degrades or prompt envelope drifts, "Codex GREEN" loses meaning silently.</p>
+</details>
+
+<h3 id="stage-1-reviewer-5">Reviewer 5: Codex deep-think (gpt-5.5 xhigh) — verdict YELLOW</h3>
+<details class="module">
+<summary><strong>Click to expand</strong> — 10-section meta-review</summary>
+<p><strong>Verbatim:</strong> "The handling is serious and mostly right for a high-risk product, but it is now close to governance overload. The strongest parts are spec-first discipline, append-only decision traceability, drift checks, and adversarial review. The weak part is canon management."</p>
+<p><strong>Decision-class rule for round count:</strong></p>
+<ul>
+<li>Existential / cross-schema / legal-security: 3-4 rounds (correct for v2.0)</li>
+<li>Additive module with contained blast radius: 2 rounds</li>
+<li>UX/detail/default answer: 1 round + owner sign-off (v2.1 over-engineered here)</li>
+</ul>
+<p><strong>Missing reviewer types (recurring gates):</strong> Legal/data-protection · CFO/cost · End-user workflow simulation · QA/test architect to turn locked invariants into regression tests.</p>
+<p><strong>Key risk: Owner-objection-after-lock.</strong> Filipe's model-agnostic objection landed AFTER Grounding was marked LOCKED. No graceful amendment path; would need full v2.2 re-lock cycle. Need lighter "v2.1 amendment" mechanism.</p>
+<p><strong>Key risk: Public knowledge leakage.</strong> Strategic architecture is being published through hc-knowledge (the Atlas you're reading). Sanitize deliberately.</p>
+<p><strong>Key risk: Spec-to-code gap.</strong> Locked invariants need automated tests or they will rot. "Turn 'no drift' into tests, not just tables."</p>
+</details>
+
+<h3 id="stage-1-action-plan">Stage 1 action plan (proposed, awaiting your sign-off)</h3>
+<div class="module">
+<p><strong>Immediate (this week):</strong></p>
+<ol>
+<li>Apply chat feedback #3 (model-agnostic) — write <code>v2.1.1 amendment</code> entry to decisions-log; revise Grounding spec from "Anthropic Citations as spine" to "structured-output validator + re-ask as spine; provider features are optimizations" (~1d)</li>
+<li>Apply chat feedback #4 (revision logbook) — Codex + 2 specialists assess Option A/B/C, fold into either claim_ledger or new namespace per consensus (~2d)</li>
+<li>Generate <code>CURRENT.md</code> auto-rendered from latest lock (~1d)</li>
+<li>Stand up CI for namespace registry + schema-package contract tests (~2d)</li>
+</ol>
+<p><strong>This month:</strong></p>
+<ol>
+<li>DPIA + threat model + incident runbook bundle (~6.5d)</li>
+<li>Definition of Done + rollback per phase (~1.5d)</li>
+<li>Onboarding doc + glossary + succession plan (~3d)</li>
+<li>Termination/exit clause in architecture spec (~2d)</li>
+</ol>
+<p><strong>Org-level (your call):</strong></p>
+<ol>
+<li>Hire/contract one named external reviewer (4-8h/month, ~$5k)</li>
+<li>Begin SOC 2 Type II readiness (Drata/Vanta, 6-9 month lead)</li>
+<li>Assign DPO (close Q-V20-13)</li>
+<li>Strike "multi-billion solution" language from customer-facing materials</li>
+</ol>
+</div>
+
 <h2 id="open-architecture-questions-routed-to-codex-and-ag">Open architecture questions (routed to Codex + agents, awaiting Filipe "go")</h2><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Open+architecture+questions&body=Comment+on+%C2%A7Open+architecture+questions%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Open architecture questions</a></div>
 
 <p>Items Filipe raised today that are NOT yet folded into the architecture. Each will be assessed by Codex + multiple specialist agents in parallel before any spec change. Sequenced by priority of decision.</p>
