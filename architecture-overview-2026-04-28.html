@@ -830,6 +830,140 @@ Each box above is a <strong>module</strong>. Below: each module explained in pla
 </ol>
 </div>
 
+<h2 id="stage-2-architecture-content-review">Stage 2 — Architecture content review (5-reviewer audit, 28.04 evening)</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Stage+2+%E2%80%94+Architecture+content+review+%285-reviewer+audit%2C+28.04+evening%29&body=Comment+on+%C2%A7Stage+2+%E2%80%94+Architecture+content+review+%285-reviewer+audit%2C+28.04+evening%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Stage 2 — Architecture content review (5-reviewer audit, 28.04 evening)</a></div>
+<p>Per Filipe directive: 3-stage meta-review. Stage 2 = do reviewers AGREE WITH THE ARCHITECTURE CONTENT? 5 reviewers ran in parallel: invariant + primitive set critique · security + compliance · coverage gaps · consultant POV adversarial · Codex (gpt-5.5 xhigh).</p>
+
+<div class="so-what">
+<strong>Consensus verdict: YELLOW.</strong> The crypto layer (Inv #5 AAD), claim-ledger taxonomy (Inv #6), GDPR backbone (§L), and WORM compliance (Inv #7) are bank/pharma audit-grade. <strong>The architecture validates your feedback #3 + #4 across all 5 reviewers</strong> — Anthropic Citations as spine IS a vendor-lock-in mistake; the missing revision logbook IS invariant-grade. Plus 4 substantive blockers nameable, plus production-killer scenarios surfaced (silent claim-ledger merge data loss, PA-delegated-session audit lies, PE-portfolio-firms architecturally underserved). Most fixable in ~5-10d spec amendment + ~2-3 weeks of coverage-gap closures.
+</div>
+
+<h3 id="stage-2-convergent">Convergent findings (3+ of 5 reviewers agree)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Convergent+findings+%283%2B+of+5+reviewers+agree%29&body=Comment+on+%C2%A7Convergent+findings+%283%2B+of+5+reviewers+agree%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Convergent findings (3+ of 5 reviewers agree)</a></div>
+<table class="conn">
+<thead><tr><th>Finding</th><th>Concurring</th><th>Sev</th></tr></thead>
+<tbody>
+<tr><td><strong>Filipe feedback #3 (model-agnostic) and #4 (revision logbook) are correct architectural calls</strong> — Anthropic Citations as spine = vendor lock-in. Need invariant #11 `revision_logbook` (separate namespace, not folded into claim_ledger).</td><td>5/5</td><td>P1</td></tr>
+<tr><td><strong>Anthropic Citations is provider optimization, NOT spine.</strong> Spine = source-store + structured-output validator + re-ask. Substring validation alone proves quote exists, not that it supports the statement (Codex unique: also semantic entailment validation needed).</td><td>5/5</td><td>P1</td></tr>
+<tr><td><strong>MIN aggregation must split into gate (send-block) vs display (% breakdown).</strong> Today: 99 GREEN + 1 RED claim → deck = RED. Partner sees "deck broken" instead of "1 item to fix."</td><td>3/5</td><td>P1</td></tr>
+<tr><td><strong>Threat model document missing entirely.</strong> §F lists trust requirements but no §N threat actors / attack surfaces / in-scope vs out-of-scope decisions.</td><td>3/5</td><td>P1</td></tr>
+<tr><td><strong>Massive coverage gaps at multi-billion scale.</strong> Telemetry/SLOs absent · data classification absent (banking blocker) · SharePoint/DAM connectors absent (adoption blocker) · contracts/DPA absent · backup/restore + EOL absent.</td><td>3/5</td><td>P1</td></tr>
+<tr><td><strong>Vendor failover should be 3+ providers with contract tests.</strong> Once model-agnosticism is mandatory, two-vendor (Anthropic + Google) is not enough.</td><td>2/5</td><td>P2</td></tr>
+<tr><td><strong>Inv #7 external_audit_log should fold into Inv #3 + retention policy.</strong> Currently 2 invariants for what is one row written to two stores.</td><td>2/5</td><td>P2</td></tr>
+</tbody>
+</table>
+
+<h3 id="stage-2-unique">Unique high-impact findings (single-reviewer flags, but show-stoppers)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Unique+high-impact+findings+%28single-reviewer+flags%2C+but+show-stoppers%29&body=Comment+on+%C2%A7Unique+high-impact+findings+%28single-reviewer+flags%2C+but+show-stoppers%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Unique high-impact findings (single-reviewer flags, but show-stoppers)</a></div>
+<table class="conn">
+<thead><tr><th>Reviewer</th><th>Finding</th></tr></thead>
+<tbody>
+<tr><td>Architect</td><td>Missing primitive: <code>validate()</code> — Tier 2 instructor is most-invoked op across F1-F6, unnamed. Plus <code>classify(image)</code>, <code>extract(deck)</code>, <code>ground(text)</code>.</td></tr>
+<tr><td>Codex</td><td>Missing primitive: <code>cohere(deck) → issues/fixes</code> — deck-level consistency for storyline, terminology, units, dates, repeated claims.</td></tr>
+<tr><td>Codex</td><td>Missing flow F7 Review/verify/package for send — first-class workflow needed, not scattered trust-contract mechanics.</td></tr>
+<tr><td>Consultant POV</td><td><strong>Production killer:</strong> 2 consultants edit offline → reconnect → silent claim-ledger merge data loss. OneDrive doesn't understand customXmlPart merge semantics. <em>"First incident. Trust evaporates. Tool dies in firm."</em></td></tr>
+<tr><td>Consultant POV</td><td>PA delegated-session missing — every PA edit on consultant's machine writes audit row as consultant. <em>30% of all edits provably wrong audit. Regulated tenants fail audit on first try.</em></td></tr>
+<tr><td>Consultant POV</td><td>PE portfolio firms architecturally underserved — 80% of claims forced to ORANGE/RED with mandatory partner co-sign. Partner spends 2h co-signing. PE = 1/3 H&C revenue, slowest workflow.</td></tr>
+<tr><td>Consultant POV</td><td><code>legal_defense_export</code> missing — when sued, no compiler bundles {sources + claims + audit + sign-off chain} into court-acceptable archive. Every lawsuit = 200-hour discovery.</td></tr>
+<tr><td>Consultant POV</td><td><code>engagement_id</code> missing — would enable conflict-of-interest detection, client-NDA cleanup, deck-family A/B variants. ~5d retrofit, large payoff.</td></tr>
+<tr><td>Consultant POV</td><td><code>rapid_edit</code> trust mode missing for time pressure. Without it, tool loses to ChatGPT for 25% of decks shipped under deadline.</td></tr>
+<tr><td>Security</td><td>6 encryption-scheme gaps undocumented: DEK lifetime · broken-backend recovery · partner co-edit · key escrow · FIPS-140 tier · per-source DEK rotation.</td></tr>
+<tr><td>Security</td><td>Insider threat / partner-rubberstamp pattern uncovered AND undocumented. Partner co-sign is forcing-function for attention, not guarantee. Need random-sample audit by independent reviewer.</td></tr>
+<tr><td>Security</td><td>SEC 10-K PDF vs IR press release wrongly conflated at cap 0.70. Should sub-divide: SEC 10-K PDF (auditor-signed) at 0.85, IR press release at 0.55.</td></tr>
+<tr><td>Coverage</td><td><strong>Top 5 enterprise procurement blockers:</strong> #1 data classification · #2 telemetry+SLOs · #3 SharePoint+DAM · #4 contracts/DPA · #5 EOL+backup.</td></tr>
+</tbody>
+</table>
+
+<h3 id="stage-2-amendments">Stage 2 architecture amendments (proposed for v2.1.1)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Stage+2+architecture+amendments+%28proposed+for+v2.1.1%29&body=Comment+on+%C2%A7Stage+2+architecture+amendments+%28proposed+for+v2.1.1%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Stage 2 architecture amendments (proposed for v2.1.1)</a></div>
+<table class="conn">
+<thead><tr><th>#</th><th>Change</th><th>Effort</th></tr></thead>
+<tbody>
+<tr><td>A1</td><td><strong>Apply feedback #3 (model-agnostic):</strong> demote Anthropic Citations to "optional Tier 1 optimization"; spine = structured-output validator + re-ask; revise §I to N-vendor-set with contract tests.</td><td>1d spec + 1d Codex re-iterate</td></tr>
+<tr><td>A2</td><td><strong>Apply feedback #4:</strong> add invariant #11 `revision_logbook` with new namespace `urn:hc-deck-revision-log/v1`; append-only per-shape change history.</td><td>2d spec + 3d build</td></tr>
+<tr><td>A3</td><td>Add §N Threat Model document (STRIDE-style).</td><td>2d</td></tr>
+<tr><td>A4</td><td>Add P7 <code>cohere()</code> primitive — deck-level consistency.</td><td>3d spec</td></tr>
+<tr><td>A5</td><td>Add <code>engagement_id</code> as first-class field threaded through tenant/decks/sources/claims.</td><td>5d retrofit</td></tr>
+<tr><td>A6</td><td>Add F7 Review/verify/package flow.</td><td>3d spec</td></tr>
+<tr><td>A7</td><td>Add <code>legal_defense_export</code> primitive for court-grade archive bundling.</td><td>5d</td></tr>
+<tr><td>A8</td><td>Add <code>delegated_session</code> mode for PA workflow.</td><td>2d</td></tr>
+<tr><td>A9</td><td>Add <code>rapid_edit</code> trust mode for time pressure.</td><td>2d</td></tr>
+<tr><td>A10</td><td>Sub-divide source_kind: SEC 10-K PDF cap 0.85, IR press release 0.55.</td><td>0.5d spec</td></tr>
+<tr><td>A11</td><td>Add semantic entailment validation in Tier 2 (beyond substring).</td><td>3-5d build</td></tr>
+<tr><td>A12</td><td><strong>customXmlPart append-only-with-tombstones merge resolver.</strong> <em>Highest priority — production killer fix.</em></td><td>5-7d build</td></tr>
+<tr><td>A13</td><td>MIN aggregation: split gate vs display + add weighted_confidence.</td><td>1d spec + 2d build</td></tr>
+<tr><td>A14</td><td>Cover photo Tier 0: preserve existing source-deck cover if license valid.</td><td>1d spec + 2d build</td></tr>
+<tr><td>A15</td><td>Quantified disclaimer footer default for regulated tenants.</td><td>1d spec + 1d build</td></tr>
+</tbody>
+</table>
+
+<h3 id="stage-2-r1">Reviewer 1: Senior architect (invariants + primitives) — YELLOW</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Reviewer+1%3A+Senior+architect+%28invariants+%2B+primitives%29+%E2%80%94+YELLOW&body=Comment+on+%C2%A7Reviewer+1%3A+Senior+architect+%28invariants+%2B+primitives%29+%E2%80%94+YELLOW%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Reviewer 1: Senior architect (invariants + primitives) — YELLOW</a></div>
+<details class="module"><summary><strong>Click to expand</strong></summary>
+<p><strong>Top 3 KEEP:</strong> Inv #5 tenant_id AAD-bound · Inv #6 claim_ledger source_kind caps · Inv #10 schema_versioned read-N-write-N+1.</p>
+<p><strong>Top 3 CHALLENGE:</strong> Inv #7 should fold into Inv #3 · Inv #8 disclaimer footer is theater (paste-special-as-image strips it) · MIN aggregation as sole rule.</p>
+<p><strong>Top 1 ADD:</strong> Invariant #11 `revision_chain`. Makes hc_filled_by derived. Satisfies GDPR Art 16 Right to Rectification.</p>
+<p><strong>Anthropic Citations spine = architecture-level mistake</strong> (not just documentation). One section rewrite, no cascade beyond grounding module.</p>
+</details>
+
+<h3 id="stage-2-r2">Reviewer 2: Coverage gap audit (35-domain) — top 5 enterprise blockers</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Reviewer+2%3A+Coverage+gap+audit+%2835-domain%29+%E2%80%94+top+5+enterprise+blockers&body=Comment+on+%C2%A7Reviewer+2%3A+Coverage+gap+audit+%2835-domain%29+%E2%80%94+top+5+enterprise+blockers%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Reviewer 2: Coverage gap audit (35-domain) — top 5 enterprise blockers</a></div>
+<details class="module"><summary><strong>Click to expand</strong></summary>
+<p>23 of 35 domains ABSENT, 9 PARTIAL, 3 PRESENT.</p>
+<p><strong>Top 5 enterprise procurement blockers:</strong></p>
+<ol>
+<li>Data classification + handling rules (banking InfoSec refuses without)</li>
+<li>Telemetry + SLOs (no Fortune-500 contract closes without status page)</li>
+<li>SharePoint + DAM connectors (kills time-to-first-value)</li>
+<li>Contract management — DPA/MSA/termination provisions</li>
+<li>EOL + backup/restore (CISO blocker)</li>
+</ol>
+<p>Honourable mentions: i18n (multi-billion needs FR/IT/ES/EN min), vendor risk register, library versioning + deprecation chaos at 24-month mark.</p>
+</details>
+
+<h3 id="stage-2-r3">Reviewer 3: Security + compliance — YELLOW (3.5d to GREEN)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Reviewer+3%3A+Security+%2B+compliance+%E2%80%94+YELLOW+%283.5d+to+GREEN%29&body=Comment+on+%C2%A7Reviewer+3%3A+Security+%2B+compliance+%E2%80%94+YELLOW+%283.5d+to+GREEN%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Reviewer 3: Security + compliance — YELLOW (3.5d to GREEN)</a></div>
+<details class="module"><summary><strong>Click to expand</strong></summary>
+<p>SOC 2 Type II readiness review prediction: 0 critical · 4-6 management letters · 8-12 informational observations.</p>
+<p><strong>Strengths:</strong> AAD-bound encryption is bank-grade · WORM + dual-key + Object Lock = complete compliance chain · GDPR-as-architecture not bolt-on.</p>
+<p><strong>Top 3 weaknesses:</strong> Insider threat / partner-rubberstamp uncovered + undocumented · "model-agnostic" is "vendor-portable, not vendor-free" — honest framing required · 6 encryption-scheme gaps undocumented.</p>
+<p><strong>Missing entirely:</strong> Threat model document. Senior security architect asks for STRIDE/LINDDUN within first hour.</p>
+<p><strong>Verbatim:</strong> "Without these: ship — architecture won't embarrass at H&C scale, but won't pass Big-4 SOC 2 Type II without management letters."</p>
+</details>
+
+<h3 id="stage-2-r4">Reviewer 4: Consultant POV adversarial — YELLOW-leaning-RED</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Reviewer+4%3A+Consultant+POV+adversarial+%E2%80%94+YELLOW-leaning-RED&body=Comment+on+%C2%A7Reviewer+4%3A+Consultant+POV+adversarial+%E2%80%94+YELLOW-leaning-RED%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Reviewer 4: Consultant POV adversarial — YELLOW-leaning-RED</a></div>
+<details class="module"><summary><strong>Click to expand</strong></summary>
+<p><strong>Verbatim:</strong> "This is a beautifully engineered SaaS for a regulated bank that has six months of deal lead time. It is not yet a tool that survives a Tuesday at H&C."</p>
+<p>15 real-consultant scenarios walked through. Top 3 production breakages:</p>
+<ol>
+<li>2 consultants offline on same train, both edit, both reconnect → silent claim-ledger merge data loss</li>
+<li>PA fixes 50 typos on consultant's machine → 30% of audit rows provably wrong</li>
+<li>PE portfolio firm deck (80% non-public) → architecturally slowest path despite being 1/3 of H&C revenue</li>
+</ol>
+<p><strong>Top 3 to CUT:</strong> MIN-to-deck aggregation theater · AI-gen cover Tier 5 (legal/IP minefield) · Dual-key compliance ceremony (5-min co-signing breaks at 6pm Friday).</p>
+<p><strong>Top 3 to ADD:</strong> `engagement_id` first-class · `legal_defense_export` primitive · `rapid_edit` trust mode.</p>
+</details>
+
+<h3 id="stage-2-r5">Reviewer 5: Codex (gpt-5.5 xhigh) — YELLOW</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Reviewer+5%3A+Codex+%28gpt-5.5+xhigh%29+%E2%80%94+YELLOW&body=Comment+on+%C2%A7Reviewer+5%3A+Codex+%28gpt-5.5+xhigh%29+%E2%80%94+YELLOW%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Reviewer 5: Codex (gpt-5.5 xhigh) — YELLOW</a></div>
+<details class="module"><summary><strong>Click to expand</strong></summary>
+<p><strong>Verbatim:</strong> "Core architecture is strong and mostly coherent for regulated SaaS, but not GREEN until Filipe #3 and #4 are converted from pending feedback into explicit locked contracts."</p>
+<p>Specific changes recommended:</p>
+<ul>
+<li>Invariant #11 `revision_logbook` separate namespace</li>
+<li>Primitive P7 `cohere()` deck-level consistency</li>
+<li>Flow F7 Review/verify/package for send</li>
+<li>Vendor failover 3+ providers with contract tests</li>
+<li>Tier 0 cover photo: preserve existing source-deck cover if licensed</li>
+<li>Semantic entailment validation in Tier 2 (substring proves quote exists, not that it supports statement)</li>
+<li>WORM enhancements: Merkle-root daily anchor, legal-hold states, eDiscovery export</li>
+<li>Coverage gap #1: observability/incident architecture entirely absent</li>
+<li>Coverage gap #2: a11y + i18n architectural for client decks</li>
+</ul>
+</details>
+
+
 <h2 id="open-architecture-questions-routed-to-codex-and-ag">Open architecture questions (routed to Codex + agents, awaiting Filipe "go")</h2><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Open+architecture+questions&body=Comment+on+%C2%A7Open+architecture+questions%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Open architecture questions</a></div>
 
 <p>Items Filipe raised today that are NOT yet folded into the architecture. Each will be assessed by Codex + multiple specialist agents in parallel before any spec change. Sequenced by priority of decision.</p>
