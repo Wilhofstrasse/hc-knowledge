@@ -964,6 +964,213 @@ Each box above is a <strong>module</strong>. Below: each module explained in pla
 </details>
 
 
+
+
+<h2 id="stage-3-implementation-approach-review">Stage 3 — Implementation approach review (5-reviewer audit, 28.04 evening)</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Stage+3+%E2%80%94+Implementation+approach+review+%285-reviewer+audit%2C+28.04+evening%29&body=Comment+on+%C2%A7Stage+3+%E2%80%94+Implementation+approach+review+%285-reviewer+audit%2C+28.04+evening%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Stage 3 — Implementation approach review (5-reviewer audit, 28.04 evening)</a></div>
+
+<p>Per Filipe directive: 3-stage meta-review. Stage 3 = do reviewers AGREE WITH HOW WE'RE IMPLEMENTING IT? 5 reviewers ran in parallel: build-sequence realism · technology stack viability · operational/SRE readiness · Filipe #3+#4 cascade plan · Codex (gpt-5.5 xhigh) deep-think.</p>
+
+<div class="module" style="background:#fff8e1; border-left:4px solid #f57c00;">
+  <div class="role">Stage 3 verdict</div>
+  <h3 id="stage-3-verdict">RED as written → YELLOW with rescope (3+ reviewer convergence)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7RED+as+written+%E2%86%92+YELLOW+with+rescope+%283%2B+reviewer+convergence%29&body=Comment+on+%C2%A7RED+as+written+%E2%86%92+YELLOW+with+rescope+%283%2B+reviewer+convergence%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §RED as written → YELLOW with rescope (3+ reviewer convergence)</a></div>
+<p><strong>Architecture is sound. Implementation plan is not honest about dates, scope, headcount, or operational readiness.</strong></p>
+
+<p>The 12-week MVP target is dishonest in every reviewer's analysis. Honest range: <strong>13-20 weeks elapsed</strong> for credible first-client MVP. BE-A0 is under-scoped (8d → 12-15d) once Filipe #3 lands. Observability is not in any phase but the trust contract already depends on it (audit-lag &gt;5min hard send-gate exists with zero telemetry). Single-dev critical path breaks at week 5-8.</p>
+
+<p><strong>Path to YELLOW:</strong> rescope BE-A0, pull observability left to OP-A parallel phase, redefine MVP as either "single-vendor template-fill" (12-week target survives) OR "multi-vendor regulated MVP" (13-14 week honest target), commit headcount at MA-B kickoff.</p>
+</div>
+
+<h3 id="stage-3-convergent">Convergent findings (3+ of 5 reviewers agree)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Convergent+findings+%283%2B+of+5+reviewers+agree%29&body=Comment+on+%C2%A7Convergent+findings+%283%2B+of+5+reviewers+agree%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Convergent findings (3+ of 5 reviewers agree)</a></div>
+
+<div class="module">
+<ol>
+  <li><strong>12-week MVP is dishonest.</strong> All 5 reviewers say longer. Codex 16-20w · build-seq agent 18-20w · ops 16-18w · plan ~13-14w · tech-stack agrees on "no senior-partner-credible 12-week claim." Hidden costs not in spec arithmetic: Azure AD wallclock 5-10d, 6-row legal sign-off 10-20d, Q-V20 sign-offs, BE-A0↔MA-A integration buffer, observability scaffolding, Filipe context-switch tax. (decisions-log.md:230 build sequence claim · grounding-module-v1.md:540 BE-A0 expansion)</li>
+  <li><strong>BE-A0 is under-scoped at 8d.</strong> 4 of 5 reviewers say 12-15d once v2.1 moves Grounding Tier 0/1/2 into BE-A0 (decisions-log L226), Filipe #3 adapter set lands, and observability is included. (fill-architecture-v2.md:507)</li>
+  <li><strong>Observability gap is RED severity, not YELLOW.</strong> 4 of 5 reviewers. The trust contract already states "external_audit_lag &gt;5min → manual partner sign-off on send" (fill-architecture-v2.md:42), yet there is no audit_lag gauge, no DLQ depth metric, no alert rule, no runbook. The single most critical SLO has zero telemetry surface. OPS phase placement at row 15 (after DR-4) is wrong. (fill-architecture-v2.md:518)</li>
+  <li><strong>Single-dev critical path breaks.</strong> 3 of 5 reviewers. One senior dev cannot ship Office.js + backend auth + KMS + WORM + grounding + schema migrations + observability + Azure AD coordination + legal gates + production cutover in 12 weeks. Headcount becomes non-optional at week 4-8 — backend/SRE owner, Office.js/frontend owner, QA/eval owner, legal/IT owner.</li>
+  <li><strong>Filipe #3 estimate too low.</strong> 3 of 5 reviewers say honest is 10-15d, not 5d+2d. Required: provider-neutral grounding contract, citation normalization, per-provider schema serialization, semantic entailment validator (NEW — replaces substring-match-only), re-ask policy, provider fixtures, cost attribution, eval set for entailment. (grounding-module-v1.md:31 still says "Anthropic Citations is the spine" — feedback-log #3 confirms not yet applied)</li>
+  <li><strong>Filipe #4 estimate too low.</strong> Codex + plan agent converge on 10-15d, not 3-5d. Stage 2's 3-5d captures only "schema + writer" — ignores partner review pane (MA-F surface), Tier 4 walker orphan detection, namespace registry update + regression test, ExternalAuditRow.primitive enum extension, dual-write atomicity (in-deck + WORM mirror).</li>
+  <li><strong>R2+SQLite scale ceiling.</strong> 2 reviewers (Codex YELLOW + tech-stack RED). Acceptable for Phase A/B (≤25 tenants); breaks before tenant #2 at 1M source pages. 1M chunks = 7.5-10GB blob; R2 GET-PUT round-trip exceeds DO 60s lease TTL → silent CAS-conflict data loss; FTS5 index requires whole-blob rewrite; serialized ingest per tenant. Migration target: D1 (≤100 tenants, 10GB DB cap watch) or Postgres (multi-billion-grade). (grounding-module-v1.md:87)</li>
+  <li><strong>MA-S1 bundle: split capability flags even if single migrator runner.</strong> Codex + build-seq agent agree. Plan agent says keep — but with conditions equivalent to splitting. Concrete failure mode: Grounding ready but Cover Photo waits on Logo.dev legal review. (decisions-log.md:221 "ship together OR neither" rule)</li>
+</ol>
+</div>
+
+<h3 id="stage-3-unique">Unique high-impact findings (single-reviewer flags, but show-stoppers)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Unique+high-impact+findings+%28single-reviewer+flags%2C+but+show-stoppers%29&body=Comment+on+%C2%A7Unique+high-impact+findings+%28single-reviewer+flags%2C+but+show-stoppers%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Unique high-impact findings (single-reviewer flags, but show-stoppers)</a></div>
+
+<div class="module">
+<ul>
+  <li><strong>Audit-lag SLO is a contractual lie</strong> (ops agent) — fill-architecture-v2.md:42 makes external_audit_lag &gt;5min a hard send-gate, but no telemetry exists to measure it. The send-gate cannot be enforced without observability that doesn't ship until OPS phase.</li>
+  <li><strong>partner_signoff_required dual state machines</strong> (plan agent) — revision_log row carries `partner_signoff_required` field; AttestationRecord.partner_review_required already exists in claim_ledger (fill-architecture-v2.md:127). Two parallel sign-off state machines unless reconciled. Recommend: revision_log inherits from claim_ledger.attestation.</li>
+  <li><strong>MA-S1 atomicity rollback contract underspecified</strong> (plan agent) — with #3 + #4 added to bundle, 4 namespaces migrate atomically. If Cover Photo migration succeeds but Grounding fails mid-way, current spec says "both or neither" but the runner has no rollback semantics. Engineering ticket needed before MA-S1 ships.</li>
+  <li><strong>Cloudflare Python Workers can't carry NLI cross-encoder + docling in size budget</strong> (plan agent + tech-stack) — Pyodide cold start 800ms+, 128MB isolate memory, Workers Python in beta (compatibility flag required). Filipe #3 doubles Python footprint with NLI sidecar. Invert default: Cloud Run primary for Python (CPython 3.12, 4 vCPU/8GB, 60-min timeout, GA SLA), Worker as TS-only edge/auth/MCP shim. +1d BE-A0.</li>
+  <li><strong>Three uncontained blast-radius failure modes</strong> (ops agent): (a) cross-tenant DEK leak — architecture good, no detection telemetry; (b) R2 Object Lock retention misconfig — unrecoverable by design with no validator; (c) GDPR purge stuck mid-flight — Article 12(3) breach with no job runner, no checkpoint, no DPO status surface.</li>
+  <li><strong>Q-V20 sign-offs block phases unless timeboxed</strong> (Codex) — 7 still open. Rule: "default auto-adopts at phase kickoff unless Filipe overrides." Otherwise Filipe sign-off latency = MVP slip.</li>
+  <li><strong>Hash-chain / Merkle root sealing for WORM is missing</strong> (Stage 2 carryover, tech-stack confirms) — without it, the audit trail is "trust us" not mathematically tamper-evident. 3-5d BE-A1 work before regulated tier-1 client.</li>
+  <li><strong>OIDC-generic backend validator before tenant #2</strong> (tech-stack + Codex) — Azure AD-only blocks Google Workspace / Okta-first tenants (PE on Workspace, defense on Okta).</li>
+  <li><strong>Multi-cloud KMS abstraction</strong> (tech-stack) — first tier-1 FS client demands BYOK with AWS KMS / GCP Cloud KMS / HSM. Need KmsAdapter abstraction in BE-A1. +2d.</li>
+</ul>
+</div>
+
+<h3 id="stage-3-amendments">Stage 3 implementation amendments (proposed)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Stage+3+implementation+amendments+%28proposed%29&body=Comment+on+%C2%A7Stage+3+implementation+amendments+%28proposed%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Stage 3 implementation amendments (proposed)</a></div>
+<div class="module" style="background:#f3f4f6;">
+<table>
+  <thead><tr><th>#</th><th>Amendment</th><th>Severity</th><th>Source</th><th>Cost</th></tr></thead>
+  <tbody>
+    <tr><td>B1</td><td><strong>Redefine MVP target.</strong> 12 weeks → either (A) 12-week single-vendor template-fill MVP with Google adapter slipped to BE-A1, OR (B) 13-14 week honest multi-vendor regulated MVP. Filipe must pick.</td><td>P1</td><td>5/5 reviewers</td><td>0d (decision)</td></tr>
+    <tr><td>B2</td><td><strong>Insert OP-A phase parallel to BE-A0.</strong> Minimum viable observability: tracing, RED metrics, structured logs (tenant/deck correlation IDs), audit_append SLO, DLQ depth alerts, external_audit_lag alerting, KMS failure alerting, provider error budgets, status page, incident runbook, paging.</td><td>P1</td><td>4/5 reviewers</td><td>5-7d</td></tr>
+    <tr><td>B3</td><td><strong>BE-A0 inflates 8d → 12-15d.</strong> Absorbs Filipe #3 adapter set (Anthropic + Google + NLI sidecar), Cloud Run sidecar primary inversion, observability skeleton.</td><td>P1</td><td>4/5 reviewers</td><td>+4-7d to BE-A0</td></tr>
+    <tr><td>B4</td><td><strong>MA-S1 bundle: split capability flags.</strong> Allow Cover Photo and Grounding to ship independently within v0.3.0 even if migrator runner is single-shot. Add atomic-migration rollback contract.</td><td>P1</td><td>3/5 reviewers</td><td>+1d MA-S1</td></tr>
+    <tr><td>B5</td><td><strong>Headcount: +1 SRE-leaning engineer at MA-B kickoff (week 4-5); +1 Office.js/frontend at week 5-6.</strong> Single-dev critical path breaks otherwise.</td><td>P1</td><td>3/5 reviewers</td><td>org decision</td></tr>
+    <tr><td>B6</td><td><strong>Filipe #3 honest scope decision.</strong> ~14d for full multi-vendor + semantic entailment + universal envelope. NOT 7d.</td><td>P1</td><td>3/5 reviewers</td><td>13-15d</td></tr>
+    <tr><td>B7</td><td><strong>Filipe #4 honest scope.</strong> ~10-11d not 3-5d. Mirror to WORM via primitive_action="revision_log_append" (additive enum). Both in-deck customXmlPart + WORM mirror — for regulated retention (SOX/MiFID/Solvency II).</td><td>P1</td><td>2/5 reviewers</td><td>10-11d</td></tr>
+    <tr><td>B8</td><td><strong>Production cutover plan: explicit doc.</strong> <code>architecture-notes/production-cutover-v1.md</code>: phase-by-phase bar + rollback. Phase A internal-Filipe → first-non-Filipe → first client deck → regulated tenant.</td><td>P1</td><td>2/5 reviewers</td><td>1d</td></tr>
+    <tr><td>B9</td><td><strong>Q-V20 sign-off auto-adopt.</strong> Default answers auto-adopt at phase kickoff unless Filipe overrides within 48h. Removes Filipe-latency from critical path.</td><td>P1</td><td>1/5 reviewers</td><td>0d (rule)</td></tr>
+    <tr><td>B10</td><td><strong>Cloud Run primary for Python.</strong> Invert: Cloud Run runs instructor + docling + NLI cross-encoder; CF Worker is TS-only edge/auth/MCP shim. Workers Python only for thin orchestration.</td><td>P1</td><td>2/5 reviewers</td><td>+1d BE-A0</td></tr>
+    <tr><td>B11</td><td><strong>Source-store substrate roadmap.</strong> Phase A/B: R2+SQLite blob OK (≤25 tenants). Before tenant #2: migrate to D1 (≤100 tenants) or Neon Postgres (multi-billion). Lock the migration trigger now.</td><td>P2</td><td>2/5 reviewers</td><td>3-5d (later)</td></tr>
+    <tr><td>B12</td><td><strong>KmsAdapter abstraction in BE-A1.</strong> BYOK support for AWS KMS / GCP Cloud KMS / HSM. First tier-1 FS client will demand it.</td><td>P2</td><td>1/5 reviewers</td><td>+2d BE-A1</td></tr>
+    <tr><td>B13</td><td><strong>Audit-lag telemetry must exist before any send-gate enforcement.</strong> The 5min send-gate (fill-architecture-v2.md:42) cannot ship without OP-A telemetry. Rebuild as enforce-only-when-monitored.</td><td>P1</td><td>1/5 reviewers</td><td>folded into B2</td></tr>
+    <tr><td>B14</td><td><strong>Hash-chain / Merkle root sealing for WORM.</strong> 3-5d BE-A1 before regulated tier-1 client. Without it, audit trail is "trust us" not tamper-evident.</td><td>P2</td><td>1/5 reviewers (carryover Stage 2)</td><td>3-5d BE-A1</td></tr>
+    <tr><td>B15</td><td><strong>OIDC-generic backend validator.</strong> Before tenant #2 (Workspace + Okta tenants). Generic OIDC broker; Azure AD becomes one provider not the only one.</td><td>P2</td><td>2/5 reviewers</td><td>2-3d BE-A1</td></tr>
+  </tbody>
+</table>
+<p><strong>Total cascade impact: ~+15-20 dev-days net to MVP, primarily concentrated in BE-A0 (+4-7d) and OP-A (5-7d new phase).</strong> Most amendments are P1 priority for credible regulated-SaaS shipping.</p>
+</div>
+
+<h3 id="stage-3-r1">Reviewer 1: Build-sequence + 12-week MVP realism — YELLOW leaning RED</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Reviewer+1%3A+Build-sequence+%2B+12-week+MVP+realism+%E2%80%94+YELLOW+leaning+RED&body=Comment+on+%C2%A7Reviewer+1%3A+Build-sequence+%2B+12-week+MVP+realism+%E2%80%94+YELLOW+leaning+RED%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Reviewer 1: Build-sequence + 12-week MVP realism — YELLOW leaning RED</a></div>
+<details>
+<summary>Click for full review</summary>
+<ul>
+  <li><strong>12-week MVP is false</strong> — honest is 18-20 weeks (22 with observability+legal). Senior-partner-credible plan publicly says "5-month template-fill MVP, 7-month first-regulated-tenant" and beats it.</li>
+  <li><strong>BE-A0 is under-scoped at 8d</strong> — honestly 12-15d engineering, plus Azure AD wallclock that's off Filipe's calendar.</li>
+  <li><strong>MA-S1 v0.3.0 bundle (Cover Photo + Grounding) — split it.</strong> Both migrators are additive-only; coordinated bumps were Codex's R2 closure for migration safety, but additive-only migrations are independently safe by construction. Concrete failure mode: Grounding ships ready while Cover Photo waits on Logo.dev legal review. Recommend v0.3.0 (Grounding) + v0.4.0 (Cover Photo).</li>
+  <li><strong>MA-A close gate ↔ BE-A0 contract = partial circular</strong>, not just sequential. 1-dev concurrency means Filipe can't be on both sides; integration round will expose 2-4 contract bugs late. Add 1w explicit buffer.</li>
+  <li><strong>Stage 2 A11 observability gap is now a Stage 3 schedule gap.</strong> No phase owns tracing/SLO/paging. Insert "BE-A0.5" phase (5-7d) before first non-Filipe traffic. Otherwise the first non-Filipe consultant is the incident-response system.</li>
+  <li><strong>Headcount is non-optional from week 8 onward.</strong> Either hire a second engineer by week 5 or scope-cut the MVP to F2-only (drop F1 stamp+fill).</li>
+  <li><strong>Production cutover plan is implicit.</strong> Need explicit <code>architecture-notes/production-cutover-v1.md</code> with bar + rollback per transition.</li>
+</ul>
+</details>
+
+<h3 id="stage-3-r2">Reviewer 2: Technology stack + vendor lock-in — YELLOW (3 RED surfaces)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Reviewer+2%3A+Technology+stack+%2B+vendor+lock-in+%E2%80%94+YELLOW+%283+RED+surfaces%29&body=Comment+on+%C2%A7Reviewer+2%3A+Technology+stack+%2B+vendor+lock-in+%E2%80%94+YELLOW+%283+RED+surfaces%29%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Reviewer 2: Technology stack + vendor lock-in — YELLOW (3 RED surfaces)</a></div>
+<details>
+<summary>Click for full review</summary>
+<ul>
+  <li><strong>Python Workers + service binding for instructor/docling — DISAGREE.</strong> Beta runtime, 128MB memory, 30s/5min CPU caps, 800ms+ Pyodide cold start break F2 ≤200ms p95 budget and OOM on real 200-page IR PDFs. Invert: Cloud Run primary (CPython 3.12, 4 vCPU/8GB, 60-min timeout, GA SLA), Worker as TS-only edge/auth/MCP shim. +1d BE-A0.</li>
+  <li><strong>R2+SQLite blob + DO 60s lease — DISAGREE at scale.</strong> Breaks past ~10-25 tenants. 1M chunks = 7.5-10 GB blob; R2 GET-PUT round-trip exceeds DO lease TTL → silent data loss via CAS conflicts; FTS5 index requires whole-blob rewrite; serialized ingest per tenant. Phase 1 OK; before tenant #2, migrate to D1 (≤100 tenants, watch 10GB DB cap) or Neon Postgres (multi-billion-grade).</li>
+  <li><strong>Azure-only KMS — DISAGREE.</strong> First tier-1 FS client demands BYOK with AWS KMS / GCP Cloud KMS / HSM. Need KmsAdapter abstraction in BE-A1. +2d.</li>
+  <li><strong>Cloudflare-only — YELLOW.</strong> Single cloud violates 99.9% SLA contract. Need S3 secondary WORM + Cloud Run failover, quarterly DR drill.</li>
+  <li><strong>docling-only — YELLOW.</strong> Single upstream maintainer; need PyMuPDF (with AGPL mitigation) or GCP Document AI peer adapter. +2d Tier 0.</li>
+  <li><strong>R2 Object Lock COMPLIANCE — AGREE on tier; needs dual-cloud WORM + hash-chain Merkle seal (3-5d BE-A1)</strong> before regulated tier-1 client. Without it, the audit trail is "trust us" not mathematically tamper-evident.</li>
+  <li><strong>Encryption (HKDF + AES-256-GCM + AAD) — AGREE.</strong> Crypto design is textbook 2026.</li>
+  <li><strong>Anthropic + Google = enough; Azure AD-only blocks non-MS tenants</strong> (PE on Workspace, defense on Okta) — add OIDC-generic backend validator before tenant #2.</li>
+  <li><strong>Observability A11 gap belongs in MA-A, not OPS.</strong> OpenTelemetry + per-tenant SLO dashboards or first real incident is a forensic guess.</li>
+</ul>
+<p><em>Verdict: would not survive 99.9% SLA at 1k DAU as written. With three RED surfaces fixed (Cloud Run primary, multi-cloud KMS, source-store substrate decision), yes — and all three fit inside the existing 30-week budget.</em></p>
+</details>
+
+<h3 id="stage-3-r3">Reviewer 3: Operational/SRE readiness — RED</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Reviewer+3%3A+Operational%2FSRE+readiness+%E2%80%94+RED&body=Comment+on+%C2%A7Reviewer+3%3A+Operational%2FSRE+readiness+%E2%80%94+RED%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Reviewer 3: Operational/SRE readiness — RED</a></div>
+<details>
+<summary>Click for full review</summary>
+<ul>
+  <li><strong>OPS phase placement is wrong.</strong> Currently row 15 of build-sequence at fill-architecture-v2.md:518. Tracing, RED metrics, structured logs, DLQ telemetry, alert skeleton, deploy primitives MUST shift left to BE-A0. Adding observability after the fact to encrypted multi-tenant audit infrastructure is a regulated-SaaS anti-pattern.</li>
+  <li><strong>Audit-lag SLO is a contractual lie.</strong> fill-architecture-v2.md:42 makes external_audit_lag &gt;5min a hard send-gate for partner sign-off — yet there is no audit_lag gauge, no DLQ depth metric, no alert rule, no runbook. Single most critical SLO has zero telemetry surface.</li>
+  <li><strong>First-non-Filipe is not shippable</strong> even with all 6 sign-offs done. Missing: error reporting (Sentry hook), support process, tenant-level kill switch, rollback plan if Phase A breaks a consultant's deck, onboarding runbook.</li>
+  <li><strong>Three uncontained blast-radius failure modes:</strong>
+    <ol>
+      <li>Cross-tenant DEK leak — architecture good, no detection telemetry</li>
+      <li>R2 Object Lock retention misconfig — unrecoverable by design with no validator</li>
+      <li>GDPR purge stuck mid-flight — Article 12(3) breach with no job runner, no checkpoint, no DPO status surface</li>
+    </ol>
+  </li>
+  <li><strong>Stage 2 compliance gaps not absorbed:</strong> hash-chaining/Merkle root sealing for WORM, eDiscovery export, retention class per project, legal-hold states, completeness monitoring, forensic timeline tooling — all missing.</li>
+  <li><strong>12-week MVP is light by 4-5w.</strong> Honest cut for "first H&C colleague usable" is 16-18 weeks once ops + first-consultant readiness + rollback are added. BE-A0 8d → 12-14d with proper observability skeleton.</li>
+  <li><strong>Headcount blocker:</strong> 1 senior dev cannot ship MVP + observability + Azure AD + legal + compliance evidence pipeline + onboarding in 12 weeks. +1 SRE-leaning engineer non-optional at MA-B kickoff (week 4-5).</li>
+</ul>
+<p><em>Minimum RED → YELLOW path: add §N "Operational primitives" to v2.0 with same review rigor as Inv #5-#10; re-cut BE-A0 to include traces/metrics/logs/DLQ/alerts/runbooks (12-14d); lock observability deliverables as close gates for each MA/BE phase, not OPS tail; compliance evidence pipeline (Merkle WORM, eDiscovery, legal-hold) must start now.</em></p>
+</details>
+
+<h3 id="stage-3-r4">Reviewer 4: Filipe #3 + #4 implementation cascade (Plan agent) — YELLOW</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Reviewer+4%3A+Filipe+%233+%2B+%234+implementation+cascade+%28Plan+agent%29+%E2%80%94+YELLOW&body=Comment+on+%C2%A7Reviewer+4%3A+Filipe+%233+%2B+%234+implementation+cascade+%28Plan+agent%29+%E2%80%94+YELLOW%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Reviewer 4: Filipe #3 + #4 implementation cascade (Plan agent) — YELLOW</a></div>
+<details>
+<summary>Click for full review</summary>
+<p><strong>§1 Filipe #3 implementation cascade (model-agnostic spine):</strong></p>
+<ul>
+  <li>Spec amendments: grounding-module-v1.md Tier 1 rewrite (L148-191), §I §K llm-boundary new §9</li>
+  <li>Provider adapters: Anthropic (instructor + Citations API), Google (Vertex Gemini structured output + groundingSupports), OpenAI optional</li>
+  <li>Universal CitationEnvelope as the spine; native citations are adapter optimizations</li>
+  <li>NEW: Semantic-entailment validator (NLI cross-encoder, e.g. <code>cross-encoder/nli-deberta-v3-base</code>) — replaces substring-match-only validation</li>
+  <li>Per-provider cost-attribution (Anthropic ~$0.30-0.80/deck cited free; Gemini $0.50-1.20; OpenAI $0.80-1.80)</li>
+  <li>Honest day estimate: <strong>~13-15d</strong> (Stage 2's 7d only honest for thin reading)</li>
+  <li>Build-sequence: adapter contract → MA-S1 v0.3.0; Anthropic+Google adapters → BE-A0 (+4d); NLI sidecar → BE-A0 (+2d); OpenAI → BE-A1</li>
+  <li><strong>Net BE-A0 inflation: 8d → ~14d</strong></li>
+</ul>
+<p><strong>§2 Filipe #4 implementation cascade (revision logbook):</strong></p>
+<ul>
+  <li>Inv #11 <code>revision_log</code> in fill-architecture-v2.md after L153</li>
+  <li>Schema: row_id, claim_id (FK), shape_guid, audit_row_id (FK), actor (user|ai|system), action_type (10-value enum), before_text+hash, after_text+hash, reason, source_snapshot_ref, model_id, vendor_adapter_version (FK to #3), prompt_id, partner_signoff_*, timestamp</li>
+  <li><strong>Storage: BOTH in-deck customXmlPart + WORM mirror.</strong> In-deck for offline + portability; WORM via new ExternalAuditRow.primitive value <code>"revision_log_append"</code> (additive enum) for regulated retention</li>
+  <li>UI: MA-A audit-walker hook (~+1d) + MA-F partner review pane "Revisions" tab (~+3d) + F7 send-gate</li>
+  <li>Tier 4 walker orphan detection (catches user manual edits bypassing listener)</li>
+  <li>Honest day estimate: <strong>~10-11d</strong> (Stage 2's 3-5d ignored partner pane + walker + namespace registry + enum extension + dual-write atomicity)</li>
+</ul>
+<p><strong>§3 Build-order: MA-S1 bundle YES, with conditions.</strong> Both #3 and #4 require schema migrations on same data structures MA-S1 already migrating (additive within v0.3.0). Bundle inflates 1-2d → 3-4d. BE-A0 inflates 8d → ~14d (real cost; MVP slips ~+1 week).</p>
+<p><strong>§4 Total: ~28-32d cascade for #3+#4+integration+coordination. Calendar: ~5-6 weeks wallclock single dev. MVP target ≈ 13-14 weeks honestly.</strong></p>
+<p><strong>§5 Risks:</strong> Cloudflare Python Workers can't carry NLI cross-encoder + docling in size budget; Vertex Gemini structured-output + grounding compatibility unverified; partner_signoff_required overlaps with claim_ledger.attestation (recommend revision_log inherits); MA-S1 atomic-rollback contract underspecified.</p>
+</details>
+
+<h3 id="stage-3-r5">Reviewer 5: Codex (gpt-5.5 xhigh) — RED → YELLOW with rescope</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Reviewer+5%3A+Codex+%28gpt-5.5+xhigh%29+%E2%80%94+RED+%E2%86%92+YELLOW+with+rescope&body=Comment+on+%C2%A7Reviewer+5%3A+Codex+%28gpt-5.5+xhigh%29+%E2%80%94+RED+%E2%86%92+YELLOW+with+rescope%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Reviewer 5: Codex (gpt-5.5 xhigh) — RED → YELLOW with rescope</a></div>
+<details>
+<summary>Click for full review</summary>
+<p><strong>Overall:</strong> Implementation approach is directionally strong, but the current schedule and phase gates are not production-honest for regulated SaaS. Becomes YELLOW if BE-A0 is rescoped, observability is pulled forward, and "12-week MVP" is explicitly redefined as internal/template-fill only.</p>
+
+<ul>
+  <li><strong>Q1 Build-sequence realism — DISAGREE / RED.</strong> BE-A0 is under-scoped at 8d. Spec says BE-A0 is Worker + Azure AD SSO + JWT + R2 Object Lock + idempotency + DLQ in 8d (fill-architecture-v2.md:507), while v2.1 moves Grounding Tier 0/1/2 into BE-A0 (decisions-log:226, grounding-module-v1.md:540). That is no longer 8d. BE-A0/BE-A1 split is only honest if BE-A0 means "internal/Filipe pilot." First non-Filipe + first client deck need at least KMS-lite, audit-lag monitoring, tenant policy, alerting.</li>
+  <li><strong>Q2 12-week MVP — SUGGEST CHANGE / RED.</strong> Plausible only for "template-fill internal MVP" originally defined: MA-A.0 + MA-S0 + MA-A + BE-A0 + MA-B (fill-architecture-v2.md:520). Not plausible once Grounding T0/1/2, MA-S1, A1 model-agnostic, A2 revision logbook, Azure AD prod, observability enter the cut. Honest range: 16-20 weeks elapsed for credible first-client MVP.</li>
+  <li><strong>Q3 Tech stack — SUGGEST CHANGE / YELLOW.</strong> Cloudflare Workers viable as edge/auth/orchestration. Python Workers not yet production-only execution path. Default: Worker orchestrator + containerized Python sidecar, not Python Worker first. R2+SQLite OK Phase A/B; not for 100×10k×1M scale; D1 has 10GB/DB cap and single-threaded throughput limits, also needs sharding.</li>
+  <li><strong>Q4 Vendor lock-in — SUGGEST CHANGE / YELLOW.</strong> Filipe #3 fixes worst LLM lock-in. Major remaining: Cloudflare-only (acceptable MVP, not multi-billion regulated without abstraction); Azure AD-only (blocks Workspace/Okta tenants); 2-vendor LLM enough for MVP if adapter contract is real, add Azure OpenAI for enterprise; docling-only parser risk (need fallback Tika/pypdf/unstructured).</li>
+  <li><strong>Q5 Build-order risks — SUGGEST CHANGE / RED.</strong> MA-S1 coupling Cover Photo + Grounding is risky; split capability flags even if migrator runner ships. BE-A0/MA-A not circular if contract-first (MA-A builds against mock Worker). Q-V20 sign-offs block unless timeboxed (default auto-adopts at phase kickoff). Azure AD adds 1-3 calendar weeks.</li>
+  <li><strong>Q6 Operational readiness — DISAGREE / RED.</strong> Biggest Stage 3 gap. OPS at row 15 is too late. Insert OP-A in parallel with BE-A0: tracing, structured logs, tenant/deck correlation IDs, audit_append SLO, DLQ alerts, external_audit_lag alerting, KMS failure alerting, provider error budgets, status page, runbook, paging.</li>
+  <li><strong>Q7 Filipe #3 — DISAGREE ON ESTIMATE / YELLOW.</strong> 5d+2d is low. Honest: 10-15d. Required: provider-neutral grounding contract, citation normalization, per-provider schema serialization, entailment validator, re-ask policy, provider fixtures, cost attribution, updated §I failover. Semantic entailment needs eval set, not just code.</li>
+  <li><strong>Q8 Filipe #4 — SUGGEST CHANGE / YELLOW.</strong> Separate namespace right call. 3-5d honest only for local append-only with no UI. With partner review UI, audit hooks, before/after hashes, source snapshots, WORM mirror: 10-15d. For regulated decks, local-only insufficient. Mirror externally or logbook is not part of legal defense chain.</li>
+  <li><strong>Q9 Production cutover — SUGGEST CHANGE / YELLOW.</strong> Phase A internal Filipe: router-mcp/dev tenant, no client data, local audit, mock test Worker, feature flags. First non-Filipe: legal §6 signed, Azure AD complete, BE-A0 + OP-A live, DLQ tested, audit-lag alerting, tenant_id defaults signed. First client deck: KMS, WORM legal validation, revision logbook, disclaimer footer, source retention, rollback to read-only/export-block. Regulated tenant: DR drill, incident process, SAML/OIDC, region policy, immutable audit export, support owner. Rollback = per-tenant kill switch + add-in read-only mode + export/send disablement.</li>
+  <li><strong>Q10 Single-dev critical path — DISAGREE / RED.</strong> One senior dev = internal MVP only. Cannot credibly deliver 12-week regulated SaaS with Office.js + backend auth + KMS + WORM + grounding + schema migrations + observability + Azure IT + legal + cutover. Headcount non-optional before first non-Filipe consultant: backend/security/SRE owner, Office.js/frontend owner, QA/eval owner, legal/IT owner. For first regulated tenant, add fractional compliance/SOC2 + support/on-call.</li>
+</ul>
+</details>
+
+<div class="module" style="background:#e8f5e9; border-left:4px solid #2e7d32;">
+  <div class="role">3-stage meta-review complete</div>
+  <h3 id="meta-review-summary">All 3 stages now landed on Atlas</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7All+3+stages+now+landed+on+Atlas&body=Comment+on+%C2%A7All+3+stages+now+landed+on+Atlas%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §All 3 stages now landed on Atlas</a></div>
+<table>
+  <thead><tr><th>Stage</th><th>Verdict</th><th>Key finding</th></tr></thead>
+  <tbody>
+    <tr><td>1 — Project handling/governance</td><td>YELLOW</td><td>Multi-billion ambition vs single-dev reality; need protocol + headcount + audit/compliance evidence pipeline</td></tr>
+    <tr><td>2 — Architecture content</td><td>YELLOW</td><td>10 invariants + 6 primitives sound; Filipe #3 (model-agnostic) + #4 (revision logbook) confirmed correct architectural calls; observability missing entirely</td></tr>
+    <tr><td>3 — Implementation approach</td><td>RED → YELLOW with rescope</td><td>12-week MVP dishonest (13-20w honest); BE-A0 under-scoped; observability in OPS phase too late; single-dev breaks at week 5-8</td></tr>
+  </tbody>
+</table>
+<p><strong>Convergent path forward (all 3 stages):</strong></p>
+<ol>
+  <li>Apply Filipe #3 + #4 amendments to v2.1 specs as v2.1.1 (Stage 2 A1+A2 + Stage 3 B6+B7)</li>
+  <li>Insert OP-A phase parallel to BE-A0 (Stage 3 B2)</li>
+  <li>Rescope BE-A0 8d → 12-15d honestly (Stage 3 B3)</li>
+  <li>Either redefine MVP target to 13-14 weeks OR ship single-vendor MVP with multi-vendor in BE-A1 (Stage 3 B1)</li>
+  <li>Commit headcount at MA-B kickoff: +1 SRE-leaning, +1 frontend (Stage 3 B5)</li>
+  <li>Write production-cutover-v1.md with bar + rollback per transition (Stage 3 B8)</li>
+  <li>Apply remaining Stage 2 amendments A3-A15 (threat model, P7 cohere, F7 review/send flow, etc.)</li>
+</ol>
+<p>Once Filipe signs off on which path (12w single-vendor or 14w multi-vendor) + headcount commit, implementation can start with eyes open. Direction is strong; only the dates+scope+headcount are dishonest as currently locked.</p>
+</div>
+
+
 <h2 id="open-architecture-questions-routed-to-codex-and-ag">Open architecture questions (routed to Codex + agents, awaiting Filipe "go")</h2><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7Open+architecture+questions&body=Comment+on+%C2%A7Open+architecture+questions%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §Open architecture questions</a></div>
 
 <p>Items Filipe raised today that are NOT yet folded into the architecture. Each will be assessed by Codex + multiple specialist agents in parallel before any spec change. Sequenced by priority of decision.</p>
