@@ -328,7 +328,61 @@
 
 
 <!-- ATLAS-INBOX:START -->
-<div class="atlas-inbox empty"><strong>📥 Comment inbox — no comments yet on Atlas.</strong><br><small>Click any “Comment on §X” button to send one. They’ll appear here with status.</small></div>
+<details class="atlas-inbox" open>
+<summary><strong>📥 Comment inbox</strong> <span class="inbox-count">4 total · 4 open · 0 closed · 4 via chat · 0 via GitHub buttons</span></summary>
+<div class="inbox-body">
+<div class="inbox-note">Chat-channel comments (you said it in chat → I saved to <code>feedback-log.md</code>) appear here too. They show as ○ Open until I propagate them to the locked .md specs and apply the change.</div>
+<div class="inbox-item state-open channel-chat"><div class="inbox-row"><span class="inbox-icon">○</span><span class="inbox-channel-tag">CHAT</span><span class="inbox-title">#chat-1 — Grounding als eigenes Modul</span><a class="inbox-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/architecture-notes/v2.1-pending/feedback-log.md" target="_blank" rel="noopener">view in feedback-log</a></div><div class="inbox-status">Saved in feedback-log — review pending</div>
+<div class="inbox-body-text">**Filipe verbatim:** "jede Aussage in den Shapes sollen Rückverfolgbar sein. Idee: click shape to see in addin somewhere source. also big bigpicture (re/„ Tool erfindet Zahlen plausibel - Jede Zahl hat eine echte Quelle aber-falsch (Goldman ROE 7,5%)…")"
+
+**Mein Verständnis:**
+- Aktueller Spec: claim_ledger covers NUMERICS only (jede Zahl → fact_id)
+- Filipe will: jede AUSSAGE (Behauptung, Statement, Bullet, Action Title) — nicht nur Zahlen — soll Rückverfolgbar sein
+- UI-Anforderung: User klickt auf eine Shape → Add-In Pane zeigt "wo kommt das her?"
+- Big picture: nicht nur die Zahl 7,5% braucht Quelle, sondern auch der Satz "Goldman has Petershill IPO" → Quelle
+
+**Spec-Impact (preview, nic …</div>
+</div>
+<div class="inbox-item state-open channel-chat"><div class="inbox-row"><span class="inbox-icon">○</span><span class="inbox-channel-tag">CHAT</span><span class="inbox-title">#chat-2 — Cover-Foto Selektion als eigenes Modul</span><a class="inbox-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/architecture-notes/v2.1-pending/feedback-log.md" target="_blank" rel="noopener">view in feedback-log</a></div><div class="inbox-status">Saved in feedback-log — review pending</div>
+<div class="inbox-body-text">**Filipe verbatim:** "Coverfoto Selektion als Modul (auch wenn später)"
+
+**Mein Verständnis:**
+- Aktueller Spec: "Phase 2 separates Projekt" für Image Replacement (vage)
+- Filipe will: explizit als Modul definiert, mit klarer Scope, auch wenn Bau-Reihenfolge spät
+- "auch wenn später" = Reihenfolge OK, aber Scope JETZT festschreiben
+
+**Spec-Impact (preview, nicht angewendet):**
+- Eigenes Sub-Modul "Cover-Foto Selektion" definieren mit:
+  - Inputs: Firmen-Profil, Sektor, Kunden-Wunsch
+  - Outputs: lizenziertes Stock-Foto / offizielle Press-Kit / User-upload
+  - Decision tree: was wenn keine offizielle Quelle existiert?
+  - License-Tracking pro Image
+- Phase im Build-Sequence-Table: aktuell "DR …</div>
+</div>
+<div class="inbox-item state-open channel-chat"><div class="inbox-row"><span class="inbox-icon">○</span><span class="inbox-channel-tag">CHAT</span><span class="inbox-title">#chat-3 — Model agnostic mandatory (28.04 afternoon, Filipe verbatim)</span><a class="inbox-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/architecture-notes/v2.1-pending/feedback-log.md" target="_blank" rel="noopener">view in feedback-log</a></div><div class="inbox-status">Saved in feedback-log — not yet applied to spec</div>
+<div class="inbox-body-text">**Filipe:** "things like this, which I need to comment that it is bullshit because it needs to be model agnostic: 'Built on Anthropic's native Citations API as the spine — the model can't make up source pointers anymore' is a good example why I need a line by line comment ability"
+
+**Mein Verständnis:**
+- Aktueller Grounding spec lockt Anthropic native Citations API als Architektur-Spine
+- Filipe fordert: **alle Module MÜSSEN model-agnostic sein** — kein Lock-in auf einen LLM-provider
+- "Spine" muss provider-neutral sein
+
+**Spec-Impact (preview, NOT applied yet):**
+- Grounding architecture revision needed:
+  - Tier 2 (instructor + Pydantic re-ask) becomes the SPINE (it's already model-agnost …</div>
+</div>
+<div class="inbox-item state-open channel-chat"><div class="inbox-row"><span class="inbox-icon">○</span><span class="inbox-channel-tag">CHAT</span><span class="inbox-title">#chat-4 — Revision history / "logbook" for AI vs user changes (28.04 afternoon, Filipe verbatim)</span><a class="inbox-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/feature/test-version-fill/architecture-notes/v2.1-pending/feedback-log.md" target="_blank" rel="noopener">view in feedback-log</a></div><div class="inbox-status">Saved in feedback-log — not yet applied to spec</div>
+<div class="inbox-body-text">**Filipe:** "what happens if users do not agree with the answer from AI and manipulate it or if they don't like it and click for AI to update it. we need for presentation a kind of logbook. I'm not sure if that should be part of the claim ledger maybe what do you think? This is something to be assessed by the agent in Codex and to flow into the main architecture"
+
+**The two cases Filipe is naming:**
+1. User MANIPULATES the AI's answer (overrides text directly)
+2. User doesn't like it and asks AI to REGENERATE (with or without feedback)
+
+**Gap in current architecture:**
+- claim_ledger tracks CURRENT STATE per claim (what's in the deck now, with what source)
+- external_audit_log records action …</div>
+</div>
+</div></details>
 <!-- ATLAS-INBOX:END -->
 <h2 id="so-what">So what?</h2><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7So+what%3F&body=Comment+on+%C2%A7So+what%3F%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §So what?</a></div>
 <div class="so-what">
