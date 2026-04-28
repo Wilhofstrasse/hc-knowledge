@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Architecture — Plain-English Reader</title>
+<style>
+  body { font-family: 'Calibri', 'Calibri Light', sans-serif; font-weight: 300; color: #000; background: #FFFFFF; margin: 0; padding: 32px 24px; max-width: 1000px; margin: 0 auto; line-height: 1.65; font-size: 16px; }
+  h1 { color: #14324E; font-size: 32px; font-weight: 700; margin: 0 0 8px 0; }
+  h2 { color: #14324E; font-size: 24px; font-weight: 700; margin-top: 36px; padding-bottom: 6px; border-bottom: 2px solid #14324E; }
+  .subtitle { color: #5B5D64; font-size: 18px; font-weight: 300; margin-bottom: 32px; }
+  .level-bar { display: flex; gap: 8px; padding: 12px 16px; background: #F0F0F0; border-radius: 4px; margin-bottom: 32px; font-size: 14px; flex-wrap: wrap; }
+  .level-bar a { color: #14324E; text-decoration: none; padding: 4px 10px; border-radius: 3px; }
+  .level-bar a.active { background: #E94D3A; color: white; font-weight: 600; }
+  .level-bar a:hover:not(.active) { background: #C2C2C2; }
+  .accent { color: #E94D3A; font-weight: 600; }
+  .intro { background: #E8EDF3; padding: 20px 24px; border-radius: 4px; border-left: 4px solid #14324E; margin: 16px 0 32px 0; }
+  .module-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 700px) { .module-grid { grid-template-columns: 1fr; } }
+  .module-card { background: #FFFFFF; border: 1px solid #C2C2C2; border-radius: 4px; padding: 20px 24px; transition: border-color 0.2s; }
+  .module-card:hover { border-color: #14324E; }
+  .module-card h3 { color: #14324E; font-size: 18px; font-weight: 700; margin: 0 0 8px 0; }
+  .module-card p { font-size: 15px; margin: 8px 0; }
+  .module-card .open { color: #5B5D64; font-size: 13px; margin-top: 12px; }
+  .module-card a { color: #E94D3A; text-decoration: none; font-weight: 600; }
+  .module-card a:hover { text-decoration: underline; }
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-left: 6px; }
+  .status-locked { background: #2E7D32; color: white; }
+  .status-pending { background: #F57C00; color: white; }
+  .status-amend { background: #E94D3A; color: white; }
+  .status-new { background: #14324E; color: white; }
+  .verdict-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 16px 0; }
+  @media (max-width: 700px) { .verdict-grid { grid-template-columns: 1fr; } }
+  .verdict-card { padding: 16px; border-radius: 4px; font-size: 14px; }
+  .verdict-card h4 { margin: 0 0 6px 0; font-size: 14px; font-weight: 700; }
+  .verdict-yellow { background: #FFF4E0; border-left: 4px solid #F57C00; color: #14324E; }
+  .verdict-red { background: #FFE5E0; border-left: 4px solid #E94D3A; color: #14324E; }
+  .nav-down { background: #14324E; color: white; padding: 20px 24px; border-radius: 4px; margin-top: 32px; }
+  .nav-down h3 { color: white; margin-top: 0; }
+  .nav-down a { color: #fff; text-decoration: underline; }
+  .footer-note { color: #5B5D64; font-size: 13px; margin-top: 48px; padding-top: 16px; border-top: 1px solid #C2C2C2; }
+  ul { padding-left: 24px; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<div class="level-bar">
+  <span style="color:#5B5D64;">Levels:</span>
+  <a href="architecture-reader.html" class="active">L3 Reader (plain English)</a>
+  <a href="flow.html">L2 Map (visual flow)</a>
+  <a href="architecture-overview-2026-04-28.html">L1 Atlas (curated)</a>
+  <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/tree/main/architecture-notes" target="_blank">L0 Spec (raw)</a>
+</div>
+
+<h1>Architecture — plain-English reader</h1>
+<p class="subtitle">For Filipe, partners, clients, and anyone who needs the picture before the spec. <span class="accent">Three modules, one foundation.</span></p>
+
+<div class="intro">
+  <strong>What this is.</strong> A multi-tenant PowerPoint add-in for consulting-grade decks. Consultants click a shape, the AI fills it with text grounded in real sources, every claim has a traffic-light, every action is logged for audit. Built for regulated industries — banking, insurance, asset management, pharma — where "show me where this number came from" is not optional.
+  <br><br>
+  <strong>Why this page exists.</strong> The full architecture has 10 invariants, 6 primitives, 6 user flows, and ~200 pages of locked specs across multiple files. That's right for engineers and Codex. It's wrong for the partner who needs the picture in 5 minutes. This page summarizes the architecture in three modules + one foundation, with links down for verification.
+</div>
+
+<h2>Where we are right now</h2>
+
+<div class="verdict-grid">
+  <div class="verdict-card verdict-yellow">
+    <h4>Stage 1 — Project handling: YELLOW</h4>
+    Multi-billion ambition vs solo-dev reality. Need protocol + headcount + audit/compliance evidence pipeline.
+  </div>
+  <div class="verdict-card verdict-yellow">
+    <h4>Stage 2 — Architecture: YELLOW</h4>
+    10 invariants + 6 primitives sound. Filipe's model-agnostic + revision-logbook calls confirmed correct. Observability missing entirely.
+  </div>
+  <div class="verdict-card verdict-red">
+    <h4>Stage 3 — Implementation: RED → YELLOW with rescope</h4>
+    12-week MVP dishonest (13-20w honest). Backend phase under-scoped. Single-dev breaks at week 5-8.
+  </div>
+</div>
+
+<p>10 reviewers across 3 stages — Codex gpt-5.5 xhigh + 9 specialist agents — converge on the same path forward: apply Filipe's two architectural amendments (#3 model-agnostic spine, #4 revision logbook), insert observability earlier, rescope backend phase honestly, commit headcount.</p>
+
+<h2>The three user-facing modules</h2>
+
+<div class="module-grid">
+
+  <div class="module-card">
+    <h3>⚖️ Trust apparatus
+      <span class="status-pill status-locked">LOCKED v2.1</span>
+      <span class="status-pill status-amend">v2.1.1 pending</span>
+    </h3>
+    <p>The system that tracks <strong>what's true in your deck</strong> and <strong>who said it</strong>. Library (vetted templates), Claim Ledger (current truth per shape with traffic-light), External Audit (tamper-proof action log, 7-10y retention), Disclaimer Flag (gap-honesty fallback footer).</p>
+    <p>Architecturally one apparatus, four invariants. The audit committee's answer to "show me you didn't make this up."</p>
+    <p class="open"><strong>Open:</strong> Q1 multi-vendor MVP shape, Q2 revision logbook storage, Q3 partner sign-off state machines, 7 Q-V20 defaults.</p>
+    <p><a href="modules/trust.html">→ Read the Trust apparatus page</a></p>
+  </div>
+
+  <div class="module-card">
+    <h3>🖼️ Imagery
+      <span class="status-pill status-locked">LOCKED v2.1</span>
+    </h3>
+    <p>All <strong>non-text visual content</strong> the AI fetches or proposes — cover photos, competitor/peer-firm logos for peer analysis, country flags + sector icons for PESTEL slides, peer-map firm icons. One module, broad scope.</p>
+    <p>6-tier picker for cover photos: user-upload → IR press kit → H&C curated library → licensed stock (Shutterstock + Getty) → AI-gen (illustrative only, NEVER fake real-firm building photos) → H&C placeholder.</p>
+    <p class="open"><strong>Out of scope:</strong> employee/people photos (privacy + GDPR — manual upload only, not AI-fetched).</p>
+    <p><a href="modules/imagery.html">→ Read the Imagery page</a></p>
+  </div>
+
+  <div class="module-card">
+    <h3>🔍 Grounding
+      <span class="status-pill status-locked">LOCKED v2.1</span>
+      <span class="status-pill status-amend">v2.1.1 pending</span>
+    </h3>
+    <p>The <strong>proof layer</strong> for every textual statement in the deck. Sources get ingested at deck open, retrieved via search, fed to the AI as grounded prompts, validated by structured-output schemas + semantic entailment, surfaced as traffic-lights + paragraph-level citations.</p>
+    <p>Filipe's model-agnostic feedback (#3) reshapes this: the spine is the universal citation envelope + entailment validator, NOT any one provider's API. Anthropic / Google / OpenAI become adapter optimizations.</p>
+    <p class="open"><strong>Open:</strong> 15 Q-GR defaults, semantic entailment NLI eval set, multi-vendor cost attribution.</p>
+    <p><a href="modules/grounding.html">→ Read the Grounding page</a></p>
+  </div>
+
+  <div class="module-card" style="background:#1F2937; color:white; border-color:#000;">
+    <h3 style="color:white;">🔐 Plumbing (foundation)
+      <span class="status-pill status-locked">LOCKED v2.1</span>
+    </h3>
+    <p>The <strong>invisible layer</strong> that makes everything else regulated-grade. Per-tenant data isolation (AAD-bound AES-256-GCM encryption), Azure Key Vault for tenant master keys, schema-versioning for forward-compatible migrations, region routing for EU-only tenants.</p>
+    <p>You won't read this page — you'll never see it as a consultant. Auditors will read the L1 Atlas, not the L3 reader. <em>Skipped here intentionally.</em></p>
+    <p style="color:#A4A3A7;"><strong>For the spec:</strong> see Tenant ID (Inv #5), Schema-versioned (Inv #10), Vendor region + data residency (Inv #9).</p>
+    <p><a href="architecture-overview-2026-04-28.html#trust-layer" style="color:#E94D3A;">→ Plumbing detail in L1 Atlas</a></p>
+  </div>
+
+</div>
+
+<h2>How they connect</h2>
+<p>Source materials → Grounding (ingestion + retrieval + adapters) → Claim Ledger (with verdict tier) → Add-in UI (consultant sees traffic-light) → External Audit (every action logged). Imagery flows in parallel for visual shapes. Plumbing wraps every payload at every step.</p>
+<p style="text-align:center; padding:16px;"><a href="flow.html" style="background:#E94D3A; color:white; padding:12px 24px; text-decoration:none; border-radius:4px; font-weight:600; display:inline-block;">→ See the visual flow (L2 Map)</a></p>
+
+<h2>What's planned next</h2>
+
+<ul>
+  <li><strong>v2.1.1 amendment</strong> — applies your model-agnostic + revision-logbook feedback to the locked specs. Concrete spec edits drafted with day estimates and sign-off block. <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/architecture-notes/v2.1-pending/v2.1.1-amendment-proposal.md" target="_blank">Read the proposal</a>.</li>
+  <li><strong>Production cutover plan</strong> (Stage 3 amendment B8) — explicit phase-by-phase bar + rollback for: internal-Filipe → first-non-Filipe → first client deck → regulated tenant. Drafting now.</li>
+  <li><strong>OP-A observability phase</strong> (Stage 3 amendment B2) — parallel to backend phase A. Without this, the contractual "audit-lag &gt;5min hard send-gate" can't even be measured. Drafting now.</li>
+  <li><strong>Headcount commit</strong> — +1 SRE-leaning engineer at week 4-5, +1 frontend at week 5-6. Or scope-cut MVP to single user-flow.</li>
+</ul>
+
+<div class="nav-down">
+  <h3>Where to go next</h3>
+  <ul style="color:white;">
+    <li><strong>See it visually:</strong> <a href="flow.html">L2 Map (Mermaid flow + sequence diagram)</a> — shows how the modules talk to each other</li>
+    <li><strong>Curated technical:</strong> <a href="architecture-overview-2026-04-28.html">L1 Atlas</a> — full overview with reviewer verdicts, comment buttons, and per-module detail</li>
+    <li><strong>Raw spec:</strong> <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/tree/main/architecture-notes" target="_blank">L0 architecture-notes/</a> — actual locked specs (10 invariants, schema definitions, build sequence)</li>
+    <li><strong>Decisions log:</strong> <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/decisions-log.md" target="_blank">decisions-log.md</a> — every locked architectural decision with date and reviewer</li>
+    <li><strong>Open questions:</strong> <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/open-questions.md" target="_blank">open-questions.md</a> — decisions awaiting Filipe sign-off (with Round-3 default answers)</li>
+  </ul>
+</div>
+
+<p class="footer-note">Last updated: 28.04.2026 · 3-stage meta-review complete (10 reviewers, 3 stages). Architecture LOCKED at v2.1; v2.1.1 amendment proposal pending Filipe sign-off. <strong>Naming convention:</strong> L3 = highest abstraction (this page); L0 = lowest (raw spec). Inverted from the C4 industry standard but kept per Filipe directive.</p>
+
+</body>
+</html>
