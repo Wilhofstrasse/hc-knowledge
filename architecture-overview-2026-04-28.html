@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>H&amp;C Corporate PPT Tool — Architecture overview (plain English)</title>
+<title>Atlas — H&amp;C Corporate PPT Tool architecture (plain English)</title>
 <style>
   :root {
     --hc-navy: #14324E;
@@ -257,17 +257,79 @@
   }
   .inbox-banner a:hover { background: rgba(255,255,255,0.28); }
 
+
+  .atlas-inbox {
+    background: var(--hc-white);
+    border: 1px solid var(--hc-gray-1);
+    border-left: 3px solid var(--hc-coral);
+    padding: 0.6rem 0.9rem;
+    margin: 0 0 1.2rem;
+    border-radius: 3px;
+    font-size: 0.92rem;
+  }
+  .atlas-inbox.empty { padding: 0.8rem 1rem; color: var(--hc-gray-4); }
+  .atlas-inbox summary { cursor: pointer; user-select: none; }
+  .atlas-inbox summary::marker { color: var(--hc-coral); }
+  .inbox-count {
+    font-family: Consolas, "SF Mono", monospace;
+    font-size: 0.75rem;
+    color: var(--hc-gray-4);
+    margin-left: 0.5rem;
+  }
+  .inbox-body { margin-top: 0.7rem; }
+  .inbox-item {
+    border: 1px solid var(--hc-gray-1);
+    border-radius: 3px;
+    padding: 0.5rem 0.7rem;
+    margin: 0.4rem 0;
+    background: var(--hc-bg-alt);
+  }
+  .inbox-item.state-closed { background: #E8F5EA; border-color: #BED7C2; }
+  .inbox-row {
+    display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;
+    font-weight: 700; color: var(--hc-navy);
+  }
+  .inbox-icon { font-size: 0.95rem; }
+  .inbox-title { flex: 1 1 auto; }
+  .inbox-meta { color: var(--hc-gray-3); font-size: 0.78rem; font-weight: 400; }
+  .inbox-link {
+    color: var(--hc-coral); text-decoration: none; font-size: 0.78rem;
+    font-weight: 700; padding: 0.1rem 0.4rem; border: 1px solid var(--hc-coral);
+    border-radius: 3px;
+  }
+  .inbox-link:hover { background: var(--hc-coral); color: var(--hc-white); }
+  .inbox-status {
+    font-size: 0.78rem; color: var(--hc-gray-4); margin-top: 0.25rem;
+    font-style: italic;
+  }
+  .inbox-body-text {
+    margin-top: 0.4rem; font-size: 0.85rem; color: var(--hc-navy-soft);
+    background: var(--hc-white); padding: 0.4rem 0.6rem; border-radius: 3px;
+    white-space: pre-wrap;
+  }
+  .inbox-replies { margin-top: 0.4rem; }
+  .inbox-replies summary { font-size: 0.78rem; color: var(--hc-gray-4); }
+  .inbox-reply { margin: 0.3rem 0; padding: 0.3rem 0.5rem; background: var(--hc-white); border-radius: 3px; }
+  .inbox-reply pre {
+    margin: 0; white-space: pre-wrap; font-family: inherit;
+    font-size: 0.83rem; color: var(--hc-navy);
+  }
+
 </style>
 </head>
 <body>
 <div class="container">
 
 <header class="top">
-  <div class="kicker">H&amp;C Corporate PPT Tool · Architecture Overview · 28.04.2026</div>
-  <h1>Modules + how they connect (plain English)</h1>
-  <p class="sub">Comment line-by-line via the buttons under each section. iPhone-friendly: no scrolling chat needed.</p>
+  <div class="kicker">ATLAS · H&amp;C Corporate PPT Tool · 28.04.2026</div>
+  <h1>Atlas — modules + how they connect (plain English)</h1>
+  <p class="sub">Bookmark this page (just say <strong>"Atlas"</strong>). Comment line-by-line via the buttons under each section. Your comments appear in the inbox below with status: ○ open · ✓ replied · ✓✓ closed.</p>
 </header>
 
+
+<!-- ATLAS-INBOX:START -->
+<div class="atlas-inbox empty"><strong>📥 Comment inbox — no comments yet on Atlas.</strong><br><small>Click any “Comment on §X” button to send one. They’ll appear here with status.</small></div>
+<!-- ATLAS-INBOX:END -->
 <h2 id="so-what">So what?</h2><div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?title=%5Barch-overview%5D+%C2%A7So+what%3F&body=Comment+on+%C2%A7So+what%3F%0A%0A%28paste+your+line%2Fquote%2C+then+your+note%29&labels=filipe-comment%2Carch-overview" target="_blank" rel="noopener">Comment on §So what?</a></div>
 <div class="so-what">
 The tool has <strong>9 modules</strong>. Three are user-facing (libraries, the add-in panel, the cockpit). Six work behind the scenes to make sure nothing the AI writes is improvised — every fact, every image, every claim must trace back to a real source or get blocked. <strong>This page explains each module in plain English and shows how they connect.</strong>
