@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trust apparatus — L3 Reader</title>
+<style>
+  body { font-family: 'Calibri', 'Calibri Light', sans-serif; font-weight: 300; color: #000; background: #FFFFFF; margin: 0; padding: 32px 24px; max-width: 900px; margin: 0 auto; line-height: 1.65; font-size: 16px; }
+  h1 { color: #14324E; font-size: 28px; font-weight: 700; margin: 0 0 8px 0; }
+  h2 { color: #14324E; font-size: 22px; font-weight: 700; margin-top: 36px; padding-bottom: 6px; border-bottom: 2px solid #14324E; }
+  h3 { color: #14324E; font-size: 18px; font-weight: 600; margin-top: 24px; }
+  .subtitle { color: #5B5D64; font-size: 18px; font-weight: 300; margin-bottom: 24px; }
+  .level-bar { display: flex; gap: 8px; padding: 12px 16px; background: #F0F0F0; border-radius: 4px; margin-bottom: 32px; font-size: 14px; flex-wrap: wrap; }
+  .level-bar a { color: #14324E; text-decoration: none; padding: 4px 10px; border-radius: 3px; }
+  .level-bar a.active { background: #E94D3A; color: white; font-weight: 600; }
+  .level-bar a:hover:not(.active) { background: #C2C2C2; }
+  .accent { color: #E94D3A; font-weight: 600; }
+  .what-block { background: #E8EDF3; padding: 20px 24px; border-radius: 4px; border-left: 4px solid #14324E; margin: 16px 0; }
+  .status-pill { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 13px; font-weight: 600; }
+  .status-locked { background: #2E7D32; color: white; }
+  .status-pending { background: #F57C00; color: white; }
+  .status-amend { background: #E94D3A; color: white; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 15px; }
+  th { background: #14324E; color: white; padding: 10px 12px; text-align: left; font-weight: 600; }
+  td { padding: 10px 12px; border-bottom: 1px solid #C2C2C2; vertical-align: top; }
+  tr:nth-child(even) td { background: #F0F0F0; }
+  .verdict-green { color: #2E7D32; font-weight: 600; }
+  .verdict-yellow { color: #F57C00; font-weight: 600; }
+  .verdict-red { color: #E94D3A; font-weight: 600; }
+  .open-decision { background: #FFE5E0; padding: 16px 20px; border-radius: 4px; border-left: 4px solid #E94D3A; margin: 12px 0; }
+  .open-decision strong { color: #14324E; }
+  .nav-down { background: #14324E; color: white; padding: 16px 20px; border-radius: 4px; margin-top: 32px; }
+  .nav-down h3 { color: white; margin-top: 0; }
+  .nav-down a { color: #fff; text-decoration: underline; }
+  .footer-note { color: #5B5D64; font-size: 13px; margin-top: 48px; padding-top: 16px; border-top: 1px solid #C2C2C2; }
+  ul { padding-left: 24px; }
+  li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<div class="level-bar">
+  <span style="color:#5B5D64;">Levels:</span>
+  <a href="../index.html">L3 Reader (plain English)</a>
+  <a href="../flow.html">L2 Map (visual flow)</a>
+  <a href="../architecture-overview-2026-04-28.html#trust-layer">L1 Atlas (curated)</a>
+  <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/architecture-notes/fill-architecture-v2.md" target="_blank">L0 Spec (raw)</a>
+</div>
+
+<h1>Trust apparatus <span class="status-pill status-locked">LOCKED v2.1</span> <span class="status-pill status-amend">v2.1.1 amendment pending</span></h1>
+<p class="subtitle">The system that tracks <span class="accent">what's true in your deck</span> and <span class="accent">who said it</span>.</p>
+
+<div class="what-block">
+  <strong>Plain-English summary.</strong> Every number, statement, image, and slide layout in a deck has provenance: where it came from, what level of trust it carries, who attested to it, and what's been changed since. The trust apparatus is the audit committee's answer to "show me you didn't make this up." Four invariants work together to make this possible — they look like separate systems, but architecturally they're one thing: the trust contract.
+</div>
+
+<h2>What it does</h2>
+
+<ul>
+  <li><strong>Tells the consultant the truth-status of every shape</strong> — green / yellow / orange / red badge per claim, before they hit "send."</li>
+  <li><strong>Logs every action with tamper-proof retention</strong> — what changed, who changed it, when, why, against what source.</li>
+  <li><strong>Enforces the send-gate</strong> — if a deck has unattested claims and goes to a client, the consultant gets blocked or sees a warning footer rendered into the slide itself.</li>
+  <li><strong>Survives offline, copy-paste, and the deck leaving the H&C perimeter</strong> — disclaimer footers and ledger entries are baked into the .pptx file, not just the add-in.</li>
+</ul>
+
+<h2>How it works (4 components, plain-English)</h2>
+
+<h3>1. Library — the vetted-content shelf</h3>
+<p>A 3-tier library (corporate / tenant / user) holds approved templates and slide patterns. Promotion path: a slide a consultant likes goes from project → user library → tenant library → corporate library, with partner sign-off at each step. Anything in the corporate library has been reviewed and is safe to use across all tenants. Lower tiers are progressively more flexible. <span class="accent">"Where does this slide come from?" — always answerable.</span></p>
+
+<h3>2. Claim Ledger — current truth per shape</h3>
+<p>For every text shape and number on every slide, a row records: what the AI wrote, where it came from (source kind, citation pointer), what the confidence tier is (green = source-backed and high-confidence; yellow = source-backed but estimate; orange = consultant said so without partner co-sign; red = blocked, no source). This is the traffic-light per shape that the consultant sees in the add-in pane. <span class="accent">Confidence is capped, not promised.</span></p>
+
+<h3>3. External Audit — tamper-proof action log</h3>
+<p>Every fill, edit, override, attestation, and send fires a row to a separate WORM (Write-Once-Read-Many) store at Cloudflare R2 with Object Lock COMPLIANCE retention — 7 years default, 10 years for banking and pharma sectors. Encrypted prompts; dual-key ceremony required to ever read them back (legal + infosec must both consent). This is the audit-committee-grade artifact. <span class="accent">Even Filipe can't unilaterally delete an audit row.</span></p>
+
+<h3>4. Disclaimer Flag — the gap-honesty layer</h3>
+<p>Two layers: (a) hard gate inside the add-in when the consultant clicks Send/Export and unattested claims exist; (b) soft fallback rendered into the .pptx as a footer for paths Office.js can't intercept (Save As, AirDrop, email-attach, Teams share). The footer is removable from the deck itself — not enforcement, but a visible flag the consultant has to actively delete to misrepresent. <span class="accent">Honest control, not a fortress.</span></p>
+
+<h2>Current status</h2>
+
+<table>
+  <thead>
+    <tr><th>Stage</th><th>Verdict</th><th>What it means</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Stage 1 — Project handling</td>
+      <td class="verdict-yellow">YELLOW</td>
+      <td>Multi-billion ambition vs solo-dev reality; need protocol + headcount</td>
+    </tr>
+    <tr>
+      <td>Stage 2 — Architecture content</td>
+      <td class="verdict-yellow">YELLOW</td>
+      <td>10 invariants + 6 primitives sound; observability missing entirely</td>
+    </tr>
+    <tr>
+      <td>Stage 3 — Implementation approach</td>
+      <td class="verdict-red">RED → YELLOW with rescope</td>
+      <td>12-week MVP dishonest (13-20w honest); single-dev breaks at week 5-8</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Convergent verdict from <strong>10 reviewers across 3 stages</strong> (Codex gpt-5.5 xhigh + 9 specialist agents): the trust apparatus architecture is sound. The amendments needed are about <em>adding</em> things (revision logbook, observability, model-agnostic spine) — not about reworking what's already locked.</p>
+
+<h2>Open decisions for Filipe</h2>
+
+<div class="open-decision">
+  <strong>Q1 — Filipe #3 honest scope.</strong> All 5 Stage 3 reviewers say the multi-vendor adapter set + semantic entailment costs ~14d, not the 7d the spec optimistically claimed. Pick: <em>(A)</em> Anthropic-only adapter in MVP, multi-vendor in BE-A1 — preserves 12-week MVP target but "model-agnostic mandatory" is partially aspirational at MVP cutover. <em>(B)</em> Full multi-vendor + entailment in MVP — honest, but MVP slips 12w → ~13-14w.<br>
+  <strong>Recommendation: B.</strong> Multi-billion target needs the architecture to actually be model-agnostic, not aspirationally so.
+</div>
+
+<div class="open-decision">
+  <strong>Q2 — Filipe #4 storage.</strong> Revision logbook (when AI rewrites text and user accepts/overrides). Pick: <em>(A)</em> in-deck only — simpler, ~6d savings, but regulated tenants can't use it as legal-defense chain. <em>(B)</em> Both in-deck + WORM mirror — regulated-grade tamper-evident audit trail, ~10-11d.<br>
+  <strong>Recommendation: B.</strong> SOX/MiFID/Solvency II investigations require tamper-proof "who said what, when."
+</div>
+
+<div class="open-decision">
+  <strong>Q3 — partner sign-off state machines.</strong> The new revision logbook has a <code>partner_signoff_required</code> field; the existing claim ledger already has <code>AttestationRecord.partner_review_required</code>. Two parallel state machines unless reconciled.<br>
+  <strong>Recommendation:</strong> revision logbook inherits from claim ledger attestation. No v2.0 contract change. Confirm and move on.
+</div>
+
+<div class="open-decision">
+  <strong>Q-V20 sign-offs (7 still open).</strong> Round-3 default answers exist for tenant_id derivation, WORM retention per sector, consultant attestation workflow, UserLibrary export, cross-tenant handoff, KMS choice, DPO assignment.<br>
+  <strong>Stage 3 reviewer recommendation:</strong> auto-adopt the defaults at phase kickoff unless Filipe overrides within 48h. Removes Filipe-latency from the critical path.
+</div>
+
+<h2>What's planned next</h2>
+
+<ul>
+  <li><strong>v2.1.1 amendment</strong> applies your model-agnostic + revision logbook feedback. Proposal already drafted at <code>architecture-notes/v2.1-pending/v2.1.1-amendment-proposal.md</code> with concrete spec edits + day estimates + sign-off block.</li>
+  <li><strong>OP-A observability phase</strong> (new — Stage 3 amendment B2) parallel to BE-A0. Without this the contractual "audit-lag &gt;5min hard send-gate" can't even be measured.</li>
+  <li><strong>production-cutover-v1.md</strong> (Stage 3 amendment B8) — explicit phase-by-phase bar + rollback for: internal-Filipe → first-non-Filipe → first client deck → regulated tenant.</li>
+  <li><strong>Headcount commit</strong> at MA-B kickoff (week 4-5): +1 SRE-leaning engineer, +1 frontend.</li>
+</ul>
+
+<div class="nav-down">
+  <h3>Where to go next</h3>
+  <ul style="color:white;">
+    <li><strong>See it visually:</strong> the L2 flow diagram shows how Trust talks to Imagery, Grounding, and the Add-in — <a href="../flow.html">go to L2 Map</a></li>
+    <li><strong>Read the curated technical detail:</strong> Atlas page section "Trust apparatus" with reviewer verdicts and comment buttons — <a href="../architecture-overview-2026-04-28.html#trust-layer">go to L1 Atlas</a></li>
+    <li><strong>Read the locked spec:</strong> 10 invariants and trust contract definition — <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/architecture-notes/fill-architecture-v2.md" target="_blank">fill-architecture-v2.md</a></li>
+    <li><strong>Read the v2.1.1 amendment proposal:</strong> concrete spec amendments for your sign-off — <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/architecture-notes/v2.1-pending/v2.1.1-amendment-proposal.md" target="_blank">v2.1.1-amendment-proposal.md</a></li>
+  </ul>
+</div>
+
+<p class="footer-note">Last updated: 28.04.2026 · Reviewers: 10 (Codex gpt-5.5 xhigh + 9 specialist agents across 3 stages) · Architecture LOCKED at v2.1; v2.1.1 amendment proposal pending Filipe sign-off.</p>
+
+</body>
+</html>
