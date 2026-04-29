@@ -47,7 +47,30 @@
   .anchor-link { color: #E94D3A; font-weight: 600; text-decoration: none; font-size: 13px; white-space: nowrap; }
 
   .empty { text-align: center; color: #5B5D64; padding: 40px; font-style: italic; }
-  .footer-note { color: #5B5D64; font-size: 12px; margin-top: 32px; padding-top: 16px; border-top: 1px solid #C2C2C2; }
+  .footer-note { color: #5B5D64; font-size: 12px; margin-top: 32px; padding-top: 16px; border-top: 1px solid #C2C2C2; }   /* OPEN — anyone owes a response (you OR me) */   /* I closed it, awaiting your sign-off */   /* mutually signed off — loop fully closed */
+  /* default grey #A4A3A7 = never touched */
+
+
+  .section-comment-row { margin: 6px 0 18px 0; }
+  .comment-link {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #A4A3A7;          /* GREY — default (no comments yet) */
+    color: white !important;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: background 0.2s;
+  }
+  .comment-link:hover { filter: brightness(0.9); }
+  .comment-link::before { content: "💬 "; }
+  .comment-link.status-red    { background: #E94D3A; }   /* OPEN — anyone owes a response (you OR me) */
+  .comment-link.status-orange { background: #F57C00; }   /* I closed it, awaiting your sign-off */
+  .comment-link.status-green  { background: #2E7D32; }   /* mutually signed off — loop fully closed */
+  /* default grey #A4A3A7 = never touched */
+
 </style>
 </head>
 <body>
