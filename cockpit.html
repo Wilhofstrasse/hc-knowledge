@@ -53,20 +53,25 @@
   .footer-note { color: #5B5D64; font-size: 12px; margin-top: 32px; padding-top: 16px; border-top: 1px solid #C2C2C2; }
   .auto-sync-badge { display: inline-block; background: #2E7D32; color: white; padding: 2px 10px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; margin-left: 8px; }
 
+
   .section-comment-row { margin: 6px 0 18px 0; }
   .comment-link {
     display: inline-block;
     padding: 3px 10px;
-    background: #E94D3A;
+    background: #A4A3A7;          /* GREY — default (no comments yet) */
     color: white !important;
     border-radius: 3px;
     font-size: 12px;
     font-weight: 600;
     text-decoration: none;
     letter-spacing: 0.02em;
+    transition: background 0.2s;
   }
-  .comment-link:hover { background: #B8321F; }
+  .comment-link:hover { filter: brightness(0.9); }
   .comment-link::before { content: "💬 "; }
+  .comment-link.status-red    { background: #E94D3A; }   /* you commented, I haven't acted */
+  .comment-link.status-green  { background: #2E7D32; }   /* I addressed, awaiting your sign-off */
+  .comment-link.status-grey-signed { background: #5B5D64; }  /* signed off, loop closed */
 
 </style>
 </head>
@@ -101,7 +106,7 @@
 </div>
 
 <h2 id="the-cockpit">The cockpit</h2>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Ccockpit&title=%5Bcomment%5D+%C2%A7The+cockpit&body=Section%3A+%C2%A7The+cockpit%0AAnchor%3A+%23the-cockpit%0APage%3A+cockpit%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+cockpit._" target="_blank" rel="noopener">Comment on §The cockpit</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="cockpit" data-anchor="the-cockpit" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Ccockpit&title=%5Bcomment%5D+%C2%A7The+cockpit&body=Section%3A+%C2%A7The+cockpit%0AAnchor%3A+%23the-cockpit%0APage%3A+cockpit%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+cockpit._" target="_blank" rel="noopener">Comment on §The cockpit</a></div>
 <div class="matrix-wrap">
 <table class="matrix">
   <thead>
@@ -154,7 +159,7 @@
 
 <div class="overall-mvp">
   <h3 id="overall-mvp-progress">Overall MVP progress</h3>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Ccockpit&title=%5Bcomment%5D+%C2%A7Overall+MVP+progress&body=Section%3A+%C2%A7Overall+MVP+progress%0AAnchor%3A+%23overall-mvp-progress%0APage%3A+cockpit%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+cockpit._" target="_blank" rel="noopener">Comment on §Overall MVP progress</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="cockpit" data-anchor="overall-mvp-progress" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Ccockpit&title=%5Bcomment%5D+%C2%A7Overall+MVP+progress&body=Section%3A+%C2%A7Overall+MVP+progress%0AAnchor%3A+%23overall-mvp-progress%0APage%3A+cockpit%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+cockpit._" target="_blank" rel="noopener">Comment on §Overall MVP progress</a></div>
 <p style="margin:4px 0 12px 0; font-size:14px;">MVP achieved = every module has crossed its own MVP line. Currently: <strong>Pre-Phase A (specs locked through v2.1.1; v2.1.1 amendment applied 28.04 evening; prompt-module-v1 DRAFT v0 in v2.1-pending awaiting Codex; Phase A.0 sub-spike not yet run)</strong></p>
   <div class="progress-track">
     <div class="progress-fill" style="width: 32%;"></div>
@@ -166,7 +171,7 @@
 </div>
 
 <h2 id="per-module-current-state">Per-module current state</h2>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Ccockpit&title=%5Bcomment%5D+%C2%A7Per-module+current+state&body=Section%3A+%C2%A7Per-module+current+state%0AAnchor%3A+%23per-module-current-state%0APage%3A+cockpit%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+cockpit._" target="_blank" rel="noopener">Comment on §Per-module current state</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="cockpit" data-anchor="per-module-current-state" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Ccockpit&title=%5Bcomment%5D+%C2%A7Per-module+current+state&body=Section%3A+%C2%A7Per-module+current+state%0AAnchor%3A+%23per-module-current-state%0APage%3A+cockpit%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+cockpit._" target="_blank" rel="noopener">Comment on §Per-module current state</a></div>
 <table class="detail">
   <thead>
     <tr><th>Module</th><th>Active phase</th><th>Current blockers</th></tr>
@@ -181,7 +186,7 @@
 
 <div class="nav-down">
   <h3 id="where-to-go-next">Where to go next</h3>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Ccockpit&title=%5Bcomment%5D+%C2%A7Where+to+go+next&body=Section%3A+%C2%A7Where+to+go+next%0AAnchor%3A+%23where-to-go-next%0APage%3A+cockpit%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+cockpit._" target="_blank" rel="noopener">Comment on §Where to go next</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="cockpit" data-anchor="where-to-go-next" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Ccockpit&title=%5Bcomment%5D+%C2%A7Where+to+go+next&body=Section%3A+%C2%A7Where+to+go+next%0AAnchor%3A+%23where-to-go-next%0APage%3A+cockpit%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+cockpit._" target="_blank" rel="noopener">Comment on §Where to go next</a></div>
 <ul style="color:white;">
     <li><strong>Plain-English landing:</strong> <a href="architecture-reader.html">L3 Reader</a> — what each module does</li>
     <li><strong>How they connect:</strong> <a href="flow.html">L2 Map</a> — Mermaid flow + sequence diagram</li>
@@ -193,6 +198,38 @@
 <p class="footer-note">
   Auto-synced: <strong>2026-04-29T05:43:31</strong> via <code>tools/sync-cockpit.py</code>. Sources of truth parsed: <code>decisions-log.md</code> (LOCKED entries), <code>architecture-notes/v2.1-pending/</code> (DRAFTs), <code>schema-package/src/</code> (published schemas), <code>architecture-notes/incident-runbooks/</code> (runbook count), git tags (when present), <code>addin/tests/</code> (when present). Manual overrides via <code>tools/cockpit-overrides.json</code>. <strong>MVP target:</strong> 13-14 (post-v2.1.1 lock; honest) weeks honest.
 </p>
+
+
+<script>
+(function() {
+  // Fetch comment-status.json from the public knowledge repo, color each button.
+  // Refreshes every 30s while the page is open.
+  var STATUS_URL = "https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/comment-status.json";
+  function applyStatus(data) {
+    if (!data || !data.anchors) return;
+    var links = document.querySelectorAll(".comment-link");
+    links.forEach(function(a) {
+      var page = a.getAttribute("data-page");
+      var anchor = a.getAttribute("data-anchor");
+      if (!page || !anchor) return;
+      // Reset
+      a.classList.remove("status-red", "status-green", "status-grey-signed");
+      var entry = data.anchors[page + "#" + anchor];
+      if (!entry) return;
+      a.classList.add("status-" + entry.state);
+      a.title = "Issue #" + entry.issue_number + " (" + entry.state + ")";
+    });
+  }
+  function fetchStatus() {
+    fetch(STATUS_URL + "?_=" + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(applyStatus)
+      .catch(function() { /* silent — default grey stays */ });
+  }
+  fetchStatus();
+  setInterval(fetchStatus, 30000);
+})();
+</script>
 
 </body>
 </html>
