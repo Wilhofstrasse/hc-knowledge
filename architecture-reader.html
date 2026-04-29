@@ -94,18 +94,17 @@
     <li><strong>4 cooperation patterns hard-coded as rules:</strong> plain-English [P-170], Atlas-not-chat [P-200], no-compliance-theater [P-201], dark-factory threshold [P-202].</li>
   </ul>
 
-  <h3 id="built-today" style="color:#14324E; margin-top:14px; font-size:16px;">Built today (29.04 — autonomous)</h3>
-<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-reader" data-anchor="built-today" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7Built+today+%2829.04+%E2%80%94+autonomous%29&body=Section%3A+%C2%A7Built+today+%2829.04+%E2%80%94+autonomous%29%0AAnchor%3A+%23built-today%0APage%3A+arch-l3-reader%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §Built today (29.04 — autonomous)</a></div>
-  <table style="width:100%; border-collapse:collapse; font-size:14px; margin:6px 0 12px 0;">
-    <tr><td style="padding:4px 8px; width:24px;">1</td><td style="padding:4px 8px;">Slide verifier — render → screenshot → diff vs reference</td><td style="padding:4px 8px; color:#5B5D64;"><code>tools/slide-verifier.py</code></td></tr>
-    <tr><td style="padding:4px 8px;">2</td><td style="padding:4px 8px;">Rules-emerge — auto-scans corrections weekly, surfaces drift</td><td style="padding:4px 8px; color:#5B5D64;"><code>~/.claude/hooks/rules-emerge.py</code></td></tr>
-    <tr><td style="padding:4px 8px;">3</td><td style="padding:4px 8px;">Vent tool — agents flag harness gaps as [vent] issues</td><td style="padding:4px 8px; color:#5B5D64;"><code>tools/agent-vent.py</code></td></tr>
-    <tr><td style="padding:4px 8px;">4</td><td style="padding:4px 8px;">Autonomous comment handler — atlas-tick fires Claude on every Atlas comment</td><td style="padding:4px 8px; color:#5B5D64;"><code>tools/atlas-tick.py</code> + launchd</td></tr>
-    <tr><td style="padding:4px 8px;">5</td><td style="padding:4px 8px;">Memory-prime hook — surfaces active drift at session start</td><td style="padding:4px 8px; color:#5B5D64;"><code>~/.claude/hooks/memory-prime.py</code></td></tr>
-    <tr><td style="padding:4px 8px;">6</td><td style="padding:4px 8px;">Isolated workspaces — flock + Agent worktree mode (doc only)</td><td style="padding:4px 8px; color:#5B5D64;"><code>tools/README-isolated-workspaces.md</code></td></tr>
-    <tr><td style="padding:4px 8px;">7</td><td style="padding:4px 8px;">Dark-factory threshold — what I ship without you, what I don't</td><td style="padding:4px 8px; color:#5B5D64;"><code>architecture-notes/dark-factory-threshold-v1.md</code></td></tr>
-  </table>
-  <p style="margin:6px 0 12px 0; font-size:13px; color:#5B5D64;">Plus: comment-button color coding (grey/red/orange/green), Comment Board dashboard, reviewer-board template on every auto-reply.</p>
+  <h3 id="built-today" style="color:#14324E; margin-top:14px; font-size:16px;">Built today (29.04 — without asking you)</h3>
+  <ol style="margin:6px 0 12px 0; line-height:1.6;">
+    <li><strong>Slide check.</strong> Takes a snapshot of every slide in your deck and tells you if anything looks different from the last approved version. Stops you needing to eyeball every change.</li>
+    <li><strong>Rule learning.</strong> Once a week, I scan everything you've corrected me on and propose new rules so I stop repeating the same mistakes.</li>
+    <li><strong>Helper-AI complaint box.</strong> The helper AIs I run while you're away can post "this is broken about how we work" notes. You see them on the comment board, alongside your own comments.</li>
+    <li><strong>Auto-handler.</strong> When you click a comment button on any Atlas page, I see it within a minute and start working on it — without you sending any chat message.</li>
+    <li><strong>Memory reminder.</strong> At the start of every chat session, I get a list of the patterns you've corrected me on most recently, so I don't repeat them.</li>
+    <li><strong>Helper-AI separation.</strong> When I run multiple helper AIs at the same time, each gets its own copy of the project so they don't overwrite each other's edits.</li>
+    <li><strong>What I commit without asking.</strong> A written rule about what changes I ship without checking with you (typos, doc edits) versus what I always check with you on (architecture, deletions, scope changes).</li>
+  </ol>
+  <p style="margin:6px 0 12px 0; font-size:13px; color:#5B5D64;">Plus: the comment buttons on this page now show colour (grey untouched / red open / orange awaiting your sign-off / green you signed off), and a Comment Board page that lists everything in one place.</p>
 
   <h3 id="parked" style="color:#14324E; margin-top:14px; font-size:16px;">Parked per your #4 + #5 + #7</h3>
 <div class="section-comment-row"><a class="comment-link" data-page="arch-l3-reader" data-anchor="parked" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7Parked+per+your+%234+%2B+%235+%2B+%237&body=Section%3A+%C2%A7Parked+per+your+%234+%2B+%235+%2B+%237%0AAnchor%3A+%23parked%0APage%3A+arch-l3-reader%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §Parked per your #4 + #5 + #7</a></div>
