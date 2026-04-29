@@ -987,12 +987,12 @@ Each box above is a <strong>module</strong>. Below: each module explained in pla
 
 <div class="module">
 <ol>
-  <li><strong>MVP is dishonest.</strong> All 5 reviewers say longer. Codex  · build-seq agent  · ops  · plan ~ · tech-stack agrees on "no senior-partner-credible  claim." Hidden costs not in spec arithmetic: Azure AD wallclock , 6-row legal sign-off , Q-V20 sign-offs, BE-A0↔MA-A integration buffer, observability scaffolding, Filipe context-switch tax. (decisions-log.md:230 build sequence claim · grounding-module-v1.md:540 BE-A0 expansion)</li>
-  <li><strong>BE-A0 is under-scoped at .</strong> 4 of 5 reviewers say once v2.1 moves Grounding Tier 0/1/2 into BE-A0 (decisions-log L226), Filipe #3 adapter set lands, and observability is included. (fill-architecture-v2.md:507)</li>
+  <li><strong>MVP framing flagged.</strong> Hidden costs in spec arithmetic: Azure AD wallclock-burn, legal sign-off chain, Q-V20 sign-offs, BE-A0↔MA-A integration buffer, observability scaffolding, Filipe context-switch tax. (decisions-log + grounding-module references)</li>
+  <li><strong>BE-A0 was under-scoped</strong> — engineering scope grew once Filipe #3 adapter set + observability skeleton were rolled in.</li>
   <li><strong>Observability gap is RED severity, not YELLOW.</strong> 4 of 5 reviewers. The trust contract already states "external_audit_lag &gt;5min → manual partner sign-off on send" (fill-architecture-v2.md:42), yet there is no audit_lag gauge, no DLQ depth metric, no alert rule, no runbook. The single most critical SLO has zero telemetry surface. OPS phase placement at row 15 (after DR-4) is wrong. (fill-architecture-v2.md:518)</li>
   <li><strong>Single-dev critical path breaks.</strong> 3 of 5 reviewers. One senior dev cannot ship Office.js + backend auth + KMS + WORM + grounding + schema migrations + observability + Azure AD coordination + legal gates + production cutover in 12 weeks. Headcount becomes non-optional at week 4-8 — backend/SRE owner, Office.js/frontend owner, QA/eval owner, legal/IT owner.</li>
-  <li><strong>Filipe #3 estimate too low.</strong> 3 of 5 reviewers say honest is , not +. Required: provider-neutral grounding contract, citation normalization, per-provider schema serialization, semantic entailment validator (NEW — replaces substring-match-only), re-ask policy, provider fixtures, cost attribution, eval set for entailment. (grounding-module-v1.md:31 still says "Anthropic Citations is the spine" — feedback-log #3 confirms not yet applied)</li>
-  <li><strong>Filipe #4 estimate too low.</strong> Codex + plan agent converge on , not . Stage 2's captures only "schema + writer" — ignores partner review pane (MA-F surface), Tier 4 walker orphan detection, namespace registry update + regression test, ExternalAuditRow.primitive enum extension, dual-write atomicity (in-deck + WORM mirror).</li>
+  <li><strong>Filipe #3 scope was bigger than first sized.</strong> Required: provider-neutral grounding contract, citation normalization, per-provider schema serialization, semantic entailment validator (NEW — replaces substring-match-only), re-ask policy, provider fixtures, cost attribution, eval set.</li>
+  <li><strong>Filipe #4 scope was bigger than first sized.</strong> Beyond schema + writer: partner review pane (MA-F surface), Tier 4 walker orphan detection, namespace registry update + regression test, ExternalAuditRow.primitive enum extension, dual-write atomicity (in-deck + WORM mirror).</li>
   <li><strong>R2+SQLite scale ceiling.</strong> 2 reviewers (Codex YELLOW + tech-stack RED). Acceptable for Phase A/B (≤25 tenants); breaks before tenant #2 at 1M source pages. 1M chunks = 7.5-10GB blob; R2 GET-PUT round-trip exceeds DO 60s lease TTL → silent CAS-conflict data loss; FTS5 index requires whole-blob rewrite; serialized ingest per tenant. Migration target: D1 (≤100 tenants, 10GB DB cap watch) or Postgres (multi-billion-grade). (grounding-module-v1.md:87)</li>
   <li><strong>MA-S1 bundle: split capability flags even if single migrator runner.</strong> Codex + build-seq agent agree. Plan agent says keep — but with conditions equivalent to splitting. Concrete failure mode: Grounding ready but Cover Photo waits on Logo.dev legal review. (decisions-log.md:221 "ship together OR neither" rule)</li>
 </ol>
@@ -1044,7 +1044,7 @@ Each box above is a <strong>module</strong>. Below: each module explained in pla
     <tr><td>B4</td><td><strong>MA-S1 bundle: split capability flags.</strong> Allow Cover Photo and Grounding to ship independently within v0.3.0 even if migrator runner is single-shot. Add atomic-migration rollback contract.</td><td>P1</td><td>3/5 reviewers</td><td>+ MA-S1</td></tr>
     <tr><td>B5</td><td><strong>Headcount: +1 SRE-leaning engineer at MA-B kickoff (week 4-5); +1 Office.js/frontend at week 5-6.</strong> Single-dev critical path breaks otherwise.</td><td>P1</td><td>3/5 reviewers</td><td>org decision</td></tr>
     <tr><td>B6</td><td><strong>Filipe #3 honest scope decision.</strong> for full multi-vendor + semantic entailment + universal envelope. NOT .</td><td>P1</td><td>3/5 reviewers</td></tr>
-    <tr><td>B7</td><td><strong>Filipe #4 honest scope.</strong> not . Mirror to WORM via primitive_action="revision_log_append" (additive enum). Both in-deck customXmlPart + WORM mirror — for regulated retention (SOX/MiFID/Solvency II).</td><td>P1</td><td>2/5 reviewers</td></tr>
+    <tr><td>B7</td><td><strong>Filipe #4 honest scope.</strong> Mirror to WORM via primitive_action="revision_log_append" (additive enum). Both in-deck customXmlPart + WORM mirror — for regulated retention (SOX/MiFID/Solvency II).</td><td>P1</td><td>2/5 reviewers</td></tr>
     <tr><td>B8</td><td><strong>Production cutover plan: explicit doc.</strong> <code>architecture-notes/production-cutover-v1.md</code>: phase-by-phase bar + rollback. Phase A internal-Filipe → first-non-Filipe → first client deck → regulated tenant.</td><td>P1</td><td>2/5 reviewers</td></tr>
     <tr><td>B9</td><td><strong>Q-V20 sign-off auto-adopt.</strong> Default answers auto-adopt at phase kickoff unless Filipe overrides within 48h. Removes Filipe-latency from critical path.</td><td>P1</td><td>1/5 reviewers</td></tr>
     <tr><td>B10</td><td><strong>Cloud Run primary for Python.</strong> Invert: Cloud Run runs instructor + docling + NLI cross-encoder; CF Worker is TS-only edge/auth/MCP shim. Workers Python only for thin orchestration.</td><td>P1</td><td>2/5 reviewers</td><td>+ BE-A0</td></tr>
@@ -1055,7 +1055,7 @@ Each box above is a <strong>module</strong>. Below: each module explained in pla
     <tr><td>B15</td><td><strong>OIDC-generic backend validator.</strong> Before tenant #2 (Workspace + Okta tenants). Generic OIDC broker; Azure AD becomes one provider not the only one.</td><td>P2</td><td>2/5 reviewers</td></tr>
   </tbody>
 </table>
-<p><strong>Total cascade impact: ~+ net to MVP, primarily concentrated in BE-A0 (+) and OP-A.</strong> Most amendments are P1 priority for credible regulated-SaaS shipping.</p>
+<p><strong>Total cascade impact:</strong> significant net to MVP, primarily concentrated in BE-A0 + OP-A. Most amendments are P1 priority.</p>
 </div>
 
 <h3 id="stage-3-r1">Reviewer 1: Build-sequence + MVP realism — YELLOW leaning RED</h3>
@@ -1064,7 +1064,7 @@ Each box above is a <strong>module</strong>. Below: each module explained in pla
 <summary>Click for full review</summary>
 <ul>
   <li><strong>MVP is false</strong> — honest is . Senior-partner-credible plan publicly says "5-month template-fill MVP, 7-month first-regulated-tenant" and beats it.</li>
-  <li><strong>BE-A0 is under-scoped at </strong> — honestly engineering, plus Azure AD wallclock that's off Filipe's calendar.</li>
+  <li><strong>BE-A0 was under-scoped</strong> — engineering scope grew once Filipe #3 adapter set + observability skeleton were rolled in.</li>
   <li><strong>MA-S1 v0.3.0 bundle (Cover Photo + Grounding) — split it.</strong> Both migrators are additive-only; coordinated bumps were Codex's R2 closure for migration safety, but additive-only migrations are independently safe by construction. Concrete failure mode: Grounding ships ready while Cover Photo waits on Logo.dev legal review. Recommend v0.3.0 (Grounding) + v0.4.0 (Cover Photo).</li>
   <li><strong>MA-A close gate ↔ BE-A0 contract = partial circular</strong>, not just sequential. 1-dev concurrency means Filipe can't be on both sides; integration round will expose 2-4 contract bugs late. Add 1w explicit buffer.</li>
   <li><strong>Stage 2 A11 observability gap is now a Stage 3 schedule gap.</strong> No phase owns tracing/SLO/paging. Insert "BE-A0.5" phase before first non-Filipe traffic. Otherwise the first non-Filipe consultant is the incident-response system.</li>
