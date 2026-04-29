@@ -40,6 +40,22 @@
   .nav-down a { color: #fff; text-decoration: underline; }
   .footer-note { color: #5B5D64; font-size: 13px; margin-top: 48px; padding-top: 16px; border-top: 1px solid #C2C2C2; }
   ul { padding-left: 24px; line-height: 1.7; }
+
+  .section-comment-row { margin: 6px 0 18px 0; }
+  .comment-link {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #E94D3A;
+    color: white !important;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .comment-link:hover { background: #B8321F; }
+  .comment-link::before { content: "💬 "; }
+
 </style>
 </head>
 <body>
@@ -143,7 +159,8 @@
   <strong>Why this page exists.</strong> The full architecture has 10 invariants, 6 primitives, 6 user flows, and ~200 pages of locked specs across multiple files. That's right for engineers and Codex. It's wrong for the partner who needs the picture in 5 minutes. This page summarizes the architecture in three modules + one foundation, with links down for verification.
 </div>
 
-<h2>Where we are right now</h2>
+<h2 id="where-we-are-right-now">Where we are right now</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7Where+we+are+right+now&body=Section%3A+%C2%A7Where+we+are+right+now%0AAnchor%3A+%23where-we-are-right-now%0APage%3A+arch-l3-reader%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §Where we are right now</a></div>
 
 <div class="verdict-grid">
   <div class="verdict-card verdict-yellow">
@@ -162,15 +179,17 @@
 
 <p>10 reviewers across 3 stages — Codex gpt-5.5 xhigh + 9 specialist agents — converge on the same path forward: apply Filipe's two architectural amendments (#3 model-agnostic spine, #4 revision logbook), insert observability earlier, rescope backend phase honestly, commit headcount.</p>
 
-<h2>The three user-facing modules</h2>
+<h2 id="the-three-user-facing-modules">The three user-facing modules</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7The+three+user-facing+modules&body=Section%3A+%C2%A7The+three+user-facing+modules%0AAnchor%3A+%23the-three-user-facing-modules%0APage%3A+arch-l3-reader%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §The three user-facing modules</a></div>
 
 <div class="module-grid">
 
   <div class="module-card">
-    <h3>⚖️ Trust apparatus
+    <h3 id="trust-apparatus-locked-v21-v211-pending">⚖️ Trust apparatus
       <span class="status-pill status-locked">LOCKED v2.1</span>
       <span class="status-pill status-amend">v2.1.1 pending</span>
     </h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7%E2%9A%96%EF%B8%8F+Trust+apparatus+LOCKED+v2.1+v2.1.1+pending&body=Section%3A+%C2%A7%E2%9A%96%EF%B8%8F+Trust+apparatus+LOCKED+v2.1+v2.1.1+pending%0AAnchor%3A+%23trust-apparatus-locked-v21-v211-pending%0APage%3A+arch-l3-reader%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §⚖️ Trust apparatus LOCKED v2.1 v2.1.1 pending</a></div>
     <p>The system that tracks <strong>what's true in your deck</strong> and <strong>who said it</strong>. Library (vetted templates), Claim Ledger (current truth per shape with traffic-light), External Audit (tamper-proof action log, 7-10y retention), Disclaimer Flag (gap-honesty fallback footer).</p>
     <p>Architecturally one apparatus, four invariants. The audit committee's answer to "show me you didn't make this up."</p>
     <p class="open"><strong>Open:</strong> Q1 multi-vendor MVP shape, Q2 revision logbook storage, Q3 partner sign-off state machines, 7 Q-V20 defaults.</p>
@@ -178,9 +197,10 @@
   </div>
 
   <div class="module-card">
-    <h3>🖼️ Imagery
+    <h3 id="imagery-locked-v21">🖼️ Imagery
       <span class="status-pill status-locked">LOCKED v2.1</span>
     </h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7%F0%9F%96%BC%EF%B8%8F+Imagery+LOCKED+v2.1&body=Section%3A+%C2%A7%F0%9F%96%BC%EF%B8%8F+Imagery+LOCKED+v2.1%0AAnchor%3A+%23imagery-locked-v21%0APage%3A+arch-l3-reader%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §🖼️ Imagery LOCKED v2.1</a></div>
     <p>All <strong>non-text visual content</strong> the AI fetches or proposes — cover photos, competitor/peer-firm logos for peer analysis, country flags + sector icons for PESTEL slides, peer-map firm icons. One module, broad scope.</p>
     <p>6-tier picker for cover photos: user-upload → IR press kit → H&C curated library → licensed stock (Shutterstock + Getty) → AI-gen (illustrative only, NEVER fake real-firm building photos) → H&C placeholder.</p>
     <p class="open"><strong>Out of scope:</strong> employee/people photos (privacy + GDPR — manual upload only, not AI-fetched).</p>
@@ -188,10 +208,11 @@
   </div>
 
   <div class="module-card">
-    <h3>🔍 Grounding
+    <h3 id="grounding-locked-v21-v211-pending">🔍 Grounding
       <span class="status-pill status-locked">LOCKED v2.1</span>
       <span class="status-pill status-amend">v2.1.1 pending</span>
     </h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7%F0%9F%94%8D+Grounding+LOCKED+v2.1+v2.1.1+pending&body=Section%3A+%C2%A7%F0%9F%94%8D+Grounding+LOCKED+v2.1+v2.1.1+pending%0AAnchor%3A+%23grounding-locked-v21-v211-pending%0APage%3A+arch-l3-reader%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §🔍 Grounding LOCKED v2.1 v2.1.1 pending</a></div>
     <p>The <strong>proof layer</strong> for every textual statement in the deck. Sources get ingested at deck open, retrieved via search, fed to the AI as grounded prompts, validated by structured-output schemas + semantic entailment, surfaced as traffic-lights + paragraph-level citations.</p>
     <p>Filipe's model-agnostic feedback (#3) reshapes this: the spine is the universal citation envelope + entailment validator, NOT any one provider's API. Anthropic / Google / OpenAI become adapter optimizations.</p>
     <p class="open"><strong>Open:</strong> 15 Q-GR defaults, semantic entailment NLI eval set, multi-vendor cost attribution.</p>
@@ -210,11 +231,13 @@
 
 </div>
 
-<h2>How they connect</h2>
+<h2 id="how-they-connect">How they connect</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7How+they+connect&body=Section%3A+%C2%A7How+they+connect%0AAnchor%3A+%23how-they-connect%0APage%3A+arch-l3-reader%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §How they connect</a></div>
 <p>Source materials → Grounding (ingestion + retrieval + adapters) → Claim Ledger (with verdict tier) → Add-in UI (consultant sees traffic-light) → External Audit (every action logged). Imagery flows in parallel for visual shapes. Plumbing wraps every payload at every step.</p>
 <p style="text-align:center; padding:16px;"><a href="flow.html" style="background:#E94D3A; color:white; padding:12px 24px; text-decoration:none; border-radius:4px; font-weight:600; display:inline-block;">→ See the visual flow (L2 Map)</a></p>
 
-<h2>What's planned next</h2>
+<h2 id="whats-planned-next">What's planned next</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7What%27s+planned+next&body=Section%3A+%C2%A7What%27s+planned+next%0AAnchor%3A+%23whats-planned-next%0APage%3A+arch-l3-reader%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §What's planned next</a></div>
 
 <ul>
   <li><strong>v2.1.1 amendment</strong> — applies your model-agnostic + revision-logbook feedback to the locked specs. Concrete spec edits drafted with day estimates and sign-off block. <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/blob/main/architecture-notes/v2.1-pending/v2.1.1-amendment-proposal.md" target="_blank">Read the proposal</a>.</li>
@@ -224,7 +247,8 @@
 </ul>
 
 <div class="nav-down">
-  <h3>Where to go next</h3>
+  <h3 id="where-to-go-next">Where to go next</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7Where+to+go+next&body=Section%3A+%C2%A7Where+to+go+next%0AAnchor%3A+%23where-to-go-next%0APage%3A+arch-l3-reader%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §Where to go next</a></div>
   <ul style="color:white;">
     <li><strong>See it visually:</strong> <a href="flow.html">L2 Map (Mermaid flow + sequence diagram)</a> — shows how the modules talk to each other</li>
     <li><strong>Curated technical:</strong> <a href="architecture-overview-2026-04-28.html">L1 Atlas</a> — full overview with reviewer verdicts, comment buttons, and per-module detail</li>
