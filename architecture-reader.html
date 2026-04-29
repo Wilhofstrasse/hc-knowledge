@@ -114,9 +114,27 @@
   <p style="font-size:14px; color:#5B5D64; margin:8px 0;"><em>Everything else (hiring / timeline / contracts / cutover gates) — REMOVED per #4 + #7.</em></p>
 </div>
 
-<div style="background:#FFF4E0; border-left:5px solid #F57C00; padding:16px 20px; border-radius:4px; margin:20px 0;">
-  <h3 style="color:#F57C00; margin:0 0 8px 0;">⏳ Autonomous run in progress — 29.04.2026 PM, 10h budget</h3>
-  <p style="margin:0; font-size:14px;">Filipe is away. Building all 7 cooperation patterns from the Cursor talk fully autonomously. Each pattern: Codex drift-check + 1 specialist agent review per [P-190], then implement, test, commit. Status table below updates as each lands.</p>
+<div style="background:#E8F5E9; border-left:5px solid #2E7D32; padding:16px 20px; border-radius:4px; margin:20px 0;">
+  <h3 id="autonomous-run-complete-29042026-pm-all-7-patterns-done" style="color:#2E7D32; margin:0 0 8px 0;">✅ Autonomous run complete — 29.04.2026 PM, all 7 patterns DONE</h3>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-reader" data-anchor="autonomous-run-complete-29042026-pm-all-7-patterns-done" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7%E2%9C%85+Autonomous+run+complete+%E2%80%94+29.04.2026+PM%2C+all+7+patterns+DONE&body=Section%3A+%C2%A7%E2%9C%85+Autonomous+run+complete+%E2%80%94+29.04.2026+PM%2C+all+7+patterns+DONE%0AAnchor%3A+%23autonomous-run-complete-29042026-pm-all-7-patterns-done%0APage%3A+arch-l3-reader%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §✅ Autonomous run complete — 29.04.2026 PM, all 7 patterns DONE</a></div>
+  <p style="margin:0; font-size:14px;">All 7 cooperation patterns from the Cursor talk built + committed. Status table below shows what landed where.</p>
+</div>
+
+<div style="background:#FFFFFF; border:1px solid #C2C2C2; padding:16px 20px; border-radius:4px; margin:20px 0;">
+  <h3 id="7-patterns-final-status" style="color:#14324E; margin:0 0 12px 0;">7 patterns — final status</h3>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-reader" data-anchor="7-patterns-final-status" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A77+patterns+%E2%80%94+final+status&body=Section%3A+%C2%A77+patterns+%E2%80%94+final+status%0AAnchor%3A+%237-patterns-final-status%0APage%3A+arch-l3-reader%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §7 patterns — final status</a></div>
+  <table style="width:100%; border-collapse:collapse; font-size:14px;">
+    <thead><tr style="background:#F0F0F0;"><th style="padding:6px 10px; text-align:left;">#</th><th style="padding:6px 10px; text-align:left;">Pattern</th><th style="padding:6px 10px; text-align:left;">Status</th><th style="padding:6px 10px; text-align:left;">Where it lives</th></tr></thead>
+    <tbody>
+      <tr><td style="padding:8px 10px;">1</td><td style="padding:8px 10px;">Playwright-for-slides verifier</td><td style="padding:8px 10px; color:#2E7D32; font-weight:600;">DONE</td><td style="padding:8px 10px;"><code>tools/slide-verifier.py</code> + 5 baseline snapshots</td></tr>
+      <tr><td style="padding:8px 10px;">2</td><td style="padding:8px 10px;">Rules-emerge pipeline</td><td style="padding:8px 10px; color:#2E7D32; font-weight:600;">DONE</td><td style="padding:8px 10px;"><code>~/.claude/hooks/rules-emerge.py</code> + weekly cron</td></tr>
+      <tr><td style="padding:8px 10px;">3</td><td style="padding:8px 10px;">Vent tool</td><td style="padding:8px 10px; color:#2E7D32; font-weight:600;">DONE</td><td style="padding:8px 10px;"><code>tools/agent-vent.py</code> — autonomous agents post [vent] issues</td></tr>
+      <tr><td style="padding:8px 10px;">4</td><td style="padding:8px 10px;">Agent code-owner</td><td style="padding:8px 10px; color:#2E7D32; font-weight:600;">DONE</td><td style="padding:8px 10px;"><code>tools/atlas-tick.py</code> + launchd 60s tick</td></tr>
+      <tr><td style="padding:8px 10px;">5</td><td style="padding:8px 10px;">Better memory</td><td style="padding:8px 10px; color:#2E7D32; font-weight:600;">DONE</td><td style="padding:8px 10px;"><code>~/.claude/hooks/memory-prime.py</code> SessionStart hook</td></tr>
+      <tr><td style="padding:8px 10px;">6</td><td style="padding:8px 10px;">Isolated workspaces</td><td style="padding:8px 10px; color:#2E7D32; font-weight:600;">DONE</td><td style="padding:8px 10px;"><code>tools/README-isolated-workspaces.md</code> — flock + Agent worktree mode</td></tr>
+      <tr><td style="padding:8px 10px;">7</td><td style="padding:8px 10px;">Dark-factory threshold</td><td style="padding:8px 10px; color:#2E7D32; font-weight:600;">DONE</td><td style="padding:8px 10px;"><code>architecture-notes/dark-factory-threshold-v1.md</code> + [P-202]</td></tr>
+    </tbody>
+  </table>
 </div>
 <!-- HOW WE COOPERATE — kept; "all 7 now" per Filipe issue #8 -->
 
