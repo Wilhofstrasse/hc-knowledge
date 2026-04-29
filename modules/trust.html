@@ -36,20 +36,25 @@
   ul { padding-left: 24px; }
   li { margin-bottom: 6px; }
 
+
   .section-comment-row { margin: 6px 0 18px 0; }
   .comment-link {
     display: inline-block;
     padding: 3px 10px;
-    background: #E94D3A;
+    background: #A4A3A7;          /* GREY — default (no comments yet) */
     color: white !important;
     border-radius: 3px;
     font-size: 12px;
     font-weight: 600;
     text-decoration: none;
     letter-spacing: 0.02em;
+    transition: background 0.2s;
   }
-  .comment-link:hover { background: #B8321F; }
+  .comment-link:hover { filter: brightness(0.9); }
   .comment-link::before { content: "💬 "; }
+  .comment-link.status-red    { background: #E94D3A; }   /* you commented, I haven't acted */
+  .comment-link.status-green  { background: #2E7D32; }   /* I addressed, awaiting your sign-off */
+  .comment-link.status-grey-signed { background: #5B5D64; }  /* signed off, loop closed */
 
 </style>
 </head>
@@ -73,7 +78,7 @@
 </div>
 
 <h2 id="what-it-does">What it does</h2>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A7What+it+does&body=Section%3A+%C2%A7What+it+does%0AAnchor%3A+%23what-it-does%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §What it does</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-trust" data-anchor="what-it-does" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A7What+it+does&body=Section%3A+%C2%A7What+it+does%0AAnchor%3A+%23what-it-does%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §What it does</a></div>
 <ul>
   <li><strong>Tells the consultant the truth-status of every shape</strong> — green / yellow / orange / red badge per claim, before they hit "send."</li>
   <li><strong>Logs every action with tamper-proof retention</strong> — what changed, who changed it, when, why, against what source.</li>
@@ -82,25 +87,25 @@
 </ul>
 
 <h2 id="how-it-works-4-components-plain-english">How it works (4 components, plain-English)</h2>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A7How+it+works+%284+components%2C+plain-English%29&body=Section%3A+%C2%A7How+it+works+%284+components%2C+plain-English%29%0AAnchor%3A+%23how-it-works-4-components-plain-english%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §How it works (4 components, plain-English)</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-trust" data-anchor="how-it-works-4-components-plain-english" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A7How+it+works+%284+components%2C+plain-English%29&body=Section%3A+%C2%A7How+it+works+%284+components%2C+plain-English%29%0AAnchor%3A+%23how-it-works-4-components-plain-english%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §How it works (4 components, plain-English)</a></div>
 <h3 id="1-library-the-vetted-content-shelf">1. Library — the vetted-content shelf</h3>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A71.+Library+%E2%80%94+the+vetted-content+shelf&body=Section%3A+%C2%A71.+Library+%E2%80%94+the+vetted-content+shelf%0AAnchor%3A+%231-library-the-vetted-content-shelf%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §1. Library — the vetted-content shelf</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-trust" data-anchor="1-library-the-vetted-content-shelf" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A71.+Library+%E2%80%94+the+vetted-content+shelf&body=Section%3A+%C2%A71.+Library+%E2%80%94+the+vetted-content+shelf%0AAnchor%3A+%231-library-the-vetted-content-shelf%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §1. Library — the vetted-content shelf</a></div>
 <p>A 3-tier library (corporate / tenant / user) holds approved templates and slide patterns. Promotion path: a slide a consultant likes goes from project → user library → tenant library → corporate library, with partner sign-off at each step. Anything in the corporate library has been reviewed and is safe to use across all tenants. Lower tiers are progressively more flexible. <span class="accent">"Where does this slide come from?" — always answerable.</span></p>
 
 <h3 id="2-claim-ledger-current-truth-per-shape">2. Claim Ledger — current truth per shape</h3>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A72.+Claim+Ledger+%E2%80%94+current+truth+per+shape&body=Section%3A+%C2%A72.+Claim+Ledger+%E2%80%94+current+truth+per+shape%0AAnchor%3A+%232-claim-ledger-current-truth-per-shape%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §2. Claim Ledger — current truth per shape</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-trust" data-anchor="2-claim-ledger-current-truth-per-shape" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A72.+Claim+Ledger+%E2%80%94+current+truth+per+shape&body=Section%3A+%C2%A72.+Claim+Ledger+%E2%80%94+current+truth+per+shape%0AAnchor%3A+%232-claim-ledger-current-truth-per-shape%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §2. Claim Ledger — current truth per shape</a></div>
 <p>For every text shape and number on every slide, a row records: what the AI wrote, where it came from (source kind, citation pointer), what the confidence tier is (green = source-backed and high-confidence; yellow = source-backed but estimate; orange = consultant said so without partner co-sign; red = blocked, no source). This is the traffic-light per shape that the consultant sees in the add-in pane. <span class="accent">Confidence is capped, not promised.</span></p>
 
 <h3 id="3-external-audit-tamper-proof-action-log">3. External Audit — tamper-proof action log</h3>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A73.+External+Audit+%E2%80%94+tamper-proof+action+log&body=Section%3A+%C2%A73.+External+Audit+%E2%80%94+tamper-proof+action+log%0AAnchor%3A+%233-external-audit-tamper-proof-action-log%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §3. External Audit — tamper-proof action log</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-trust" data-anchor="3-external-audit-tamper-proof-action-log" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A73.+External+Audit+%E2%80%94+tamper-proof+action+log&body=Section%3A+%C2%A73.+External+Audit+%E2%80%94+tamper-proof+action+log%0AAnchor%3A+%233-external-audit-tamper-proof-action-log%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §3. External Audit — tamper-proof action log</a></div>
 <p>Every fill, edit, override, attestation, and send fires a row to a separate WORM (Write-Once-Read-Many) store at Cloudflare R2 with Object Lock COMPLIANCE retention — 7 years default, 10 years for banking and pharma sectors. Encrypted prompts; dual-key ceremony required to ever read them back (legal + infosec must both consent). This is the audit-committee-grade artifact. <span class="accent">Even Filipe can't unilaterally delete an audit row.</span></p>
 
 <h3 id="4-disclaimer-flag-the-gap-honesty-layer">4. Disclaimer Flag — the gap-honesty layer</h3>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A74.+Disclaimer+Flag+%E2%80%94+the+gap-honesty+layer&body=Section%3A+%C2%A74.+Disclaimer+Flag+%E2%80%94+the+gap-honesty+layer%0AAnchor%3A+%234-disclaimer-flag-the-gap-honesty-layer%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §4. Disclaimer Flag — the gap-honesty layer</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-trust" data-anchor="4-disclaimer-flag-the-gap-honesty-layer" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A74.+Disclaimer+Flag+%E2%80%94+the+gap-honesty+layer&body=Section%3A+%C2%A74.+Disclaimer+Flag+%E2%80%94+the+gap-honesty+layer%0AAnchor%3A+%234-disclaimer-flag-the-gap-honesty-layer%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §4. Disclaimer Flag — the gap-honesty layer</a></div>
 <p>Two layers: (a) hard gate inside the add-in when the consultant clicks Send/Export and unattested claims exist; (b) soft fallback rendered into the .pptx as a footer for paths Office.js can't intercept (Save As, AirDrop, email-attach, Teams share). The footer is removable from the deck itself — not enforcement, but a visible flag the consultant has to actively delete to misrepresent. <span class="accent">Honest control, not a fortress.</span></p>
 
 <h2 id="current-status">Current status</h2>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A7Current+status&body=Section%3A+%C2%A7Current+status%0AAnchor%3A+%23current-status%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §Current status</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-trust" data-anchor="current-status" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A7Current+status&body=Section%3A+%C2%A7Current+status%0AAnchor%3A+%23current-status%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §Current status</a></div>
 <table>
   <thead>
     <tr><th>Stage</th><th>Verdict</th><th>What it means</th></tr>
@@ -127,7 +132,7 @@
 <p>Convergent verdict from <strong>10 reviewers across 3 stages</strong> (Codex gpt-5.5 xhigh + 9 specialist agents): the trust apparatus architecture is sound. The amendments needed are about <em>adding</em> things (revision logbook, observability, model-agnostic spine) — not about reworking what's already locked.</p>
 
 <h2 id="open-decisions-for-filipe">Open decisions for Filipe</h2>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A7Open+decisions+for+Filipe&body=Section%3A+%C2%A7Open+decisions+for+Filipe%0AAnchor%3A+%23open-decisions-for-filipe%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §Open decisions for Filipe</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-trust" data-anchor="open-decisions-for-filipe" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A7Open+decisions+for+Filipe&body=Section%3A+%C2%A7Open+decisions+for+Filipe%0AAnchor%3A+%23open-decisions-for-filipe%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §Open decisions for Filipe</a></div>
 <div class="open-decision">
   <strong>Q1 — Filipe #3 honest scope.</strong> All 5 Stage 3 reviewers say the multi-vendor adapter set + semantic entailment costs ~14d, not the 7d the spec optimistically claimed. Pick: <em>(A)</em> Anthropic-only adapter in MVP, multi-vendor in BE-A1 — preserves 12-week MVP target but "model-agnostic mandatory" is partially aspirational at MVP cutover. <em>(B)</em> Full multi-vendor + entailment in MVP — honest, but MVP slips 12w → ~13-14w.<br>
   <strong>Recommendation: B.</strong> Multi-billion target needs the architecture to actually be model-agnostic, not aspirationally so.
@@ -149,7 +154,7 @@
 </div>
 
 <h2 id="whats-planned-next">What's planned next</h2>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A7What%27s+planned+next&body=Section%3A+%C2%A7What%27s+planned+next%0AAnchor%3A+%23whats-planned-next%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §What's planned next</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-trust" data-anchor="whats-planned-next" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A7What%27s+planned+next&body=Section%3A+%C2%A7What%27s+planned+next%0AAnchor%3A+%23whats-planned-next%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §What's planned next</a></div>
 <ul>
   <li><strong>v2.1.1 amendment</strong> applies your model-agnostic + revision logbook feedback. Proposal already drafted at <code>architecture-notes/v2.1-pending/v2.1.1-amendment-proposal.md</code> with concrete spec edits + day estimates + sign-off block.</li>
   <li><strong>OP-A observability phase</strong> (new — Stage 3 amendment B2) parallel to BE-A0. Without this the contractual "audit-lag &gt;5min hard send-gate" can't even be measured.</li>
@@ -159,7 +164,7 @@
 
 <div class="nav-down">
   <h3 id="where-to-go-next">Where to go next</h3>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A7Where+to+go+next&body=Section%3A+%C2%A7Where+to+go+next%0AAnchor%3A+%23where-to-go-next%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §Where to go next</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-trust" data-anchor="where-to-go-next" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A7Where+to+go+next&body=Section%3A+%C2%A7Where+to+go+next%0AAnchor%3A+%23where-to-go-next%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §Where to go next</a></div>
 <ul style="color:white;">
     <li><strong>See it visually:</strong> the L2 flow diagram shows how Trust talks to Imagery, Grounding, and the Add-in — <a href="../flow.html">go to L2 Map</a></li>
     <li><strong>Read the curated technical detail:</strong> Atlas page section "Trust apparatus" with reviewer verdicts and comment buttons — <a href="../architecture-overview-2026-04-28.html#trust-layer">go to L1 Atlas</a></li>
@@ -169,6 +174,38 @@
 </div>
 
 <p class="footer-note">Last updated: 28.04.2026 · Reviewers: 10 (Codex gpt-5.5 xhigh + 9 specialist agents across 3 stages) · Architecture LOCKED at v2.1; v2.1.1 amendment proposal pending Filipe sign-off.</p>
+
+
+<script>
+(function() {
+  // Fetch comment-status.json from the public knowledge repo, color each button.
+  // Refreshes every 30s while the page is open.
+  var STATUS_URL = "https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/comment-status.json";
+  function applyStatus(data) {
+    if (!data || !data.anchors) return;
+    var links = document.querySelectorAll(".comment-link");
+    links.forEach(function(a) {
+      var page = a.getAttribute("data-page");
+      var anchor = a.getAttribute("data-anchor");
+      if (!page || !anchor) return;
+      // Reset
+      a.classList.remove("status-red", "status-green", "status-grey-signed");
+      var entry = data.anchors[page + "#" + anchor];
+      if (!entry) return;
+      a.classList.add("status-" + entry.state);
+      a.title = "Issue #" + entry.issue_number + " (" + entry.state + ")";
+    });
+  }
+  function fetchStatus() {
+    fetch(STATUS_URL + "?_=" + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(applyStatus)
+      .catch(function() { /* silent — default grey stays */ });
+  }
+  fetchStatus();
+  setInterval(fetchStatus, 30000);
+})();
+</script>
 
 </body>
 </html>
