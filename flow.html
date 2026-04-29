@@ -23,6 +23,22 @@
   .accent { color: #E94D3A; }
   ul { line-height: 1.7; }
   .footer-note { color: #5B5D64; font-size: 13px; margin-top: 48px; padding-top: 16px; border-top: 1px solid #C2C2C2; }
+
+  .section-comment-row { margin: 6px 0 18px 0; }
+  .comment-link {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #E94D3A;
+    color: white !important;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .comment-link:hover { background: #B8321F; }
+  .comment-link::before { content: "💬 "; }
+
 </style>
 </head>
 <body>
@@ -43,7 +59,8 @@
   <strong>Reading the diagram:</strong> Solid arrows = data flow. Dotted arrows = "wraps everything" (security/plumbing layer that sits underneath every other module). The four user-facing groupings sit on top of one invisible foundation.
 </div>
 
-<h2>The full picture</h2>
+<h2 id="the-full-picture">The full picture</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l2-flow&title=%5Bcomment%5D+%C2%A7The+full+picture&body=Section%3A+%C2%A7The+full+picture%0AAnchor%3A+%23the-full-picture%0APage%3A+arch-l2-flow%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l2-flow._" target="_blank" rel="noopener">Comment on §The full picture</a></div>
 
 <div class="mermaid">
 flowchart TB
@@ -110,7 +127,8 @@ flowchart TB
   class PLUMBING plumbingNode
 </div>
 
-<h2>How a single AI fill flows through the system</h2>
+<h2 id="how-a-single-ai-fill-flows-through-the-system">How a single AI fill flows through the system</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l2-flow&title=%5Bcomment%5D+%C2%A7How+a+single+AI+fill+flows+through+the+system&body=Section%3A+%C2%A7How+a+single+AI+fill+flows+through+the+system%0AAnchor%3A+%23how-a-single-ai-fill-flows-through-the-system%0APage%3A+arch-l2-flow%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l2-flow._" target="_blank" rel="noopener">Comment on §How a single AI fill flows through the system</a></div>
 
 <div class="mermaid">
 sequenceDiagram
@@ -138,7 +156,8 @@ sequenceDiagram
   Addin->>Consultant: render shape + traffic-light pill
 </div>
 
-<h2>What's outside this flow (deliberately)</h2>
+<h2 id="whats-outside-this-flow-deliberately">What's outside this flow (deliberately)</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l2-flow&title=%5Bcomment%5D+%C2%A7What%27s+outside+this+flow+%28deliberately%29&body=Section%3A+%C2%A7What%27s+outside+this+flow+%28deliberately%29%0AAnchor%3A+%23whats-outside-this-flow-deliberately%0APage%3A+arch-l2-flow%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l2-flow._" target="_blank" rel="noopener">Comment on §What's outside this flow (deliberately)</a></div>
 
 <ul>
   <li><strong>People photos / employee headshots</strong> — never auto-fetched. Privacy + GDPR + ethics. Manual upload only.</li>
@@ -148,7 +167,8 @@ sequenceDiagram
 </ul>
 
 <div class="nav-down">
-  <h3>Where to go next</h3>
+  <h3 id="where-to-go-next">Where to go next</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l2-flow&title=%5Bcomment%5D+%C2%A7Where+to+go+next&body=Section%3A+%C2%A7Where+to+go+next%0AAnchor%3A+%23where-to-go-next%0APage%3A+arch-l2-flow%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l2-flow._" target="_blank" rel="noopener">Comment on §Where to go next</a></div>
   <ul style="color:white;">
     <li><strong>Plain-English (L3 Reader):</strong> Click any subgraph in the diagram to read what that module does without jargon — <a href="index.html">start at the L3 reader landing</a></li>
     <li><strong>Curated technical (L1 Atlas):</strong> The full architecture overview with reviewer verdicts, comment buttons, and module detail — <a href="architecture-overview-2026-04-28.html">go to L1 Atlas</a></li>
