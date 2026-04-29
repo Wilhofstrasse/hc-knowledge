@@ -241,7 +241,7 @@
     display: flex; justify-content: flex-end; margin-top: 0.4rem;
   }
   .inbox-banner {
-    background: linear-gradient(90deg, var(--hc-coral) 0%, var(--hc-coral-safe) 100%);
+    background: linear-gradient 0%, var(--hc-coral-safe) 100%);
     color: var(--hc-white);
     padding: 0.85rem 1.2rem;
     border-radius: 4px;
@@ -443,17 +443,17 @@
       <tr>
         <td><strong>Stamp template onto blank slide</strong></td>
         <td>Drop the template's geometry on a blank slide so an empty deck can become a thesis/matrix/etc. without manual box-drawing.</td>
-        <td class="todo">Phase B (~3-4 weeks)</td>
+        <td class="todo">Phase B</td>
       </tr>
       <tr>
         <td><strong>Detect existing shapes + role mapping</strong></td>
         <td>Look at an in-progress slide, classify each shape (user / AI / empty), propose what role it plays in the chosen template. Binding plan preview before any fill fires.</td>
-        <td class="todo">Phase C (~2 weeks)</td>
+        <td class="todo">Phase C</td>
       </tr>
       <tr>
         <td><strong>Jumpstart from input materials</strong></td>
         <td>Feed in a brief / interview / source deck → AI proposes a storyline, matches each section to a library template, stamps and fills the deck end-to-end.</td>
-        <td class="todo">Phase D (~6-8 weeks, gated on H&amp;C backend + legal §6)</td>
+        <td class="todo">Phase D</td>
       </tr>
       <tr>
         <td><strong>Production backend (H&amp;C-owned Worker)</strong></td>
@@ -579,8 +579,8 @@ Same surface. Centralised key. Per-user auth. Audit log + cost ceilings.</div>
   <div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Cbig-picture&title=%5Bcomment%5D+%C2%A76.+Phase+plan+%E2%80%94+A.0+%E2%86%92+A+%E2%86%92+B+%E2%86%92+C+%E2%86%92+D&body=Section%3A+%C2%A76.+Phase+plan+%E2%80%94+A.0+%E2%86%92+A+%E2%86%92+B+%E2%86%92+C+%E2%86%92+D%0AAnchor%3A+%23phases%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+the+big-picture+page._" target="_blank" rel="noopener">Comment on §6. Phase plan — A.0 → A → B → C → D</a></div>
 
   <div class="stack">
-    <div class="stack-row"><div class="id">A.0</div><div class="body"><strong>Listener-reliability sub-spike</strong> — 2 days, BEFORE Phase A code<div class="meta">5 mutation paths tested on Mac PowerPoint. PASS = listener-based authorship safe; FAIL = audit-driven only. <em>Awaits your manual run.</em></div></div></div>
-    <div class="stack-row"><div class="id">A</div><div class="body"><strong>Trustworthy Edit-in-Place</strong> — ~7 days, internal-Filipe-only<div class="meta">F2 with binding-plan preview + per-shape undo. Invariants live in code today. UI binding-plan preview is the next chunk of work.</div></div></div>
+    <div class="stack-row"><div class="id">A.0</div><div class="body"><strong>Listener-reliability sub-spike</strong> — BEFORE Phase A code<div class="meta">5 mutation paths tested on Mac PowerPoint. PASS = listener-based authorship safe; FAIL = audit-driven only. <em>Awaits your manual run.</em></div></div></div>
+    <div class="stack-row"><div class="id">A</div><div class="body"><strong>Trustworthy Edit-in-Place</strong> — internal-Filipe-only<div class="meta">F2 with binding-plan preview + per-shape undo. Invariants live in code today. UI binding-plan preview is the next chunk of work.</div></div></div>
     <div class="stack-row"><div class="id">B</div><div class="body"><strong>Stamp + Fill Templates</strong> — ~3-4 weeks, consultant-deployable<div class="meta">F1 ships. Library browse UX, version pinning, paragraphs[] schema, retire dummy-deck. First time the tool is shippable to non-Filipe consultants.</div></div></div>
     <div class="stack-row"><div class="id">C</div><div class="body"><strong>Detect + Fill</strong> — ~2 weeks, after A + B<div class="meta">F3 ships. Role-proposal heuristic + benchmark gate (≥80% accuracy on 30+ slides) before consultants get it.</div></div></div>
     <div class="stack-row"><div class="id">D</div><div class="body"><strong>Jumpstart + restructure</strong> — ~6-8 weeks, gated on production backend<div class="meta">F4 + F5a + F5b + P5 restructure. Cannot ship without 6-row sign-off + Azure AD + legal §6.</div></div></div>
