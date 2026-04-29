@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comment Board — All Atlas comments by state</title>
+<style>
+  body { font-family: 'Calibri', 'Calibri Light', sans-serif; font-weight: 300; color: #000; background: #FFFFFF; margin: 0; padding: 32px 24px; max-width: 1100px; margin: 0 auto; line-height: 1.55; font-size: 15px; }
+  h1 { color: #14324E; font-size: 28px; font-weight: 700; margin: 0 0 8px 0; }
+  .subtitle { color: #5B5D64; font-size: 16px; font-weight: 300; margin-bottom: 24px; }
+  .level-bar { display: flex; gap: 8px; padding: 12px 16px; background: #F0F0F0; border-radius: 4px; margin-bottom: 24px; font-size: 13px; flex-wrap: wrap; }
+  .level-bar a { color: #14324E; text-decoration: none; padding: 4px 10px; border-radius: 3px; }
+  .level-bar a.active { background: #E94D3A; color: white; font-weight: 600; }
+  .level-bar a:hover:not(.active) { background: #C2C2C2; }
+
+  .summary-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 16px 0 32px 0; }
+  @media (max-width: 700px) { .summary-cards { grid-template-columns: repeat(2, 1fr); } }
+  .summary-card { padding: 16px; border-radius: 4px; text-align: center; cursor: pointer; transition: transform 0.1s; }
+  .summary-card:hover { transform: translateY(-2px); }
+  .summary-card.active { box-shadow: 0 0 0 3px rgba(20,50,78,0.4); }
+  .summary-card .count { font-size: 32px; font-weight: 700; line-height: 1; }
+  .summary-card .label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+  .summary-card.state-red    { background: #FFE5E0; color: #B8321F; }
+  .summary-card.state-orange { background: #FFF4E0; color: #B85F00; }
+  .summary-card.state-green  { background: #E8F5E9; color: #1B5E20; }
+  .summary-card.state-grey   { background: #F0F0F0; color: #5B5D64; }
+
+  .filters { background: #F0F0F0; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .filter-chip { padding: 4px 12px; border-radius: 16px; font-size: 13px; font-weight: 600; cursor: pointer; user-select: none; border: 2px solid transparent; }
+  .filter-chip.active { border-color: #14324E; }
+  .filter-chip[data-state="all"]    { background: #14324E; color: white; }
+  .filter-chip[data-state="red"]    { background: #FFE5E0; color: #B8321F; }
+  .filter-chip[data-state="orange"] { background: #FFF4E0; color: #B85F00; }
+  .filter-chip[data-state="green"]  { background: #E8F5E9; color: #1B5E20; }
+
+  .anchor-list { display: flex; flex-direction: column; gap: 8px; }
+  .anchor-row { background: #FFFFFF; border: 1px solid #C2C2C2; border-radius: 4px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+  .anchor-row:hover { border-color: #14324E; background: #F8F9FA; }
+  .anchor-state-badge { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .anchor-state-badge.state-red    { background: #E94D3A; }
+  .anchor-state-badge.state-orange { background: #F57C00; }
+  .anchor-state-badge.state-green  { background: #2E7D32; }
+  .anchor-state-badge.state-grey   { background: #A4A3A7; }
+  .anchor-info { flex: 1; min-width: 0; }
+  .anchor-title { font-weight: 600; color: #14324E; font-size: 15px; }
+  .anchor-meta { font-size: 12px; color: #5B5D64; margin-top: 2px; }
+  .anchor-link { color: #E94D3A; font-weight: 600; text-decoration: none; font-size: 13px; white-space: nowrap; }
+
+  .empty { text-align: center; color: #5B5D64; padding: 40px; font-style: italic; }
+  .footer-note { color: #5B5D64; font-size: 12px; margin-top: 32px; padding-top: 16px; border-top: 1px solid #C2C2C2; }
+</style>
+</head>
+<body>
+
+<div class="level-bar">
+  <span style="color:#5B5D64;">Levels:</span>
+  <a href="architecture-reader.html">L3 Reader (plain English)</a>
+  <a href="flow.html">L2 Map (visual flow)</a>
+  <a href="cockpit.html">Cockpit (progress)</a>
+  <a href="comment-board.html" class="active">💬 Comment Board</a>
+  <a href="architecture-overview-2026-04-28.html">L1 Atlas (curated)</a>
+  <a href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/tree/main/architecture-notes" target="_blank">L0 Spec (raw)</a>
+</div>
+
+<h1>Comment Board</h1>
+<p class="subtitle">All Atlas comments grouped by state. Click any row to jump to the issue. Auto-refreshes every 30s.</p>
+
+<div class="summary-cards" id="summary-cards">
+  <div class="summary-card state-red" data-filter="red">
+    <div class="count" id="count-red">—</div>
+    <div class="label">🔴 Open (red)</div>
+  </div>
+  <div class="summary-card state-orange" data-filter="orange">
+    <div class="count" id="count-orange">—</div>
+    <div class="label">🟠 Awaiting your sign-off</div>
+  </div>
+  <div class="summary-card state-green" data-filter="green">
+    <div class="count" id="count-green">—</div>
+    <div class="label">🟢 Signed off</div>
+  </div>
+  <div class="summary-card state-grey" data-filter="all">
+    <div class="count" id="count-total">—</div>
+    <div class="label">All anchors</div>
+  </div>
+</div>
+
+<div class="filters">
+  <span style="color:#5B5D64; font-size:13px;">Filter:</span>
+  <span class="filter-chip active" data-state="all">all</span>
+  <span class="filter-chip" data-state="red">🔴 red</span>
+  <span class="filter-chip" data-state="orange">🟠 orange</span>
+  <span class="filter-chip" data-state="green">🟢 green</span>
+</div>
+
+<div class="anchor-list" id="anchor-list">
+  <div class="empty">Loading…</div>
+</div>
+
+<p class="footer-note" id="footer-note">Source: <code>comment-status.json</code> — auto-published by <code>atlas-tick.py</code> every 60s.</p>
+
+<script>
+(function() {
+  var STATUS_URL = "https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/comment-status.json";
+  var GH_REPO = "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2";
+  var currentFilter = "all";
+  var data = null;
+
+  function render() {
+    if (!data) return;
+    var anchors = data.anchors || {};
+    var rows = [];
+    var counts = { red: 0, orange: 0, green: 0, total: 0 };
+    Object.keys(anchors).forEach(function(key) {
+      var entry = anchors[key];
+      counts.total++;
+      counts[entry.state] = (counts[entry.state] || 0) + 1;
+    });
+    document.getElementById("count-red").textContent = counts.red || 0;
+    document.getElementById("count-orange").textContent = counts.orange || 0;
+    document.getElementById("count-green").textContent = counts.green || 0;
+    document.getElementById("count-total").textContent = counts.total || 0;
+
+    // Build rows, sorted by state priority (red first)
+    var stateOrder = { red: 0, orange: 1, green: 2 };
+    var entries = Object.keys(anchors).map(function(key) {
+      var [page, anchor] = key.split("#");
+      return {
+        key: key, page: page, anchor: anchor,
+        entry: anchors[key],
+      };
+    }).sort(function(a, b) {
+      var sa = stateOrder[a.entry.state] !== undefined ? stateOrder[a.entry.state] : 99;
+      var sb = stateOrder[b.entry.state] !== undefined ? stateOrder[b.entry.state] : 99;
+      if (sa !== sb) return sa - sb;
+      return (b.entry.updated_at || "").localeCompare(a.entry.updated_at || "");
+    });
+
+    var visible = currentFilter === "all" ? entries : entries.filter(function(e) { return e.entry.state === currentFilter; });
+
+    var listEl = document.getElementById("anchor-list");
+    if (visible.length === 0) {
+      listEl.innerHTML = '<div class="empty">No anchors in this state.</div>';
+      return;
+    }
+    listEl.innerHTML = visible.map(function(e) {
+      var stateLabel = {
+        red: "OPEN — owes a response",
+        orange: "Closed — awaiting your sign-off",
+        green: "Signed off",
+      }[e.entry.state] || e.entry.state;
+      var pageLabel = e.page.replace(/^arch-l3-/, "L3 ").replace(/^arch-/, "");
+      var displayPage = pageLabel.replace(/-/g, " ");
+      var anchorPretty = e.anchor.replace(/-/g, " ").replace(/^./, function(c) { return c.toUpperCase(); });
+      return (
+        '<div class="anchor-row" onclick="window.open(\'' + e.entry.issue_url + '\', \'_blank\')">' +
+        '<div class="anchor-state-badge state-' + e.entry.state + '"></div>' +
+        '<div class="anchor-info">' +
+          '<div class="anchor-title">' + anchorPretty + '</div>' +
+          '<div class="anchor-meta">' + stateLabel + ' · #' + e.entry.issue_number + ' · page: ' + displayPage + ' · ' + e.entry.n_issues_for_anchor + ' issue(s)</div>' +
+        '</div>' +
+        '<a class="anchor-link" href="' + e.entry.issue_url + '" target="_blank" onclick="event.stopPropagation();">Open →</a>' +
+        '</div>'
+      );
+    }).join("");
+
+    document.getElementById("footer-note").innerHTML = (
+      "Generated: " + (data.generated_at || "?") +
+      " · " + counts.total + " anchors with activity · " +
+      'Source: <a href="' + STATUS_URL + '" target="_blank"><code>comment-status.json</code></a>'
+    );
+  }
+
+  function fetchStatus() {
+    fetch(STATUS_URL + "?_=" + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(function(d) { data = d; render(); })
+      .catch(function(err) {
+        document.getElementById("anchor-list").innerHTML = '<div class="empty">Failed to load comment-status.json. Check that atlas-tick is running. (' + err + ')</div>';
+      });
+  }
+
+  // Filter chip clicks
+  document.querySelectorAll(".filter-chip").forEach(function(chip) {
+    chip.addEventListener("click", function() {
+      currentFilter = this.getAttribute("data-state");
+      document.querySelectorAll(".filter-chip").forEach(function(c) { c.classList.remove("active"); });
+      this.classList.add("active");
+      render();
+    });
+  });
+
+  // Summary card clicks (same as filter)
+  document.querySelectorAll(".summary-card").forEach(function(card) {
+    card.addEventListener("click", function() {
+      currentFilter = this.getAttribute("data-filter");
+      document.querySelectorAll(".filter-chip").forEach(function(c) {
+        c.classList.toggle("active", c.getAttribute("data-state") === currentFilter);
+      });
+      document.querySelectorAll(".summary-card").forEach(function(c) { c.classList.remove("active"); });
+      this.classList.add("active");
+      render();
+    });
+  });
+
+  fetchStatus();
+  setInterval(fetchStatus, 30000);
+})();
+</script>
+
+</body>
+</html>
