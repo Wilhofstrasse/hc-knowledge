@@ -29,8 +29,29 @@
   .nav-down a { color: #fff; text-decoration: underline; }
   .footer-note { color: #5B5D64; font-size: 13px; margin-top: 48px; padding-top: 16px; border-top: 1px solid #C2C2C2; }
   ul { padding-left: 24px; }
-  li { margin-bottom: 6px; }/* I addressed, awaiting your sign-off */
-  .comment-link.status-grey-signed { background: #5B5D64; }  /* signed off, loop closed */
+  li { margin-bottom: 6px; }/* I addressed, awaiting your sign-off */  /* signed off, loop closed */   /* OPEN — anyone owes a response (you OR me) */   /* I closed it, awaiting your sign-off */   /* mutually signed off — loop fully closed */
+  /* default grey #A4A3A7 = never touched */
+
+
+  .section-comment-row { margin: 6px 0 18px 0; }
+  .comment-link {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #A4A3A7;          /* GREY — default (no comments yet) */
+    color: white !important;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: background 0.2s;
+  }
+  .comment-link:hover { filter: brightness(0.9); }
+  .comment-link::before { content: "💬 "; }
+  .comment-link.status-red    { background: #E94D3A; }   /* OPEN — anyone owes a response (you OR me) */
+  .comment-link.status-orange { background: #F57C00; }   /* I closed it, awaiting your sign-off */
+  .comment-link.status-green  { background: #2E7D32; }   /* mutually signed off — loop fully closed */
+  /* default grey #A4A3A7 = never touched */
 
 </style>
 </head>
@@ -146,6 +167,41 @@
 
 
 
+
+
+
+
+
+<script>
+(function() {
+  // Fetch comment-status.json from the public knowledge repo, color each button.
+  // Refreshes every 30s while the page is open.
+  var STATUS_URL = "https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/comment-status.json";
+  function applyStatus(data) {
+    if (!data || !data.anchors) return;
+    var links = document.querySelectorAll(".comment-link");
+    links.forEach(function(a) {
+      var page = a.getAttribute("data-page");
+      var anchor = a.getAttribute("data-anchor");
+      if (!page || !anchor) return;
+      // Reset
+      a.classList.remove("status-red", "status-orange", "status-green");
+      var entry = data.anchors[page + "#" + anchor];
+      if (!entry) return;
+      a.classList.add("status-" + entry.state);
+      a.title = "Issue #" + entry.issue_number + " (" + entry.state + ")";
+    });
+  }
+  function fetchStatus() {
+    fetch(STATUS_URL + "?_=" + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(applyStatus)
+      .catch(function() { /* silent — default grey stays */ });
+  }
+  fetchStatus();
+  setInterval(fetchStatus, 30000);
+})();
+</script>
 
 </body>
 </html>
