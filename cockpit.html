@@ -69,11 +69,17 @@
     transition: background 0.2s;
   }
   .comment-link:hover { filter: brightness(0.9); }
-  .comment-link::before { content: "💬 "; }
+  .comment-link.tick-link { background: #2E7D32; padding: 2px 8px; }
+  .comment-link.tick-link::before { content: ""; }  /* override 💬 prefix for tick */
+  .comment-link.tick-link:hover { background: #1B5E20; }
+  .section-comment-row.paragraph { display: inline-flex; gap: 4px; margin: 2px 0 6px 6px; vertical-align: middle; }
+  .section-comment-row.paragraph .comment-link { padding: 1px 6px; font-size: 11px; line-height: 1.2; }
   .comment-link.status-red    { background: #E94D3A; }   /* OPEN — anyone owes a response (you OR me) */
+  .comment-link.status-working { background: #1976D2; animation: pulse 1.5s ease-in-out infinite; } /* AI mid-flight on this issue */
   .comment-link.status-orange { background: #F57C00; }   /* I closed it, awaiting your sign-off */
   .comment-link.status-green  { background: #2E7D32; }   /* mutually signed off — loop fully closed */
   /* default grey #A4A3A7 = never touched */
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.6;} }
 
 </style>
 </head>
@@ -209,6 +215,9 @@
 
 
 
+
+
+
 <script>
 (function() {
   // Fetch comment-status.json from the public knowledge repo, color each button.
@@ -222,7 +231,7 @@
       var anchor = a.getAttribute("data-anchor");
       if (!page || !anchor) return;
       // Reset
-      a.classList.remove("status-red", "status-orange", "status-green");
+      a.classList.remove("status-red", "status-working", "status-orange", "status-green");
       var entry = data.anchors[page + "#" + anchor];
       if (!entry) return;
       a.classList.add("status-" + entry.state);
