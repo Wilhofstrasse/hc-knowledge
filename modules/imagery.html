@@ -31,20 +31,25 @@
   ul { padding-left: 24px; }
   li { margin-bottom: 6px; }
 
+
   .section-comment-row { margin: 6px 0 18px 0; }
   .comment-link {
     display: inline-block;
     padding: 3px 10px;
-    background: #E94D3A;
+    background: #A4A3A7;          /* GREY — default (no comments yet) */
     color: white !important;
     border-radius: 3px;
     font-size: 12px;
     font-weight: 600;
     text-decoration: none;
     letter-spacing: 0.02em;
+    transition: background 0.2s;
   }
-  .comment-link:hover { background: #B8321F; }
+  .comment-link:hover { filter: brightness(0.9); }
   .comment-link::before { content: "💬 "; }
+  .comment-link.status-red    { background: #E94D3A; }   /* you commented, I haven't acted */
+  .comment-link.status-green  { background: #2E7D32; }   /* I addressed, awaiting your sign-off */
+  .comment-link.status-grey-signed { background: #5B5D64; }  /* signed off, loop closed */
 
 </style>
 </head>
@@ -68,7 +73,7 @@
 </div>
 
 <h2 id="what-it-does">What it does</h2>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7What+it+does&body=Section%3A+%C2%A7What+it+does%0AAnchor%3A+%23what-it-does%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §What it does</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-imagery" data-anchor="what-it-does" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7What+it+does&body=Section%3A+%C2%A7What+it+does%0AAnchor%3A+%23what-it-does%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §What it does</a></div>
 <ul>
   <li><strong>Picks an image when the consultant asks for one</strong> — cover photo, competitor logo, country flag, sector icon — using a 6-tier decision tree (user upload first, AI-gen last).</li>
   <li><strong>Tracks the license for every image</strong> — a separate ledger records source URL, license type, attribution, expiry, and whether the consultant can legally use it for this client engagement.</li>
@@ -77,7 +82,7 @@
 </ul>
 
 <h2 id="how-the-picker-works-6-tier-decision-tree">How the picker works (6-tier decision tree)</h2>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7How+the+picker+works+%286-tier+decision+tree%29&body=Section%3A+%C2%A7How+the+picker+works+%286-tier+decision+tree%29%0AAnchor%3A+%23how-the-picker-works-6-tier-decision-tree%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §How the picker works (6-tier decision tree)</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-imagery" data-anchor="how-the-picker-works-6-tier-decision-tree" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7How+the+picker+works+%286-tier+decision+tree%29&body=Section%3A+%C2%A7How+the+picker+works+%286-tier+decision+tree%29%0AAnchor%3A+%23how-the-picker-works-6-tier-decision-tree%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §How the picker works (6-tier decision tree)</a></div>
 <table>
   <thead>
     <tr><th>Tier</th><th>Source</th><th>Use case</th></tr>
@@ -93,25 +98,25 @@
 </table>
 
 <h2 id="the-4-sub-modules-locked-spec">The 4 sub-modules (locked spec)</h2>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7The+4+sub-modules+%28locked+spec%29&body=Section%3A+%C2%A7The+4+sub-modules+%28locked+spec%29%0AAnchor%3A+%23the-4-sub-modules-locked-spec%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §The 4 sub-modules (locked spec)</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-imagery" data-anchor="the-4-sub-modules-locked-spec" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7The+4+sub-modules+%28locked+spec%29&body=Section%3A+%C2%A7The+4+sub-modules+%28locked+spec%29%0AAnchor%3A+%23the-4-sub-modules-locked-spec%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §The 4 sub-modules (locked spec)</a></div>
 <h3 id="dr-4a-cover-photo-9-10d-build">DR-4a Cover Photo (~9-10d build)</h3>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7DR-4a+Cover+Photo+%28~9-10d+build%29&body=Section%3A+%C2%A7DR-4a+Cover+Photo+%28~9-10d+build%29%0AAnchor%3A+%23dr-4a-cover-photo-9-10d-build%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §DR-4a Cover Photo (~9-10d build)</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-imagery" data-anchor="dr-4a-cover-photo-9-10d-build" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7DR-4a+Cover+Photo+%28~9-10d+build%29&body=Section%3A+%C2%A7DR-4a+Cover+Photo+%28~9-10d+build%29%0AAnchor%3A+%23dr-4a-cover-photo-9-10d-build%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §DR-4a Cover Photo (~9-10d build)</a></div>
 <p>The 6-tier picker for the title-slide cover image. Most engineering effort lives here. Per-tier license persistence; click-to-trace UX in the trust pane.</p>
 
 <h3 id="dr-4b-logo-swap-3d-build">DR-4b Logo Swap (~3d build)</h3>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7DR-4b+Logo+Swap+%28~3d+build%29&body=Section%3A+%C2%A7DR-4b+Logo+Swap+%28~3d+build%29%0AAnchor%3A+%23dr-4b-logo-swap-3d-build%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §DR-4b Logo Swap (~3d build)</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-imagery" data-anchor="dr-4b-logo-swap-3d-build" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7DR-4b+Logo+Swap+%28~3d+build%29&body=Section%3A+%C2%A7DR-4b+Logo+Swap+%28~3d+build%29%0AAnchor%3A+%23dr-4b-logo-swap-3d-build%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §DR-4b Logo Swap (~3d build)</a></div>
 <p>Replace consultant-uploaded firm-logo placeholders with real logos via Logo.dev (Clearbit successor) or licensed alternatives. Validates rights-of-use field; fail-closed if no license.</p>
 
 <h3 id="dr-4c-peer-map-native-rebuild-5d-build">DR-4c Peer-Map Native Rebuild (~5d build)</h3>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7DR-4c+Peer-Map+Native+Rebuild+%28~5d+build%29&body=Section%3A+%C2%A7DR-4c+Peer-Map+Native+Rebuild+%28~5d+build%29%0AAnchor%3A+%23dr-4c-peer-map-native-rebuild-5d-build%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §DR-4c Peer-Map Native Rebuild (~5d build)</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-imagery" data-anchor="dr-4c-peer-map-native-rebuild-5d-build" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7DR-4c+Peer-Map+Native+Rebuild+%28~5d+build%29&body=Section%3A+%C2%A7DR-4c+Peer-Map+Native+Rebuild+%28~5d+build%29%0AAnchor%3A+%23dr-4c-peer-map-native-rebuild-5d-build%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §DR-4c Peer-Map Native Rebuild (~5d build)</a></div>
 <p>For peer-analysis slides (e.g., "X vs competitors A/B/C"). Generates a native PowerPoint shape map with firm icons placed by industry segment. Not a pasted image.</p>
 
 <h3 id="dr-4d-pestel-center-logo-2d-build">DR-4d PESTEL Center Logo (~2d build)</h3>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7DR-4d+PESTEL+Center+Logo+%28~2d+build%29&body=Section%3A+%C2%A7DR-4d+PESTEL+Center+Logo+%28~2d+build%29%0AAnchor%3A+%23dr-4d-pestel-center-logo-2d-build%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §DR-4d PESTEL Center Logo (~2d build)</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-imagery" data-anchor="dr-4d-pestel-center-logo-2d-build" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7DR-4d+PESTEL+Center+Logo+%28~2d+build%29&body=Section%3A+%C2%A7DR-4d+PESTEL+Center+Logo+%28~2d+build%29%0AAnchor%3A+%23dr-4d-pestel-center-logo-2d-build%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §DR-4d PESTEL Center Logo (~2d build)</a></div>
 <p>For PESTEL slides (Political/Economic/Social/Technological/Environmental/Legal). The center logo + surrounding country flags + sector icons. Reuses Tier 3 H&C library + Tier 4 stock.</p>
 
 <h2 id="image-classification-cascade-4-tier">Image classification cascade (4-tier)</h2>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7Image+classification+cascade+%284-tier%29&body=Section%3A+%C2%A7Image+classification+cascade+%284-tier%29%0AAnchor%3A+%23image-classification-cascade-4-tier%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §Image classification cascade (4-tier)</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-imagery" data-anchor="image-classification-cascade-4-tier" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7Image+classification+cascade+%284-tier%29&body=Section%3A+%C2%A7Image+classification+cascade+%284-tier%29%0AAnchor%3A+%23image-classification-cascade-4-tier%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §Image classification cascade (4-tier)</a></div>
 <p>Behind the scenes, every image gets classified to decide what to do with it (replace? swap? keep?). The cascade goes cheapest-first:</p>
 
 <ul>
@@ -122,19 +127,19 @@
 </ul>
 
 <h2 id="whats-deliberately-out-of-scope">What's deliberately out of scope</h2>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7What%27s+deliberately+out+of+scope&body=Section%3A+%C2%A7What%27s+deliberately+out+of+scope%0AAnchor%3A+%23whats-deliberately-out-of-scope%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §What's deliberately out of scope</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-imagery" data-anchor="whats-deliberately-out-of-scope" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7What%27s+deliberately+out+of+scope&body=Section%3A+%C2%A7What%27s+deliberately+out+of+scope%0AAnchor%3A+%23whats-deliberately-out-of-scope%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §What's deliberately out of scope</a></div>
 <div class="open-decision">
   <strong>Employee photos / people headshots.</strong> Privacy + GDPR + ethics concern. The system never auto-fetches photos of real people. Consultants can manually upload (e.g., from a client-provided org chart), but the AI will not propose them. Confirm with Filipe before relaxing.
 </div>
 
 <h2 id="current-status">Current status</h2>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7Current+status&body=Section%3A+%C2%A7Current+status%0AAnchor%3A+%23current-status%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §Current status</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-imagery" data-anchor="current-status" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7Current+status&body=Section%3A+%C2%A7Current+status%0AAnchor%3A+%23current-status%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §Current status</a></div>
 <p>Architecture locked at v2.1 (28.04.2026). 4 rounds of /iterate review with Codex (gpt-5.5 xhigh) + 6 specialist agents reached GREEN consensus before lock. Stage 1+2+3 meta-review (28.04.2026 evening) raised no module-specific issues — the implementation-approach concerns are about backend phase scope, not Imagery.</p>
 
 <p><strong>One Stage 2 amendment proposed (A12):</strong> add Tier 0 — "preserve existing source-deck cover if license/attestation is already valid" — for the case where the consultant is editing a deck that already has a vetted cover photo. Currently the picker treats the existing cover as Tier 1 (user-uploaded), which works but isn't explicit. Pending Filipe approval.</p>
 
 <h2 id="open-decisions-for-filipe">Open decisions for Filipe</h2>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7Open+decisions+for+Filipe&body=Section%3A+%C2%A7Open+decisions+for+Filipe%0AAnchor%3A+%23open-decisions-for-filipe%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §Open decisions for Filipe</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-imagery" data-anchor="open-decisions-for-filipe" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7Open+decisions+for+Filipe&body=Section%3A+%C2%A7Open+decisions+for+Filipe%0AAnchor%3A+%23open-decisions-for-filipe%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §Open decisions for Filipe</a></div>
 <div class="open-decision">
   <strong>Q-CPS-01 to Q-CPS-08.</strong> 8 open default-locked questions: H&C library seed budget, Shutterstock vs Getty primary, AI-gen tenant opt-in policy, license expiry refresh cadence, peer-map data source, PESTEL flag library, asset_swap audit retention, employee-photo policy.<br>
   <strong>Recommendation:</strong> auto-adopt Round-3 defaults at phase kickoff unless overridden within 48h. Same rule as Q-V20.
@@ -146,7 +151,7 @@
 
 <div class="nav-down">
   <h3 id="where-to-go-next">Where to go next</h3>
-<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7Where+to+go+next&body=Section%3A+%C2%A7Where+to+go+next%0AAnchor%3A+%23where-to-go-next%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §Where to go next</a></div>
+<div class="section-comment-row"><a class="comment-link" data-page="arch-l3-imagery" data-anchor="where-to-go-next" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-imagery&title=%5Bcomment%5D+%C2%A7Where+to+go+next&body=Section%3A+%C2%A7Where+to+go+next%0AAnchor%3A+%23where-to-go-next%0APage%3A+arch-l3-imagery%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-imagery._" target="_blank" rel="noopener">Comment on §Where to go next</a></div>
 <ul style="color:white;">
     <li><strong>See it visually:</strong> <a href="../flow.html">L2 Map</a> — Imagery in the orange subgraph</li>
     <li><strong>Curated technical:</strong> <a href="../architecture-overview-2026-04-28.html#cover-photo">L1 Atlas — Cover Photo section</a></li>
@@ -156,6 +161,38 @@
 </div>
 
 <p class="footer-note">Last updated: 28.04.2026 · Reviewers: 7 (4 rounds /iterate Codex gpt-5.5 xhigh + 6 specialist agents). Architecture LOCKED at v2.1.</p>
+
+
+<script>
+(function() {
+  // Fetch comment-status.json from the public knowledge repo, color each button.
+  // Refreshes every 30s while the page is open.
+  var STATUS_URL = "https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/comment-status.json";
+  function applyStatus(data) {
+    if (!data || !data.anchors) return;
+    var links = document.querySelectorAll(".comment-link");
+    links.forEach(function(a) {
+      var page = a.getAttribute("data-page");
+      var anchor = a.getAttribute("data-anchor");
+      if (!page || !anchor) return;
+      // Reset
+      a.classList.remove("status-red", "status-green", "status-grey-signed");
+      var entry = data.anchors[page + "#" + anchor];
+      if (!entry) return;
+      a.classList.add("status-" + entry.state);
+      a.title = "Issue #" + entry.issue_number + " (" + entry.state + ")";
+    });
+  }
+  function fetchStatus() {
+    fetch(STATUS_URL + "?_=" + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(applyStatus)
+      .catch(function() { /* silent — default grey stays */ });
+  }
+  fetchStatus();
+  setInterval(fetchStatus, 30000);
+})();
+</script>
 
 </body>
 </html>
