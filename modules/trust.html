@@ -106,7 +106,7 @@
     <tr>
       <td>Stage 3 — Implementation approach</td>
       <td class="verdict-red">RED → YELLOW with rescope</td>
-      <td>12-week MVP dishonest (13-20w honest); single-dev breaks at week 5-8</td>
+      <td>MVP dishonest ( honest); single-dev breaks at week 5-8</td>
     </tr>
   </tbody>
 </table>
@@ -116,12 +116,12 @@
 <h2 id="open-decisions-for-filipe">Open decisions for Filipe</h2>
 <div class="section-comment-row"><a class="comment-link" data-page="arch-l3-trust" data-anchor="open-decisions-for-filipe" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-trust&title=%5Bcomment%5D+%C2%A7Open+decisions+for+Filipe&body=Section%3A+%C2%A7Open+decisions+for+Filipe%0AAnchor%3A+%23open-decisions-for-filipe%0APage%3A+arch-l3-trust%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-trust._" target="_blank" rel="noopener">Comment on §Open decisions for Filipe</a></div>
 <div class="open-decision">
-  <strong>Q1 — Filipe #3 honest scope.</strong> All 5 Stage 3 reviewers say the multi-vendor adapter set + semantic entailment costs ~14d, not the 7d the spec optimistically claimed. Pick: <em>(A)</em> Anthropic-only adapter in MVP, multi-vendor in BE-A1 — preserves 12-week MVP target but "model-agnostic mandatory" is partially aspirational at MVP cutover. <em>(B)</em> Full multi-vendor + entailment in MVP — honest, but MVP slips 12w → ~13-14w.<br>
+  <strong>Q1 — Filipe #3 honest scope.</strong> All 5 Stage 3 reviewers say the multi-vendor adapter set + semantic entailment costs, not the the spec optimistically claimed. Pick: <em>(A)</em> Anthropic-only adapter in MVP, multi-vendor in BE-A1 — preserves MVP target but "model-agnostic mandatory" is partially aspirational at MVP cutover. <em>(B)</em> Full multi-vendor + entailment in MVP — honest, but MVP slips slips.<br>
   <strong>Recommendation: B.</strong> Multi-billion target needs the architecture to actually be model-agnostic, not aspirationally so.
 </div>
 
 <div class="open-decision">
-  <strong>Q2 — Filipe #4 storage.</strong> Revision logbook (when AI rewrites text and user accepts/overrides). Pick: <em>(A)</em> in-deck only — simpler, ~6d savings, but regulated tenants can't use it as legal-defense chain. <em>(B)</em> Both in-deck + WORM mirror — regulated-grade tamper-evident audit trail, ~10-11d.<br>
+  <strong>Q2 — Filipe #4 storage.</strong> Revision logbook (when AI rewrites text and user accepts/overrides). Pick: <em>(A)</em> in-deck only — simpler, savings, but regulated tenants can't use it as legal-defense chain. <em>(B)</em> Both in-deck + WORM mirror — regulated-grade tamper-evident audit trail.<br>
   <strong>Recommendation: B.</strong> SOX/MiFID/Solvency II investigations require tamper-proof "who said what, when."
 </div>
 
