@@ -24,6 +24,8 @@
   .summary-card.state-orange { background: #FFF4E0; color: #B85F00; }
   .summary-card.state-green  { background: #E8F5E9; color: #1B5E20; }
   .summary-card.state-grey   { background: #F0F0F0; color: #5B5D64; }
+  .summary-card.state-working { background: #E3F2FD; color: #1976D2; animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.6;} }
 
   .filters { background: #F0F0F0; padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
   .filter-chip { padding: 4px 12px; border-radius: 16px; font-size: 13px; font-weight: 600; cursor: pointer; user-select: none; border: 2px solid transparent; }
@@ -65,11 +67,17 @@
     transition: background 0.2s;
   }
   .comment-link:hover { filter: brightness(0.9); }
-  .comment-link::before { content: "💬 "; }
+  .comment-link.tick-link { background: #2E7D32; padding: 2px 8px; }
+  .comment-link.tick-link::before { content: ""; }  /* override 💬 prefix for tick */
+  .comment-link.tick-link:hover { background: #1B5E20; }
+  .section-comment-row.paragraph { display: inline-flex; gap: 4px; margin: 2px 0 6px 6px; vertical-align: middle; }
+  .section-comment-row.paragraph .comment-link { padding: 1px 6px; font-size: 11px; line-height: 1.2; }
   .comment-link.status-red    { background: #E94D3A; }   /* OPEN — anyone owes a response (you OR me) */
+  .comment-link.status-working { background: #1976D2; animation: pulse 1.5s ease-in-out infinite; } /* AI mid-flight on this issue */
   .comment-link.status-orange { background: #F57C00; }   /* I closed it, awaiting your sign-off */
   .comment-link.status-green  { background: #2E7D32; }   /* mutually signed off — loop fully closed */
   /* default grey #A4A3A7 = never touched */
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.6;} }
 
 </style>
 </head>
@@ -110,6 +118,7 @@
 <div class="filters">
   <span style="color:#5B5D64; font-size:13px;">Filter:</span>
   <span class="filter-chip active" data-state="all">all</span>
+  <span class="filter-chip" data-state="working" style="background:#E3F2FD;color:#1976D2;">🤖 AI working</span>
   <span class="filter-chip" data-state="red">🔴 red</span>
   <span class="filter-chip" data-state="orange">🟠 orange</span>
   <span class="filter-chip" data-state="green">🟢 green</span>
@@ -145,7 +154,7 @@
     document.getElementById("count-total").textContent = counts.total || 0;
 
     // Build rows, sorted by state priority (red first)
-    var stateOrder = { red: 0, orange: 1, green: 2 };
+    var stateOrder = { working: -1, red: 0, orange: 1, green: 2 };
     var entries = Object.keys(anchors).map(function(key) {
       var [page, anchor] = key.split("#");
       return {
