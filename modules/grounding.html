@@ -36,6 +36,22 @@
   .footer-note { color: #5B5D64; font-size: 13px; margin-top: 48px; padding-top: 16px; border-top: 1px solid #C2C2C2; }
   ul { padding-left: 24px; }
   li { margin-bottom: 6px; }
+
+  .section-comment-row { margin: 6px 0 18px 0; }
+  .comment-link {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #E94D3A;
+    color: white !important;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .comment-link:hover { background: #B8321F; }
+  .comment-link::before { content: "💬 "; }
+
 </style>
 </head>
 <body>
@@ -56,7 +72,8 @@
   <strong>Plain-English summary.</strong> When the AI writes a number or statement on a slide, where did it come from? The grounding module is the answer. It ingests source materials at deck open (PDFs, EDGAR filings, IR docs, client uploads), retrieves the relevant chunks for each shape, asks the AI to write text grounded in those chunks, and validates that the AI's output is actually backed by the cited source — not just "looks like a citation." Every claim that survives this gate gets a green / yellow / orange / red traffic-light in the consultant's add-in pane.
 </div>
 
-<h2>What it does</h2>
+<h2 id="what-it-does">What it does</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-grounding&title=%5Bcomment%5D+%C2%A7What+it+does&body=Section%3A+%C2%A7What+it+does%0AAnchor%3A+%23what-it-does%0APage%3A+arch-l3-grounding%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-grounding._" target="_blank" rel="noopener">Comment on §What it does</a></div>
 
 <ul>
   <li><strong>Reads the consultant's source materials</strong> — at deck open, parses every uploaded PDF and external feed into searchable chunks with full provenance.</li>
@@ -66,16 +83,20 @@
   <li><strong>Surfaces traffic-lights in the add-in</strong> — every shape gets a confidence-tier badge: <span class="verdict-tier tier-green"></span>green / <span class="verdict-tier tier-yellow"></span>yellow / <span class="verdict-tier tier-orange"></span>orange / <span class="verdict-tier tier-red"></span>red. Click for paragraph-level citations like Claude.ai or ChatGPT.</li>
 </ul>
 
-<h2>The 4-tier architecture</h2>
+<h2 id="the-4-tier-architecture">The 4-tier architecture</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-grounding&title=%5Bcomment%5D+%C2%A7The+4-tier+architecture&body=Section%3A+%C2%A7The+4-tier+architecture%0AAnchor%3A+%23the-4-tier-architecture%0APage%3A+arch-l3-grounding%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-grounding._" target="_blank" rel="noopener">Comment on §The 4-tier architecture</a></div>
 
-<h3>Tier 0 — Source ingestion (~3-5d build)</h3>
+<h3 id="tier-0-source-ingestion-3-5d-build">Tier 0 — Source ingestion (~3-5d build)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-grounding&title=%5Bcomment%5D+%C2%A7Tier+0+%E2%80%94+Source+ingestion+%28~3-5d+build%29&body=Section%3A+%C2%A7Tier+0+%E2%80%94+Source+ingestion+%28~3-5d+build%29%0AAnchor%3A+%23tier-0-source-ingestion-3-5d-build%0APage%3A+arch-l3-grounding%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-grounding._" target="_blank" rel="noopener">Comment on §Tier 0 — Source ingestion (~3-5d build)</a></div>
 <p>Uses <strong>docling</strong> (MIT license, viable for SaaS resale; deliberately NOT marker-pdf which is GPL+commercial). Parses PDFs, DOCX, HTML into structured chunks at paragraph granularity. Each chunk gets a content hash, page reference, and full provenance. Encrypted at rest in tenant-scoped R2 with FTS5 full-text-search index.</p>
 
-<h3>Tier 1 — LLM call with grounded prompt (~3-5d per provider adapter)</h3>
+<h3 id="tier-1-llm-call-with-grounded-prompt-3-5d-per-provider-adapt">Tier 1 — LLM call with grounded prompt (~3-5d per provider adapter)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-grounding&title=%5Bcomment%5D+%C2%A7Tier+1+%E2%80%94+LLM+call+with+grounded+prompt+%28~3-5d+per+provider+adapter%29&body=Section%3A+%C2%A7Tier+1+%E2%80%94+LLM+call+with+grounded+prompt+%28~3-5d+per+provider+adapter%29%0AAnchor%3A+%23tier-1-llm-call-with-grounded-prompt-3-5d-per-provider-adapt%0APage%3A+arch-l3-grounding%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-grounding._" target="_blank" rel="noopener">Comment on §Tier 1 — LLM call with grounded prompt (~3-5d per provider adapter)</a></div>
 <p><strong>Filipe's #3 feedback reshapes this tier.</strong> Original spec made Anthropic's native Citations API the architectural spine — meaning the architecture was vendor-locked to Anthropic. Filipe flagged this as wrong: <em>"it needs to be model agnostic."</em></p>
 <p>Amended (pending v2.1.1 sign-off): the spine becomes the universal CitationEnvelope contract that every provider adapter must produce. Anthropic Citations API, Google groundingSupports, OpenAI Structured Outputs — all become adapter optimizations. When the active provider supports them, the adapter uses them; when not, the adapter falls fully through to the entailment validator. The architecture doesn't depend on any one provider.</p>
 
-<h3>Tier 2 — Validation + re-ask (~2d build)</h3>
+<h3 id="tier-2-validation-re-ask-2d-build">Tier 2 — Validation + re-ask (~2d build)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-grounding&title=%5Bcomment%5D+%C2%A7Tier+2+%E2%80%94+Validation+%2B+re-ask+%28~2d+build%29&body=Section%3A+%C2%A7Tier+2+%E2%80%94+Validation+%2B+re-ask+%28~2d+build%29%0AAnchor%3A+%23tier-2-validation-re-ask-2d-build%0APage%3A+arch-l3-grounding%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-grounding._" target="_blank" rel="noopener">Comment on §Tier 2 — Validation + re-ask (~2d build)</a></div>
 <p>Wraps every LLM call with Pydantic schemas via the <strong>instructor</strong> library. Two checks run on each citation:</p>
 <ul>
   <li><strong>Substring match (cheap):</strong> is the cited_text actually verbatim in the chunk?</li>
@@ -83,13 +104,16 @@
 </ul>
 <p>If either fails, instructor re-asks the LLM with corrective feedback. Up to 3 retries. After 3 fails: claim → state: blocked, tier: RED, audit row written, consultant sees why.</p>
 
-<h3>Tier 3 — Add-in pane UX (~3-4d build)</h3>
+<h3 id="tier-3-add-in-pane-ux-3-4d-build">Tier 3 — Add-in pane UX (~3-4d build)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-grounding&title=%5Bcomment%5D+%C2%A7Tier+3+%E2%80%94+Add-in+pane+UX+%28~3-4d+build%29&body=Section%3A+%C2%A7Tier+3+%E2%80%94+Add-in+pane+UX+%28~3-4d+build%29%0AAnchor%3A+%23tier-3-add-in-pane-ux-3-4d-build%0APage%3A+arch-l3-grounding%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-grounding._" target="_blank" rel="noopener">Comment on §Tier 3 — Add-in pane UX (~3-4d build)</a></div>
 <p>Always-visible sub-pane in the add-in shows: traffic-light per shape, source URL, paragraph excerpt, citation snapshot. 5 quick-buttons (regenerate, override, attest, refresh source, show full Cockpit). Full Grounding Cockpit modal (~900×600) for partner review pane with revision history, send-gate enforcement, source freshness alerts.</p>
 
-<h3>Tier 4 — Audit walker (~2d build, OPS phase)</h3>
+<h3 id="tier-4-audit-walker-2d-build-ops-phase">Tier 4 — Audit walker (~2d build, OPS phase)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-grounding&title=%5Bcomment%5D+%C2%A7Tier+4+%E2%80%94+Audit+walker+%28~2d+build%2C+OPS+phase%29&body=Section%3A+%C2%A7Tier+4+%E2%80%94+Audit+walker+%28~2d+build%2C+OPS+phase%29%0AAnchor%3A+%23tier-4-audit-walker-2d-build-ops-phase%0APage%3A+arch-l3-grounding%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-grounding._" target="_blank" rel="noopener">Comment on §Tier 4 — Audit walker (~2d build, OPS phase)</a></div>
 <p>Background process that periodically walks every deck checking for: orphan claims (text changed but no revision-log row), stale sources (citation URL returns 404 or content hash drift), broken citation pointers, expired licenses on Imagery. Surfaces RED in Cockpit; doesn't block fills, but flags drift.</p>
 
-<h2>Confidence tiers</h2>
+<h2 id="confidence-tiers">Confidence tiers</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-grounding&title=%5Bcomment%5D+%C2%A7Confidence+tiers&body=Section%3A+%C2%A7Confidence+tiers%0AAnchor%3A+%23confidence-tiers%0APage%3A+arch-l3-grounding%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-grounding._" target="_blank" rel="noopener">Comment on §Confidence tiers</a></div>
 
 <table>
   <thead>
@@ -105,11 +129,13 @@
 
 <p>Aggregation per shape/slide/deck = MIN of constituent tiers. <strong>Stage 2 amendment A11:</strong> show distribution alongside MIN ("1 RED, 4 ORANGE, 38 GREEN") so one minor blocker doesn't make the whole deck look unusable.</p>
 
-<h2>Cost</h2>
+<h2 id="cost">Cost</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-grounding&title=%5Bcomment%5D+%C2%A7Cost&body=Section%3A+%C2%A7Cost%0AAnchor%3A+%23cost%0APage%3A+arch-l3-grounding%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-grounding._" target="_blank" rel="noopener">Comment on §Cost</a></div>
 
 <p>~$0.50-1.00 per deck for grounding alone (Anthropic adapter). ~$2.5-5K per tenant per year dominated by Anthropic API costs. Per-provider variance after v2.1.1: Gemini ~$0.50-1.20/deck (cited text counted as output tokens, unlike Anthropic); OpenAI ~$0.80-1.80/deck. Per-deck budget cap in cost-governance §G.</p>
 
-<h2>Critical caveats</h2>
+<h2 id="critical-caveats">Critical caveats</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-grounding&title=%5Bcomment%5D+%C2%A7Critical+caveats&body=Section%3A+%C2%A7Critical+caveats%0AAnchor%3A+%23critical-caveats%0APage%3A+arch-l3-grounding%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-grounding._" target="_blank" rel="noopener">Comment on §Critical caveats</a></div>
 
 <ul>
   <li><strong>Anthropic Citations API and Structured Outputs are mutually exclusive</strong> — confirmed at API level. Anthropic adapter outputs plain text + citations array; structured-shape parsing happens in Tier 2 instructor, not Anthropic JSON-schema-mode.</li>
@@ -118,13 +144,15 @@
   <li><strong>F2 latency budget:</strong> ≤200ms p95 with session-trust ON (cached); ≤2.5s p95 classifier; ≤8s p95 full pipeline. Session-trust default ON for F2 edits.</li>
 </ul>
 
-<h2>Current status</h2>
+<h2 id="current-status">Current status</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-grounding&title=%5Bcomment%5D+%C2%A7Current+status&body=Section%3A+%C2%A7Current+status%0AAnchor%3A+%23current-status%0APage%3A+arch-l3-grounding%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-grounding._" target="_blank" rel="noopener">Comment on §Current status</a></div>
 
 <p>Architecture locked at v2.1 (28.04.2026). 4 rounds of /iterate review with Codex (gpt-5.5 xhigh) + 6 specialist agents reached GREEN consensus before lock. <strong>Filipe's #3 feedback (model-agnostic mandatory) reopens Tier 1</strong> — proposed v2.1.1 amendment drafted, pending sign-off.</p>
 
 <p>Stage 2 + Stage 3 reviewers (28.04.2026 evening, 10 reviewers across 3 stages) confirmed Filipe #3 is the correct architectural call — amendment goes ahead. Stage 3 honest day estimate: ~14d cascade (Stage 2's 7d was too optimistic).</p>
 
-<h2>Open decisions for Filipe</h2>
+<h2 id="open-decisions-for-filipe">Open decisions for Filipe</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-grounding&title=%5Bcomment%5D+%C2%A7Open+decisions+for+Filipe&body=Section%3A+%C2%A7Open+decisions+for+Filipe%0AAnchor%3A+%23open-decisions-for-filipe%0APage%3A+arch-l3-grounding%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-grounding._" target="_blank" rel="noopener">Comment on §Open decisions for Filipe</a></div>
 
 <div class="open-decision">
   <strong>Q1 — Multi-vendor MVP scope.</strong> See main reader Q1. Two paths: (A) Anthropic-only adapter at MVP, multi-vendor in BE-A1 — preserves 12-week target; (B) full multi-vendor + entailment in MVP — slips to ~14w but architecture isn't aspirational.<br>
@@ -142,7 +170,8 @@
 </div>
 
 <div class="nav-down">
-  <h3>Where to go next</h3>
+  <h3 id="where-to-go-next">Where to go next</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-grounding&title=%5Bcomment%5D+%C2%A7Where+to+go+next&body=Section%3A+%C2%A7Where+to+go+next%0AAnchor%3A+%23where-to-go-next%0APage%3A+arch-l3-grounding%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-grounding._" target="_blank" rel="noopener">Comment on §Where to go next</a></div>
   <ul style="color:white;">
     <li><strong>See it visually:</strong> <a href="../flow.html">L2 Map</a> — Grounding in the red subgraph + sequence diagram</li>
     <li><strong>Curated technical:</strong> <a href="../architecture-overview-2026-04-28.html#grounding-engine">L1 Atlas — Grounding Engine section</a></li>
