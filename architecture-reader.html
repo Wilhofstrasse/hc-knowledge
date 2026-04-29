@@ -161,6 +161,74 @@
 <!-- END "Since you were away" panel                                                    -->
 <!-- ════════════════════════════════════════════════════════════════════════════════ -->
 
+<!-- ════════════════════════════════════════════════════════════════════════════════ -->
+<!-- HOW WE COOPERATE — applied learnings from the Cursor "software factory" talk     -->
+<!-- ════════════════════════════════════════════════════════════════════════════════ -->
+
+<div style="background:#E8EDF3; border-left:5px solid #14324E; padding:20px 24px; border-radius:4px; margin:20px 0 32px 0;">
+  <h2 id="how-we-cooperate-to-build-this" style="color:#14324E; margin:0 0 12px 0; font-size:22px;">How we cooperate to build this</h2>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7How+we+cooperate+to+build+this&body=Section%3A+%C2%A7How+we+cooperate+to+build+this%0AAnchor%3A+%23how-we-cooperate-to-build-this%0APage%3A+arch-l3-reader%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §How we cooperate to build this</a></div>
+  <p style="margin:0 0 16px 0; font-size:15px; color:#5B5D64;"><em>Applied learnings from the Cursor "software factory" talk you just dropped in 01 Private. The talk's recipe maps almost 1:1 onto our project — both how we BUILD it (you + AIs cooperating) and what we're BUILDING (a factory for consulting decks).</em></p>
+
+  <h3 id="the-framing-the-talk-gives-us" style="color:#14324E; margin-top:16px;">The framing the talk gives us</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7The+framing+the+talk+gives+us&body=Section%3A+%C2%A7The+framing+the+talk+gives+us%0AAnchor%3A+%23the-framing-the-talk-gives-us%0APage%3A+arch-l3-reader%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §The framing the talk gives us</a></div>
+  <p>The Cursor speaker (Eric Zakariasson) lays out six levels of how a human works with AI on code:</p>
+  <ol style="line-height:1.7;">
+    <li>Autocomplete (the AI finishes your sentence)</li>
+    <li>Pair programmer (the AI suggests, you accept)</li>
+    <li>AI writes most of the code, you steer</li>
+    <li>You review what the AI did</li>
+    <li><strong>You manage — you don't write code, you set intent and pick which AI does what</strong> (Eric says this is where he is now)</li>
+    <li>"Dark factory" — you set intent and walk away; AIs run thousands of jobs per day</li>
+  </ol>
+  <p><strong>Where we are right now:</strong> you are at level 5 (you're the manager). I'm doing levels 4-5 work (writing, reviewing, drafting specs). The second AI (the reviewer) is at level 4 (it checks my work). The helper AIs we send to look at things in parallel are at level 3.</p>
+
+  <h3 id="what-were-already-doing-right-matches-the-talk" style="color:#14324E; margin-top:24px;">What we're already doing right (matches the talk)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7What+we%27re+already+doing+right+%28matches+the+talk%29&body=Section%3A+%C2%A7What+we%27re+already+doing+right+%28matches+the+talk%29%0AAnchor%3A+%23what-were-already-doing-right-matches-the-talk%0APage%3A+arch-l3-reader%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §What we're already doing right (matches the talk)</a></div>
+  <ul style="line-height:1.7;">
+    <li><strong>You don't type, you decide.</strong> You comment via the buttons on these pages, you sign off on locks, you kill bullshit at the L3 level. I do the typing.</li>
+    <li><strong>Multiple AI reviewers in parallel.</strong> Every non-trivial decision gets sent to the second AI plus 2-3 helper AIs at the same time, each looking from a different angle (architect, security, user-experience, etc.). One alone is not enough.</li>
+    <li><strong>The codebase is structured for AIs to work in.</strong> Project rules, skills library, decision logs, comment-button feedback loop. New AI sessions can pick up the project without re-asking what's going on.</li>
+    <li><strong>Saves are automatic.</strong> Once you approve a piece of work, it commits and pushes without further confirmation. No "save it? yes" ping-pong.</li>
+    <li><strong>Decisions are durable.</strong> Every locked decision goes into the project's decision log. Not in chat. Not in memory. In the file that survives compaction.</li>
+    <li><strong>Status is visible.</strong> The cockpit page (link in the navigation bar) updates itself from the decision log. You can check it any time.</li>
+  </ul>
+
+  <h3 id="what-the-talk-says-we-should-add-translated-to-our-setup" style="color:#14324E; margin-top:24px;">What the talk says we should ADD (translated to our setup)</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7What+the+talk+says+we+should+ADD+%28translated+to+our+setup%29&body=Section%3A+%C2%A7What+the+talk+says+we+should+ADD+%28translated+to+our+setup%29%0AAnchor%3A+%23what-the-talk-says-we-should-add-translated-to-our-setup%0APage%3A+arch-l3-reader%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §What the talk says we should ADD (translated to our setup)</a></div>
+  <ol style="line-height:1.85;">
+    <li><strong>Let rules emerge from corrections — automatically.</strong> Right now when you correct me ("don't do X"), I update the playbook by hand. The talk's "continual learning" idea: at the end of each session, I scan recent corrections and propose new rules to add. You approve or reject. Eric's friend at Lovable did this and it surfaced real gaps.</li>
+    <li><strong>Build "Playwright for slides" before first colleague uses the tool.</strong> The talk: AI ships fast IF the output is verifiable. For us: every time the fill flow changes, automatically (a) render the deck, (b) screenshot every slide, (c) compare against a reference. This is the slide equivalent of what Eric calls "click every link, screenshot, eyeball." Without it, every change requires you to manually open the deck.</li>
+    <li><strong>Steal the "agent code-owner" pattern.</strong> For low-risk changes (typo fixes, dependency bumps, doc-only edits), an AI auto-approves under defined thresholds. For high-risk (anything touching encryption, audit, payments), routes to you + the second AI. You spend your attention on what matters.</li>
+    <li><strong>Steal the "vent tool" pattern.</strong> Give the AIs (me + the helpers) a way to flag what's broken about how we work together. Eric's friend gave their agent a "vent" button that posted to Slack as a joke — it surfaced real problems (e.g., the agent didn't have image access). For us: a feedback queue you scan weekly. The flagging itself becomes signal.</li>
+    <li><strong>Define when you stop reviewing every change.</strong> The talk: at level 6, the human only sets intent. We're nowhere near that for architectural locks (you should always review those). But for routine commits — typo fixes, dependency bumps, cockpit re-syncs — when do you stop being needed? Defining the threshold means we know what to automate next.</li>
+    <li><strong>Isolated workspaces when many AIs run in parallel.</strong> Right now when 3 helper AIs run at the same time, they share the same project state. For 5+ helpers running simultaneously, that breaks (they'd step on each other). The talk: Cursor runs each agent in its own cloud machine — thousands per day. We're not at thousands, but as we ramp up to 10+ helpers per session, this becomes the bottleneck.</li>
+    <li><strong>Be honest about memory.</strong> AI sessions are stateless — they forget when the chat ends. The talk: capturing your preferences, your decisions, your design choices into rules + memory + the AI's training data is what builds real trust over time. We do this manually (memory files, playbook, decision log). It works, but it's lossy. Every "I told you this already" is a memory leak. Worth investing in better.</li>
+  </ol>
+
+  <h3 id="the-two-big-shifts-in-your-role-this-implies" style="color:#14324E; margin-top:24px;">The two big shifts in YOUR role this implies</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7The+two+big+shifts+in+YOUR+role+this+implies&body=Section%3A+%C2%A7The+two+big+shifts+in+YOUR+role+this+implies%0AAnchor%3A+%23the-two-big-shifts-in-your-role-this-implies%0APage%3A+arch-l3-reader%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §The two big shifts in YOUR role this implies</a></div>
+  <ul style="line-height:1.85;">
+    <li><strong>Your time goes to setting intent, not reviewing diffs.</strong> The cooperation works when I write the spec → helper AIs review independently → you only get pulled in for "is this the right thing to build?" not "is this code correct?" The talk: this is the difference between level 4 and level 5.</li>
+    <li><strong>Your taste is the bottleneck, not your typing speed.</strong> Once the factory is running, the limiting factor is what you decide is worth building. That's why every chat correction matters more than any code I write.</li>
+  </ul>
+
+  <h3 id="decision-for-you" style="color:#14324E; margin-top:24px;">Decision for you</h3>
+<div class="section-comment-row"><a class="comment-link" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7Decision+for+you&body=Section%3A+%C2%A7Decision+for+you%0AAnchor%3A+%23decision-for-you%0APage%3A+arch-l3-reader%0A%0A%28type+your+comment+here%29%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">Comment on §Decision for you</a></div>
+  <p>Of the seven things to ADD above, which do we invest in NEXT? My take, ranked by leverage for THIS project:</p>
+  <ol style="line-height:1.85;">
+    <li><strong>The Playwright-for-slides verifier (#2)</strong> — this is the unlock. Without it, every fill-flow change needs your manual eyeball. With it, the project ships 5× faster.</li>
+    <li><strong>Rules-emerge pipeline (#1)</strong> — half-day investment, compounds over months as your corrections accumulate.</li>
+    <li><strong>Vent tool (#4)</strong> — cheap, surfaces invisible problems.</li>
+    <li>The other four are valuable but later — when team scales past you alone.</li>
+  </ol>
+  <p>Comment under any item above (button under each heading) to redirect or add to the list.</p>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════════════ -->
+<!-- END "How we cooperate" panel                                                       -->
+<!-- ════════════════════════════════════════════════════════════════════════════════ -->
+
 <div class="intro">
   <strong>What this is.</strong> A multi-tenant PowerPoint add-in for consulting-grade decks. Consultants click a shape, the AI fills it with text grounded in real sources, every claim has a traffic-light, every action is logged for audit. Built for regulated industries — banking, insurance, asset management, pharma — where "show me where this number came from" is not optional.
   <br><br>
