@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-04-29T14:22:44",
+  "generated_at": "2026-04-29T14:23:48",
   "n_anchors": 8,
   "anchors": {
     "arch-l3-reader#update-29042026": {
-      "state": "green",
+      "state": "orange",
       "issue_number": 11,
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/11",
       "issue_state": "closed",
@@ -11,7 +11,7 @@
       "n_issues_for_anchor": 1
     },
     "arch-l3-reader#locked-decisions": {
-      "state": "green",
+      "state": "orange",
       "issue_number": 10,
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/10",
       "issue_state": "closed",
@@ -19,7 +19,7 @@
       "n_issues_for_anchor": 2
     },
     "arch-l3-reader#decision-for-you": {
-      "state": "green",
+      "state": "orange",
       "issue_number": 8,
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/8",
       "issue_state": "closed",
@@ -27,7 +27,7 @@
       "n_issues_for_anchor": 1
     },
     "arch-l3-reader#what-i-need-from-you-five-things": {
-      "state": "green",
+      "state": "orange",
       "issue_number": 7,
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/7",
       "issue_state": "closed",
@@ -35,7 +35,7 @@
       "n_issues_for_anchor": 1
     },
     "arch-l3-reader#5-i-found-a-missing-piece-your-hunch-was-right": {
-      "state": "green",
+      "state": "orange",
       "issue_number": 6,
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/6",
       "issue_state": "closed",
@@ -43,7 +43,7 @@
       "n_issues_for_anchor": 1
     },
     "arch-l3-reader#3-i-wrote-8-of-15-emergency-playbooks": {
-      "state": "green",
+      "state": "orange",
       "issue_number": 5,
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/5",
       "issue_state": "closed",
@@ -51,7 +51,7 @@
       "n_issues_for_anchor": 1
     },
     "arch-l3-reader#2-i-drafted-two-new-pieces-of-the-project": {
-      "state": "green",
+      "state": "orange",
       "issue_number": 4,
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/4",
       "issue_state": "closed",
@@ -59,7 +59,7 @@
       "n_issues_for_anchor": 1
     },
     "arch-l3-reader#1-i-locked-in-your-three-decisions-from-yesterday": {
-      "state": "green",
+      "state": "orange",
       "issue_number": 3,
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/3",
       "issue_state": "closed",
