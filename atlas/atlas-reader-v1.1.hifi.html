@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Atlas — plain-English reader</title>
+<style>
+  /* ─────────────────────────────────────────────────────────
+     Atlas v1 reader — Stage 2 hi-fidelity
+     Design System (from atlas-reader-v1.md):
+       Type   — system stack, body 16/1.6, H1 28/1.25, H2 20/1.3, caption 13/1.5
+       Colour — #1A1A1A ink · #737373 muted · #FFFFFF bg · #F7F7F7 wash
+                #E94D3A accent · #C97A00 amber · #2E7D32 green
+       State  — left border 1 px solid + 4 % opacity tint of same colour
+       Edges  — sharp; no shadows, no gradients, no rounded everything
+       Icons  — stroke-only, single-weight, monochrome
+     ────────────────────────────────────────────────────── */
+
+  :root {
+    --ink: #1A1A1A;
+    --muted: #737373;
+    --bg: #FFFFFF;
+    --wash: #F7F7F7;
+    --hair: #E5E5E5;
+
+    --accent: #E94D3A;          /* red / asked */
+    --amber: #C97A00;           /* answer ready */
+    --green: #2E7D32;           /* signed off */
+
+    /* 4 % opacity tints, baked to keep file size down */
+    --tint-red:   #FEF1EE;
+    --tint-amber: #FBF6EE;
+    --tint-green: #EFF5EF;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection { background: rgba(233, 77, 58, 0.18); }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ── tiny screen-bar that lets you jump between the 5 screens ──── */
+  .screenbar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; gap: 24px; flex-wrap: wrap;
+    padding: 10px 24px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--hair);
+    font-size: 12px; color: var(--muted);
+  }
+  .screenbar a { color: var(--muted); padding-bottom: 2px; }
+  .screenbar a:hover { color: var(--ink); }
+  .screenbar a.is-active { color: var(--ink); border-bottom: 1px solid var(--ink); }
+  .screenbar .lead { color: var(--ink); font-weight: 600; }
+
+  /* ── reader column ─────────────────────────────────────────────── */
+  .reader {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+  }
+
+  h1.title {
+    font-size: 28px;
+    line-height: 1.25;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0 0 12px 0;
+  }
+  .demo {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 56px 0;
+  }
+  h2.section {
+    font-size: 20px;
+    line-height: 1.3;
+    font-weight: 600;
+    margin: 56px 0 16px 0;
+    letter-spacing: -0.005em;
+  }
+
+  /* ── paragraph as topic ────────────────────────────────────────── */
+  .para {
+    position: relative;
+    padding: 14px 96px 14px 16px;
+    margin: 0 0 24px 0;
+    border-left: 1px solid transparent;
+    background: transparent;
+    transition: background-color 200ms ease, border-color 200ms ease;
+  }
+  .para p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  /* state strips — barely-there per brief */
+  .para.is-asked     { border-left-color: var(--accent); background: var(--tint-red); }
+  .para.is-ready     { border-left-color: var(--amber);  background: var(--tint-amber); }
+  .para.is-signed    { border-left-color: var(--green);  background: var(--tint-green); }
+
+  /* 'decided' stamp on signed-off paragraphs (replaces padlock) */
+  .stamp {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 1px 6px 0;
+    border: 1px solid var(--green);
+    color: var(--green);
+    font-size: 10px;
+    line-height: 1.5;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    vertical-align: 2px;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .stamp .who {
+    color: var(--muted);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    margin-left: 6px;
+    border-left: 1px solid var(--hair);
+    padding-left: 6px;
+  }
+
+  /* ── action icons (right edge, fade in on hover) ───────────────── */
+  .actions {
+    position: absolute;
+    top: 14px;
+    right: 12px;
+    display: flex;
+    gap: 16px;
+    opacity: 0;
+    transition: opacity 200ms ease;
+    pointer-events: none;
+  }
+  .para:hover .actions,
+  .para:focus-within .actions,
+  .actions.is-pinned { opacity: 1; pointer-events: auto; }
+  .actions button {
+    appearance: none; -webkit-appearance: none;
+    background: transparent; border: 0; padding: 4px;
+    color: var(--ink); cursor: pointer;
+    width: 28px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .actions button:hover { color: var(--accent); }
+  .actions button[aria-pressed="true"] { color: var(--accent); }
+  .actions svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* answering caption (red state) */
+  .answering {
+    margin: -16px 0 24px 16px;
+    color: var(--muted);
+    font-size: 13px;
+    font-style: italic;
+  }
+  .answering .dots::after {
+    content: "…";
+    display: inline-block;
+    width: 1em;
+    animation: dots 1.4s steps(3, end) infinite;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+  @keyframes dots { 0% { width: 0; } 100% { width: 1em; } }
+
+  /* answer expansion under amber paragraph */
+  .answer {
+    margin: -16px 0 24px 16px;
+    padding: 14px 16px;
+    background: var(--bg);
+    border-left: 1px solid var(--hair);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  .answer .lbl {
+    display: block;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .answer p { margin: 0; }
+  .chev {
+    color: var(--muted); font-size: 12px;
+    margin-left: 6px; user-select: none;
+  }
+
+  /* ── highlight popover (Screen 2) ──────────────────────────────── */
+  .demo-paragraph .hl {
+    background: var(--tint-red);
+    border-bottom: 1px dashed var(--accent);
+    padding: 0 1px;
+  }
+  .popover-anchor { position: relative; }
+  .popover {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    width: min(360px, calc(100vw - 48px));
+    background: var(--bg);
+    border: 1px solid var(--ink);
+    padding: 14px 14px 12px;
+    z-index: 30;
+  }
+  .popover .leader {
+    position: absolute;
+    top: -10px; left: 24px;
+    width: 1px; height: 10px; background: var(--ink);
+  }
+  .popover .lead {
+    font-size: 13px;
+    color: var(--ink);
+    margin: 0 0 10px 0;
+  }
+  .popover .lead em { font-style: normal; border-bottom: 1px solid var(--ink); padding-bottom: 1px; }
+  .popover textarea {
+    width: 100%; resize: none;
+    border: 1px solid var(--hair);
+    padding: 8px 10px;
+    font: inherit; font-size: 14px; line-height: 1.45;
+    color: var(--ink);
+    background: var(--bg);
+    min-height: 64px;
+    margin-bottom: 10px;
+  }
+  .popover textarea::placeholder { color: var(--muted); }
+  .popover textarea:focus { outline: 0; border-color: var(--ink); }
+
+  /* consult-flag row (Stage 1 patch carried into Stage 2) */
+  .popover .consult {
+    display: flex; align-items: center; gap: 14px;
+    flex-wrap: wrap;
+    padding: 10px 0;
+    border-top: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .popover .consult .lbl { color: var(--muted); }
+  .popover .consult label {
+    display: inline-flex; align-items: center; gap: 6px;
+    cursor: pointer; user-select: none;
+  }
+  .popover .consult input[type="checkbox"] {
+    appearance: none; -webkit-appearance: none;
+    width: 14px; height: 14px;
+    border: 1px solid var(--ink);
+    background: var(--bg);
+    margin: 0; padding: 0;
+    position: relative; cursor: pointer;
+    flex: none;
+  }
+  .popover .consult input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute; left: 3px; top: 0px;
+    width: 4px; height: 8px;
+    border-right: 1.5px solid var(--ink);
+    border-bottom: 1.5px solid var(--ink);
+    transform: rotate(45deg);
+  }
+  .popover .row {
+    display: flex; justify-content: flex-end; gap: 20px;
+    font-size: 14px;
+  }
+  .popover .row button {
+    appearance: none; -webkit-appearance: none;
+    background: transparent; border: 0; padding: 4px 0;
+    cursor: pointer; font: inherit;
+  }
+  .popover .row .cancel { color: var(--muted); }
+  .popover .row .post   { color: var(--accent); font-weight: 600; }
+  .popover .row button:hover { opacity: 0.75; }
+
+  .consult-note {
+    margin: 12px 0 0 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  /* ── Face ID modal (Screen 3) ──────────────────────────────────── */
+  .modal-shade {
+    position: fixed; inset: 0;
+    background: rgba(26,26,26,0.45);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+  }
+  .modal-shade.is-open { opacity: 1; pointer-events: auto; }
+  .modal {
+    width: min(320px, calc(100vw - 48px));
+    background: var(--bg);
+    border: 1px solid var(--ink);
+    padding: 28px 24px 20px;
+    text-align: center;
+  }
+  .modal .glyph {
+    width: 56px; height: 56px;
+    margin: 0 auto 14px;
+    border: 1px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink);
+    transition: transform 1200ms ease, border-color 1200ms ease;
+  }
+  .modal .glyph svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .modal.is-pulsing .glyph {
+    transform: scale(1.08);
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .modal .ttl {
+    font-size: 16px; font-weight: 600;
+    margin: 0 0 4px 0;
+  }
+  .modal .sub {
+    font-size: 13px; color: var(--muted);
+    margin: 0 0 20px 0;
+  }
+  .modal .actions-row {
+    display: flex; justify-content: center; gap: 28px;
+    font-size: 14px;
+  }
+  .modal button {
+    appearance: none; -webkit-appearance: none;
+    background: transparent; border: 0; padding: 4px 0;
+    cursor: pointer; font: inherit;
+  }
+  .modal .cancel { color: var(--muted); }
+  .modal .confirm { color: var(--accent); font-weight: 600; }
+
+  /* ── Map + Workings deep-dive screens (4 + 5) ──────────────────── */
+  .layer-screen {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 24px 24px 96px;
+    border-top: 1px solid var(--hair);
+  }
+  .crumb {
+    font-size: 13px; color: var(--muted);
+    margin: 0 0 32px 0;
+  }
+  .crumb a { color: var(--muted); border-bottom: 1px solid var(--hair); padding-bottom: 1px; }
+  .crumb a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+  .layer-screen h2.layer {
+    font-size: 20px; font-weight: 600; margin: 0 0 8px 0;
+  }
+  .layer-screen p.layer-sub {
+    color: var(--muted); font-size: 14px; margin: 0 0 32px 0;
+  }
+
+  /* Map — interactive nodes, edges with cardinality, inspector panel */
+  .map-wrap {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 720px) {
+    .map-wrap { grid-template-columns: 1fr; }
+  }
+  .map {
+    position: relative;
+    border: 1px solid var(--hair);
+    height: 380px;
+    background:
+      linear-gradient(to right, rgba(0,0,0,0.025) 1px, transparent 1px) 0 0/40px 40px,
+      linear-gradient(to bottom, rgba(0,0,0,0.025) 1px, transparent 1px) 0 0/40px 40px,
+      var(--bg);
+  }
+  .map .node {
+    position: absolute;
+    border: 1px solid var(--ink);
+    padding: 8px 10px;
+    font-size: 12px; line-height: 1.35;
+    background: var(--bg);
+    min-width: 108px;
+    cursor: pointer;
+    transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+  }
+  .map .node strong { display: block; font-weight: 600; font-size: 12px; }
+  .map .node span.kind { color: var(--muted); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .map .node:hover { background: var(--wash); }
+  .map .node:focus { outline: 0; }
+  .map .node.is-active { border-color: var(--accent); background: var(--tint-red); }
+  .map .node.is-signed { border-style: solid; }
+  .map .node.is-signed::after {
+    content: "\2713"; /* check */
+    position: absolute; top: -7px; right: -7px;
+    width: 14px; height: 14px;
+    background: var(--green); color: #fff;
+    font-size: 9px; line-height: 14px; text-align: center;
+  }
+  .map .node.is-asked::after {
+    content: "?";
+    position: absolute; top: -7px; right: -7px;
+    width: 14px; height: 14px;
+    background: var(--accent); color: #fff;
+    font-size: 10px; font-weight: 600; line-height: 14px; text-align: center;
+  }
+  .map .node.is-focused {
+    transform: scale(1.04);
+    border-color: var(--ink);
+    box-shadow: 0 0 0 3px var(--wash);
+  }
+
+  .map svg.edges { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .map svg.edges line { stroke: var(--hair); stroke-width: 1; }
+  .map svg.edges line.heavy { stroke: var(--ink); }
+  .map svg.edges text {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 10px;
+    fill: var(--muted);
+  }
+
+  .map-inspector {
+    border: 1px solid var(--hair);
+    padding: 14px 14px 16px;
+    background: var(--bg);
+    font-size: 13px;
+    line-height: 1.5;
+    align-self: start;
+  }
+  .map-inspector .lbl {
+    display: block;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .map-inspector h4 {
+    font-size: 14px; font-weight: 600;
+    margin: 0 0 12px 0;
+  }
+  .map-inspector dl {
+    margin: 0; padding: 0;
+    display: grid; grid-template-columns: 84px 1fr; gap: 4px 12px;
+    font-size: 12px;
+  }
+  .map-inspector dt { color: var(--muted); margin: 0; }
+  .map-inspector dd { margin: 0; color: var(--ink); }
+  .map-inspector .links {
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px solid var(--hair);
+    display: flex; gap: 14px; font-size: 12px;
+  }
+  .map-inspector .links a {
+    color: var(--accent);
+    border-bottom: 1px solid var(--tint-red);
+    padding-bottom: 1px;
+  }
+  .map-inspector .links a:hover { border-bottom-color: var(--accent); }
+
+  .map-legend {
+    color: var(--muted);
+    font-size: 11px;
+    display: flex; gap: 18px; flex-wrap: wrap;
+    margin: 0 0 24px 0;
+  }
+  .map-legend .swatch {
+    display: inline-block;
+    width: 10px; height: 10px;
+    margin-right: 6px;
+    border: 1px solid var(--ink);
+    vertical-align: -1px;
+  }
+  .map-legend .swatch.signed { background: var(--green); border-color: var(--green); }
+  .map-legend .swatch.asked  { background: var(--accent); border-color: var(--accent); }
+  .map-legend .swatch.open   { background: var(--bg); }
+  .map-legend code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--ink);
+    background: var(--wash);
+    padding: 0 4px;
+    font-size: 11px;
+  }
+
+  /* Workings — Index (left) + Explain (right) */
+  .workings {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 24px;
+    border-top: 1px solid var(--hair);
+    padding-top: 16px;
+  }
+  @media (max-width: 720px) {
+    .workings { grid-template-columns: 1fr; gap: 16px; }
+  }
+  .workings .index {
+    border-right: 1px solid var(--hair);
+    padding-right: 16px;
+    font-size: 13px;
+  }
+  @media (max-width: 720px) {
+    .workings .index { border-right: 0; padding-right: 0; border-bottom: 1px solid var(--hair); padding-bottom: 12px; }
+  }
+  .workings .index .lbl {
+    display: block;
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px 0;
+  }
+  .workings .index ul { list-style: none; margin: 0; padding: 0; }
+  .workings .index li { margin: 0 0 2px 0; }
+  .workings .index a {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 12px;
+    padding: 6px 8px 6px 0;
+    color: var(--ink);
+    border-left: 2px solid transparent;
+    padding-left: 8px;
+  }
+  .workings .index a:hover { background: var(--wash); }
+  .workings .index a.is-active {
+    border-left-color: var(--ink);
+    background: var(--wash);
+    font-weight: 600;
+  }
+  .workings .index a .count { color: var(--muted); font-size: 11px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .workings .index a.is-asked .count  { color: var(--accent); }
+  .workings .index a.is-signed .count { color: var(--green); }
+
+  .workings .explain { min-width: 0; }
+  .workings .explain .crumb {
+    display: flex; align-items: baseline; gap: 8px;
+    font-size: 12px; color: var(--muted);
+    margin: 0 0 4px 0;
+  }
+  .workings .explain h3 {
+    font-size: 18px; font-weight: 600;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.005em;
+  }
+  .workings .explain .sub {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0 0 20px 0;
+  }
+
+  .l1-table {
+    border-top: 1px solid var(--hair);
+    border-bottom: 1px solid var(--hair);
+  }
+  .l1-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 140px;
+    gap: 24px;
+    padding: 14px 0;
+    border-top: 1px solid var(--hair);
+    align-items: baseline;
+    font-size: 14px;
+  }
+  .l1-row:first-child { border-top: 0; }
+  .l1-row .k { font-weight: 600; }
+  .l1-row .v { color: var(--ink); }
+  .l1-row .meta { color: var(--muted); font-size: 12px; }
+  @media (max-width: 600px) {
+    .l1-row { grid-template-columns: 1fr; gap: 4px; }
+    .l1-row .meta { font-size: 12px; }
+  }
+
+  /* ── footer ────────────────────────────────────────────────────── */
+  .footer {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+    color: var(--muted);
+    font-size: 12px;
+    border-top: 1px solid var(--hair);
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .legend {
+    display: inline-flex; gap: 16px; flex-wrap: wrap; align-items: center;
+    color: var(--muted);
+  }
+  .legend .sw {
+    display: inline-block;
+    width: 10px; height: 10px;
+    margin-right: 6px; vertical-align: 0;
+  }
+  .legend .sw-r { background: var(--accent); }
+  .legend .sw-a { background: var(--amber); }
+  .legend .sw-g { background: var(--green); }
+
+  /* ── motion ─────────────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+
+  /* ── responsive squeeze ────────────────────────────────────────── */
+  @media (max-width: 480px) {
+    .reader { padding: 32px 20px 64px; }
+    h1.title { font-size: 26px; }
+    h2.section { font-size: 18px; }
+    .para { padding-right: 16px; }
+    .actions {
+      position: static; opacity: 1; pointer-events: auto;
+      margin-top: 8px; gap: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<nav class="screenbar" aria-label="Screens">
+  <span class="lead">Atlas reader</span>
+  <a href="#main" class="is-active">Story</a>
+  <a href="#popover">Ask</a>
+  <a href="#sign-off">Sign off</a>
+  <a href="#map">Map</a>
+  <a href="#workings">Workings</a>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCREEN 1 · Main reader
+     ════════════════════════════════════════════════════════════════ -->
+<main class="reader" id="main">
+
+  <h1 class="title">Architecture — the Story</h1>
+  <p class="demo">Story · the plain-English reading layer. Hover or long-press any paragraph below to see the three actions: ask, deep-dive, sign off.</p>
+
+  <!-- Section 1 — Locked decisions -->
+  <h2 class="section">Locked decisions</h2>
+
+  <article class="para" data-state="neutral">
+    <p>Atlas keeps one source of truth per repository. Every change to a project — whether you write it in plain English here or someone pushes code on GitHub — flows through the same record. There is no second place to look.</p>
+    <div class="actions" aria-label="Paragraph actions">
+      <button title="Ask about this paragraph" aria-label="Ask">
+        <svg viewBox="0 0 24 24"><path d="M5 19l3.5-1.5 9.5-9.5a2.121 2.121 0 0 0-3-3l-9.5 9.5L4 18z"/><path d="M14 6.5l3 3"/></svg>
+      </button>
+      <button title="Deep-dive into the topic" aria-label="Deep-dive">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.35-4.35"/></svg>
+      </button>
+      <button title="Sign this paragraph off" aria-label="Sign off">
+        <svg viewBox="0 0 24 24"><path d="M5 12.5l4 4 10-10"/></svg>
+      </button>
+    </div>
+  </article>
+
+  <article class="para is-asked" data-state="asked">
+    <p>Each project carries a state — <em>red</em> when there is a question waiting for an answer, <em>orange</em> when an answer is ready for you to read, <em>green</em> when everything has been signed off. The colours are barely there; reading should dominate.</p>
+    <div class="actions" aria-label="Paragraph actions">
+      <button title="Ask"><svg viewBox="0 0 24 24"><path d="M5 19l3.5-1.5 9.5-9.5a2.121 2.121 0 0 0-3-3l-9.5 9.5L4 18z"/><path d="M14 6.5l3 3"/></svg></button>
+      <button title="Deep-dive"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.35-4.35"/></svg></button>
+      <button title="Sign off"><svg viewBox="0 0 24 24"><path d="M5 12.5l4 4 10-10"/></svg></button>
+    </div>
+  </article>
+  <p class="answering"><span class="dots">answering</span></p>
+
+  <article class="para is-signed" data-state="signed">
+    <p>Sign-off is the final step. When you sign a paragraph off, it locks. Atlas remembers who signed, when, and from which device — Face ID on the phone, or the equivalent on a laptop. Locked paragraphs do not change without a new conversation.<span class="stamp" aria-label="Decided by L. Wilhof on 28 Apr 2026">decided<span class="who">L.W. · 28 Apr</span></span></p>
+  </article>
+
+  <!-- Section 2 — Building right now -->
+  <h2 class="section">Building right now</h2>
+
+  <article class="para is-ready" data-state="ready">
+    <p>The logbook now fails closed. If the database is unreachable when a write comes in, Atlas refuses the write and surfaces the failure to the caller, instead of retrying silently and losing the change. <a href="#" class="chev">read answer ⌄</a></p>
+    <div class="actions" aria-label="Paragraph actions">
+      <button title="Ask"><svg viewBox="0 0 24 24"><path d="M5 19l3.5-1.5 9.5-9.5a2.121 2.121 0 0 0-3-3l-9.5 9.5L4 18z"/><path d="M14 6.5l3 3"/></svg></button>
+      <button title="Deep-dive"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.35-4.35"/></svg></button>
+      <button title="Sign off"><svg viewBox="0 0 24 24"><path d="M5 12.5l4 4 10-10"/></svg></button>
+    </div>
+  </article>
+  <div class="answer">
+    <span class="lbl">answer · ready</span>
+    <p>Codex moved the failure mode from <em>open</em> to <em>closed</em> in the logbook contract. The behaviour is now: if the database can't be reached, Atlas returns an error to whoever sent the write, and the write does not happen. Six sparring agents reviewed; one flagged a small race condition near the flush path — the fix is queued and visible on the run timeline.</p>
+  </div>
+
+  <article class="para is-ready" data-state="ready">
+    <p>Sign-off now requires Face ID by default on phones. The earlier behaviour — sign-off via tap with no second factor — is preserved on desktop, where typing the passphrase serves the same role.</p>
+    <div class="actions" aria-label="Paragraph actions">
+      <button title="Ask"><svg viewBox="0 0 24 24"><path d="M5 19l3.5-1.5 9.5-9.5a2.121 2.121 0 0 0-3-3l-9.5 9.5L4 18z"/><path d="M14 6.5l3 3"/></svg></button>
+      <button title="Deep-dive"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.35-4.35"/></svg></button>
+      <button title="Sign off"><svg viewBox="0 0 24 24"><path d="M5 12.5l4 4 10-10"/></svg></button>
+    </div>
+  </article>
+
+  <!-- Section 3 — Waiting on you -->
+  <h2 class="section">Waiting on you</h2>
+
+  <article class="para" data-state="neutral">
+    <p>Logbook retention. Today, every write is kept forever. Storage cost is negligible at the current pace, but there is no policy on the books, and the GDPR review last quarter flagged it as something to decide before the next audit.</p>
+    <div class="actions" aria-label="Paragraph actions">
+      <button title="Ask"><svg viewBox="0 0 24 24"><path d="M5 19l3.5-1.5 9.5-9.5a2.121 2.121 0 0 0-3-3l-9.5 9.5L4 18z"/><path d="M14 6.5l3 3"/></svg></button>
+      <button title="Deep-dive"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.35-4.35"/></svg></button>
+      <button title="Sign off"><svg viewBox="0 0 24 24"><path d="M5 12.5l4 4 10-10"/></svg></button>
+    </div>
+  </article>
+
+  <article class="para" data-state="neutral">
+    <p>Read-only mirror for partners. Two clients have asked to see the logbook live. We can give them a read-only link without giving them edit rights, but the routing is not in place yet — that's the next visible piece of work.</p>
+    <div class="actions" aria-label="Paragraph actions">
+      <button title="Ask"><svg viewBox="0 0 24 24"><path d="M5 19l3.5-1.5 9.5-9.5a2.121 2.121 0 0 0-3-3l-9.5 9.5L4 18z"/><path d="M14 6.5l3 3"/></svg></button>
+      <button title="Deep-dive"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.35-4.35"/></svg></button>
+      <button title="Sign off"><svg viewBox="0 0 24 24"><path d="M5 12.5l4 4 10-10"/></svg></button>
+    </div>
+  </article>
+
+</main>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCREEN 2 · Highlight popover (anchored to a selection in body text)
+     ════════════════════════════════════════════════════════════════ -->
+<section class="reader" id="popover" style="padding-top: 0;">
+  <h2 class="section" style="margin-top: 0;">Asking about a selection</h2>
+  <p class="demo">Drag-select any text inside a paragraph to anchor the popover. On a phone, long-press and drag.</p>
+
+  <article class="para demo-paragraph" data-state="neutral">
+    <p>The logbook now fails closed. If the database is unreachable when a write comes in, Atlas refuses the write and surfaces the <span class="popover-anchor"><span class="hl">failure to the caller</span><span class="popover" role="dialog" aria-label="Ask about “failure to the caller”">
+      <span class="leader"></span>
+      <p class="lead">Ask about <em>“failure to the caller”</em></p>
+      <textarea placeholder="What does the caller actually see when this fails?"></textarea>
+      <div class="consult" role="group" aria-label="Who to consult">
+        <span class="lbl">consult:</span>
+        <label><input type="checkbox" checked /> Codex</label>
+        <label><input type="checkbox" checked /> Design</label>
+        <label><input type="checkbox" checked /> Agents</label>
+      </div>
+      <div class="row">
+        <button class="cancel" type="button">cancel</button>
+        <button class="post"   type="button">post</button>
+      </div>
+    </span></span>, instead of retrying silently and losing the change.</p>
+  </article>
+
+  <p class="consult-note">All comments go to Claude. Untick to instruct Claude not to consult that stakeholder. Defaults on.</p>
+  <p class="consult-note">Claude obeys unticks by default. It may override only when essential — when the response would be materially incorrect, unsafe, or unusable without that consultation — and explains on the run timeline if it does.</p>
+
+  <p class="demo" style="margin-top: 32px;">After <em>post</em>, the popover dismisses and the paragraph fades to red — <em>asked</em> — until the answer comes back.</p>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCREEN 3 · Sign-off · Face ID modal
+     ════════════════════════════════════════════════════════════════ -->
+<section class="reader" id="sign-off" style="padding-top: 0;">
+  <h2 class="section">Signing a paragraph off</h2>
+  <p class="demo">Tapping <em>sign off</em> opens a centred confirmation. On phones, it requests Face ID; on desktop, it asks for the passphrase. After a single soft pulse the modal closes and the paragraph turns green with a small lock at the end.</p>
+
+  <div class="modal-shade is-open" id="modal-demo" aria-hidden="false">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Confirm sign-off">
+      <div class="glyph" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 8V6a2 2 0 0 1 2-2h2"/>
+          <path d="M16 4h2a2 2 0 0 1 2 2v2"/>
+          <path d="M20 16v2a2 2 0 0 1-2 2h-2"/>
+          <path d="M8 20H6a2 2 0 0 1-2-2v-2"/>
+          <circle cx="9" cy="11" r="0.6" fill="currentColor"/>
+          <circle cx="15" cy="11" r="0.6" fill="currentColor"/>
+          <path d="M9 15c1 1 2 1.4 3 1.4S14 16 15 15"/>
+        </svg>
+      </div>
+      <p class="ttl">Confirm sign-off</p>
+      <p class="sub">Face ID required</p>
+      <div class="actions-row">
+        <button class="cancel" type="button">cancel</button>
+        <button class="confirm" type="button" id="modal-confirm">confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="demo" style="margin-top: 32px;">Tap <em>confirm</em> to play the pulse — the glyph eases to green for a moment and the modal closes. (Esc or <em>cancel</em> dismisses without changing state.)</p>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCREEN 4 · Map (deep-dive placeholder)
+     ════════════════════════════════════════════════════════════════ -->
+<section class="layer-screen" id="map">
+  <p class="crumb"><a href="#main">← back to the Story</a></p>
+  <h2 class="layer">Map — where you navigate the project</h2>
+  <p class="layer-sub">The Map is the primary navigation surface, not a wall poster. Tap a <em>node</em> to open its Workings (Explain if covered, otherwise Index). Tap an <em>edge</em> to see the provenance of that relationship and the Story paragraphs that justify it. Cardinality is shown on the line.</p>
+
+  <div class="map-legend" aria-label="Map legend">
+    <span><span class="swatch open"></span>open</span>
+    <span><span class="swatch asked"></span>asked</span>
+    <span><span class="swatch signed"></span>decided</span>
+    <span><code>1</code> 1:1</span>
+    <span><code>1..n</code> one-to-many</span>
+    <span><code>0..n</code> unresolved</span>
+  </div>
+
+  <div class="map-wrap">
+    <div class="map" aria-label="Topic map" id="topic-map">
+      <svg class="edges" preserveAspectRatio="none" viewBox="0 0 600 380" aria-hidden="true">
+        <!-- Logbook ── Failure mode (1:1) -->
+        <line class="heavy" x1="110" y1="60"  x2="290" y2="170" />
+        <text x="195" y="110">1</text>
+        <!-- Failure mode ── SLA (1:1) -->
+        <line class="heavy" x1="310" y1="170" x2="470" y2="80" />
+        <text x="395" y="115">1</text>
+        <!-- Failure mode ── Sign-off (1..n) -->
+        <line x1="290" y1="190" x2="200" y2="300" />
+        <text x="230" y="255">1..n</text>
+        <!-- Failure mode ── Retention (0..n unresolved) -->
+        <line x1="310" y1="190" x2="450" y2="300" stroke-dasharray="3 3" />
+        <text x="395" y="255">0..n</text>
+        <!-- Logbook ── Sign-off (n:1 converging) -->
+        <line x1="110" y1="80"  x2="200" y2="300" />
+        <text x="135" y="200">n..1</text>
+      </svg>
+
+      <button class="node is-signed"  style="left:4%;  top:8%;"  data-node="logbook"
+              aria-label="Logbook — decided. Tap to open Workings.">
+        <strong>Logbook</strong><span class="kind">contract</span>
+      </button>
+      <button class="node is-active"  style="left:44%; top:38%;" data-node="failure"
+              aria-label="Failure mode — arrived from Story. Tap to open Workings.">
+        <strong>Failure mode</strong><span class="kind">fail-closed</span>
+      </button>
+      <button class="node is-signed"  style="left:76%; top:12%;" data-node="sla"
+              aria-label="SLA on db outage — decided. Tap to open Workings.">
+        <strong>SLA</strong><span class="kind">db outage</span>
+      </button>
+      <button class="node"            style="left:22%; top:74%;" data-node="signoff"
+              aria-label="Sign-off — open. Tap to open Workings.">
+        <strong>Sign-off</strong><span class="kind">face-id</span>
+      </button>
+      <button class="node is-asked"   style="left:66%; top:74%;" data-node="retention"
+              aria-label="Retention — asked, unresolved. Tap to open Workings.">
+        <strong>Retention</strong><span class="kind">unresolved</span>
+      </button>
+    </div>
+
+    <aside class="map-inspector" id="map-inspector" aria-live="polite">
+      <span class="lbl">selected · edge</span>
+      <h4>Logbook → Failure mode</h4>
+      <dl>
+        <dt>kind</dt><dd>contains (1:1)</dd>
+        <dt>state</dt><dd>decided · this run</dd>
+        <dt>provenance</dt><dd>run #418, codex pass 2 — fail-closed contract change</dd>
+        <dt>justified by</dt><dd>Story §1 (locked decisions) · Story §3 (building right now)</dd>
+      </dl>
+      <p class="links">
+        <a href="#workings">open Workings →</a>
+        <a href="#main">back to Story →</a>
+      </p>
+    </aside>
+  </div>
+
+  <p class="demo">Selection persists across views — switching from Map back to Story keeps the same topic highlighted. 0..n edges (dashed) flag unresolved relationships and surface a “resolve” CTA in the inspector instead of a silent dead-end.</p>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCREEN 5 · Workings (curated technical placeholder)
+     ════════════════════════════════════════════════════════════════ -->
+<section class="layer-screen" id="workings">
+  <p class="crumb"><a href="#map">← back to the Map</a></p>
+  <h2 class="layer">Workings — Index and Explain</h2>
+  <p class="layer-sub">Two flavours, one layer. <strong>Index</strong> mirrors Source 1:1 with status — always complete. <strong>Explain</strong> is best-effort plain-language coverage — may be sparse. Default tap-target is Explain when present, Index otherwise.</p>
+
+  <div class="workings">
+    <nav class="index" aria-label="Workings Index — mirror of Source paths">
+      <span class="lbl">Index · 12 entries</span>
+      <ul>
+        <li><a href="#" class="is-active is-signed">
+          <span>logbook/failure_mode.ts</span><span class="count">decided</span>
+        </a></li>
+        <li><a href="#" class="is-signed">
+          <span>logbook/sla.md</span><span class="count">decided</span>
+        </a></li>
+        <li><a href="#" class="is-signed">
+          <span>logbook/retry.ts</span><span class="count">decided</span>
+        </a></li>
+        <li><a href="#">
+          <span>signoff/face_id.ts</span><span class="count">open</span>
+        </a></li>
+        <li><a href="#" class="is-asked">
+          <span>logbook/retention.md</span><span class="count">asked</span>
+        </a></li>
+        <li><a href="#">
+          <span>logbook/test_e2e.spec</span><span class="count">flagged</span>
+        </a></li>
+        <li><a href="#">
+          <span>routing/readonly.ts</span><span class="count">no explain</span>
+        </a></li>
+      </ul>
+    </nav>
+
+    <div class="explain" aria-label="Workings Explain — plain-language coverage of selected Index entry">
+      <p class="crumb">
+        <span>Index ›</span>
+        <span>logbook/failure_mode.ts</span>
+        <span>›</span>
+        <span>Explain</span>
+      </p>
+      <h3>Failure mode — fail-closed</h3>
+      <p class="sub">What this contract actually means, in human terms. Editable only by leaving a comment from the Story — never directly here.</p>
+
+      <div class="l1-table" role="table" aria-label="Failure mode · explain">
+        <div class="l1-row" role="row">
+          <span class="k" role="rowheader">Behaviour</span>
+          <span class="v" role="cell">closed — write rejected on db error, error surfaced to caller</span>
+          <span class="meta" role="cell">contract · v3 · this run</span>
+        </div>
+        <div class="l1-row" role="row">
+          <span class="k" role="rowheader">SLA on db outage</span>
+          <span class="v" role="cell">writes are rejected; reads continue from local snapshot for up to 5 minutes</span>
+          <span class="meta" role="cell">→ logbook/sla.md</span>
+        </div>
+        <div class="l1-row" role="row">
+          <span class="k" role="rowheader">Retry policy</span>
+          <span class="v" role="cell">no retries — the caller decides whether to retry</span>
+          <span class="meta" role="cell">changed this run</span>
+        </div>
+        <div class="l1-row" role="row">
+          <span class="k" role="rowheader">Test coverage</span>
+          <span class="v" role="cell">e2e: race near flush flagged by test-engineer (open)</span>
+          <span class="meta" role="cell">flagged · 1/6</span>
+        </div>
+      </div>
+
+      <p class="demo" style="margin-top: 20px;">A small chevron next to any row opens the underlying file in <em>Source</em> — the layer Atlas does not surface to non-technical readers by default.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <span class="legend">
+    <span><span class="sw sw-r"></span>asked</span>
+    <span><span class="sw sw-a"></span>answer ready</span>
+    <span><span class="sw sw-g"></span>signed off</span>
+  </span>
+  <span>last updated 1 May 2026 · atlas</span>
+</footer>
+
+<script>
+  // Modal demo — confirm pulses then closes
+  (function () {
+    var shade = document.getElementById('modal-shade');
+    var btn   = document.getElementById('modal-confirm');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var modal = btn.closest('.modal');
+      if (!modal) return;
+      modal.classList.add('is-pulsing');
+      setTimeout(function () {
+        modal.classList.remove('is-pulsing');
+      }, 1200);
+    });
+
+    // Cancel buttons close the demo modal
+    var cancels = document.querySelectorAll('#sign-off .modal .cancel');
+    cancels.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var sh = document.querySelector('#sign-off .modal-shade');
+        if (sh) sh.classList.toggle('is-open');
+      });
+    });
+  })();
+
+  // Screenbar active state
+  (function () {
+    var links = document.querySelectorAll('.screenbar a[href^="#"]');
+    var ids = Array.prototype.map.call(links, function (a) { return a.getAttribute('href').slice(1); });
+    function update() {
+      var y = window.scrollY + 120;
+      var active = ids[0];
+      ids.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el && el.offsetTop <= y) active = id;
+      });
+      links.forEach(function (a) {
+        a.classList.toggle('is-active', a.getAttribute('href') === '#' + active);
+      });
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+
+  // Popover post → fade demo paragraph to red, dismiss popover
+  (function () {
+    var post = document.querySelector('#popover .popover .post');
+    var cancel = document.querySelector('#popover .popover .cancel');
+    var pop = document.querySelector('#popover .popover');
+    var para = document.querySelector('#popover .demo-paragraph');
+    if (!post || !pop || !para) return;
+    function close() { pop.style.display = 'none'; }
+    post.addEventListener('click', function () {
+      para.classList.remove('is-asked'); // force a reflow before re-applying for transition
+      void para.offsetWidth;
+      para.classList.add('is-asked');
+      close();
+    });
+    cancel.addEventListener('click', close);
+  })();
+</script>
+
+</body>
+</html>
