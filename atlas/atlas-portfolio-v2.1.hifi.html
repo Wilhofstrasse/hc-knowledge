@@ -1,0 +1,1856 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Atlas — repo portfolio (Stage 2 hi-fi)</title>
+<style>
+  /* ─────────────────────────────────────────────────────────
+     Atlas v2 portfolio — Stage 2 hi-fidelity
+     Variant A: sticky app bar with state legend + agent pill;
+                breadcrumb sits under the bar on every inner screen.
+     Inherits the v1 reader design system; adds blue (#1E5FAD)
+     for "building" — the only fourth state.
+     ────────────────────────────────────────────────────── */
+
+  :root {
+    --ink: #1A1A1A;
+    --muted: #737373;
+    --bg: #FFFFFF;
+    --wash: #F7F7F7;
+    --hair: #E5E5E5;
+
+    --accent: #E94D3A;          /* red — asked */
+    --amber:  #C97A00;          /* orange — answer ready */
+    --green:  #2E7D32;          /* green — signed off */
+    --blue:   #1E5FAD;          /* blue — building */
+
+    --tint-red:    #FEF1EE;
+    --tint-amber:  #FBF6EE;
+    --tint-green:  #EFF5EF;
+    --tint-blue:   #EEF3FA;
+
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection { background: rgba(233,77,58,0.18); }
+  a { color: inherit; text-decoration: none; }
+
+  /* ── app bar (Variant A) ───────────────────────────────────────── */
+  .appbar {
+    position: sticky; top: 0; z-index: 60;
+    display: flex; align-items: center; gap: 24px;
+    padding: 12px 28px;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid var(--hair);
+  }
+  .appbar .brand {
+    display: inline-flex; align-items: baseline; gap: 10px;
+    font-size: 15px; font-weight: 600; letter-spacing: -0.005em;
+  }
+  .appbar .brand .dot {
+    width: 8px; height: 8px; background: var(--accent); display: inline-block; transform: translateY(-1px);
+  }
+  .appbar .legend {
+    display: inline-flex; align-items: center; gap: 16px;
+    font-size: 12px; color: var(--muted);
+  }
+  .appbar .legend .sw {
+    display: inline-block; width: 8px; height: 8px; margin-right: 6px; vertical-align: 0;
+  }
+  .appbar .legend .sw-r { background: var(--accent); }
+  .appbar .legend .sw-a { background: var(--amber); }
+  .appbar .legend .sw-g { background: var(--green); }
+  .appbar .legend .sw-b { background: var(--blue); }
+  .appbar .spacer { flex: 1; }
+  .appbar .agent-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 10px;
+    border: 1px solid var(--hair);
+    font-size: 12px; color: var(--ink);
+    cursor: pointer;
+  }
+  .appbar .agent-pill:hover { border-color: var(--ink); }
+  .appbar .agent-pill .led {
+    width: 6px; height: 6px; background: var(--blue);
+    animation: blink 1.4s infinite ease-in-out;
+  }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .appbar .icon-btn {
+    appearance: none; background: transparent; border: 1px solid var(--hair);
+    width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+  .appbar .icon-btn:hover { border-color: var(--ink); }
+  .appbar .icon-btn svg { width: 14px; height: 14px; stroke: var(--ink); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* TOC strip — only visible at the top of this composite document */
+  .toc {
+    display: flex; gap: 18px; flex-wrap: wrap;
+    padding: 10px 28px; border-bottom: 1px solid var(--hair);
+    font-size: 12px; color: var(--muted);
+    background: var(--bg);
+    position: sticky; top: 53px; z-index: 55;
+  }
+  .toc a { color: var(--muted); padding-bottom: 2px; }
+  .toc a:hover { color: var(--ink); }
+  .toc a.is-active { color: var(--ink); border-bottom: 1px solid var(--ink); }
+
+  /* ── screen container ───────────────────────────────────────────── */
+  .screen {
+    border-bottom: 1px solid var(--hair);
+    padding: 56px 28px 80px;
+  }
+  .screen-head {
+    max-width: 1080px; margin: 0 auto 32px;
+  }
+  .screen-head .num {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .screen-head h1 {
+    font-size: 26px; line-height: 1.25; font-weight: 600; margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .screen-head p {
+    color: var(--muted); font-size: 14px; margin: 0; max-width: 720px;
+  }
+
+  /* breadcrumb (under appbar on inner screens) */
+  .crumb {
+    max-width: 1080px; margin: 0 auto 24px;
+    font-size: 13px; color: var(--muted);
+  }
+  .crumb a { color: var(--muted); }
+  .crumb a:hover { color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 1px; }
+  .crumb .sep { margin: 0 8px; color: var(--hair); }
+  .crumb .here { color: var(--ink); }
+
+  /* ── screen 1 — /projects ──────────────────────────────────────── */
+  .controls {
+    max-width: 1080px; margin: 0 auto 24px;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .search {
+    flex: 1 1 320px; min-width: 240px;
+    border: 1px solid var(--hair);
+    padding: 8px 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .search input {
+    flex: 1; border: 0; outline: 0; font: inherit; font-size: 14px; background: transparent;
+  }
+  .search svg { width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 1.5; }
+  .filters {
+    display: inline-flex; gap: 6px; flex-wrap: wrap;
+  }
+  .chip {
+    padding: 5px 10px; font-size: 12px;
+    border: 1px solid var(--hair); cursor: pointer;
+    color: var(--ink); background: transparent;
+  }
+  .chip:hover { border-color: var(--ink); }
+  .chip.is-on { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+  .chip .sw { display: inline-block; width: 6px; height: 6px; margin-right: 6px; vertical-align: 1px; }
+  .new-btn {
+    padding: 7px 12px; font-size: 13px; font-weight: 500;
+    border: 1px solid var(--ink); background: var(--ink); color: var(--bg); cursor: pointer;
+  }
+
+  .grid {
+    max-width: 1080px; margin: 0 auto;
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  .card {
+    border: 1px solid var(--hair);
+    padding: 18px;
+    background: var(--bg);
+    cursor: pointer;
+    transition: border-color 160ms ease;
+    position: relative;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .card:hover { border-color: var(--ink); }
+  .card .top {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+  }
+  .card h3 {
+    font-size: 16px; font-weight: 600; margin: 0;
+    letter-spacing: -0.005em;
+  }
+  .card .repo {
+    color: var(--muted); font-size: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  .card .state-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 2px 8px;
+    border: 1px solid var(--hair);
+    color: var(--ink);
+    flex: none;
+  }
+  .card .state-pill .sw { width: 6px; height: 6px; display: inline-block; }
+  .card.is-asked  { border-left: 2px solid var(--accent); }
+  .card.is-asked  .state-pill { border-color: var(--accent); color: var(--accent); }
+  .card.is-asked  .state-pill .sw { background: var(--accent); }
+  .card.is-ready  { border-left: 2px solid var(--amber); }
+  .card.is-ready  .state-pill { border-color: var(--amber); color: var(--amber); }
+  .card.is-ready  .state-pill .sw { background: var(--amber); }
+  .card.is-signed { border-left: 2px solid var(--green); }
+  .card.is-signed .state-pill { border-color: var(--green); color: var(--green); }
+  .card.is-signed .state-pill .sw { background: var(--green); }
+  .card.is-build  { border-left: 2px solid var(--blue); }
+  .card.is-build  .state-pill { border-color: var(--blue); color: var(--blue); }
+  .card.is-build  .state-pill .sw { background: var(--blue); animation: blink 1.4s infinite ease-in-out; }
+
+  .card .summary {
+    font-size: 13px; color: var(--ink); line-height: 1.5;
+    margin: 0;
+  }
+  .card .meta {
+    display: flex; align-items: baseline; justify-content: space-between;
+    color: var(--muted); font-size: 12px; margin-top: 4px;
+  }
+  .card .stack { display: inline-flex; gap: 6px; }
+  .card .stack .tag {
+    font-size: 11px; padding: 1px 6px; border: 1px solid var(--hair);
+    color: var(--muted);
+  }
+
+  /* ── screen 2 — project home (layer picker) ─────────────────────── */
+  .summary-strip {
+    max-width: 1080px; margin: 0 auto 32px;
+    border: 1px solid var(--hair);
+    padding: 18px 20px;
+    display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center;
+  }
+  .summary-strip .left p { margin: 0; font-size: 14px; color: var(--ink); }
+  .summary-strip .stats { display: inline-flex; gap: 24px; font-size: 12px; color: var(--muted); }
+  .summary-strip .stats b { color: var(--ink); font-weight: 600; }
+
+  .layers {
+    max-width: 1080px; margin: 0 auto;
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  .layer-card {
+    border: 1px solid var(--hair);
+    padding: 24px;
+    cursor: pointer;
+    transition: border-color 160ms ease, background-color 160ms ease;
+    min-height: 200px;
+    display: flex; flex-direction: column; justify-content: space-between; gap: 16px;
+  }
+  .layer-card:hover { border-color: var(--ink); background: var(--wash); }
+  .layer-card .lvl {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  }
+  .layer-card h3 {
+    font-size: 18px; font-weight: 600; margin: 6px 0 6px; letter-spacing: -0.005em;
+  }
+  .layer-card p {
+    font-size: 13px; color: var(--muted); margin: 0;
+    line-height: 1.5;
+  }
+  .layer-card .arr { color: var(--muted); font-size: 18px; }
+  .layer-card.is-recommended { border-color: var(--ink); }
+  .layer-card.is-recommended .lvl::after {
+    content: "· recommended"; color: var(--accent); margin-left: 6px;
+  }
+
+  /* layer tabs (under summary on inner layers) */
+  .layer-tabs {
+    max-width: 1080px; margin: 0 auto 28px;
+    display: inline-flex; border: 1px solid var(--hair);
+  }
+  .layer-tabs a {
+    padding: 8px 14px; font-size: 13px; color: var(--muted);
+    border-right: 1px solid var(--hair);
+  }
+  .layer-tabs a:last-child { border-right: 0; }
+  .layer-tabs a.is-active { color: var(--ink); background: var(--wash); font-weight: 500; }
+  .layer-tabs a:hover { color: var(--ink); }
+
+  /* ── screen 3 — Story (carries v1 reader, scoped) ───────────── */
+  .reader-col {
+    max-width: 680px; margin: 0 auto; padding: 0 4px;
+  }
+  .reader-col h2.title {
+    font-size: 24px; line-height: 1.25; font-weight: 600; letter-spacing: -0.005em;
+    margin: 0 0 10px;
+  }
+  .reader-col p.demo { color: var(--muted); font-size: 13px; margin: 0 0 40px; }
+  .reader-col h3.section {
+    font-size: 18px; font-weight: 600; margin: 48px 0 14px; letter-spacing: -0.003em;
+  }
+  .para {
+    position: relative;
+    padding: 12px 88px 12px 14px;
+    margin: 0 0 20px;
+    border-left: 1px solid transparent;
+    transition: background-color 200ms ease;
+  }
+  .para p { margin: 0; font-size: 16px; line-height: 1.6; text-wrap: pretty; }
+  .para.is-asked  { border-left-color: var(--accent); background: var(--tint-red); }
+  .para.is-ready  { border-left-color: var(--amber);  background: var(--tint-amber); }
+  .para.is-signed { border-left-color: var(--green);  background: var(--tint-green); }
+  .para.is-build  { border-left-color: var(--blue);   background: var(--tint-blue); }
+  .para .lock { color: var(--muted); margin-left: 6px; font-size: 13px; }
+  .para .stamp {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 1px 6px 0;
+    border: 1px solid var(--green);
+    color: var(--green);
+    font-size: 10px;
+    line-height: 1.5;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    vertical-align: 2px;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .para .stamp .who {
+    color: var(--muted);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    margin-left: 6px;
+    border-left: 1px solid var(--hair);
+    padding-left: 6px;
+  }
+  .para .actions {
+    position: absolute; top: 12px; right: 10px;
+    display: flex; gap: 14px; opacity: 0; pointer-events: none;
+    transition: opacity 160ms ease;
+  }
+  .para:hover .actions, .para:focus-within .actions { opacity: 1; pointer-events: auto; }
+  .para .actions button {
+    appearance: none; background: transparent; border: 0; width: 26px; height: 26px;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--ink); cursor: pointer; padding: 0;
+  }
+  .para .actions button:hover { color: var(--accent); }
+  .para .actions svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* building paragraph: animated dots in place of caret */
+  .building-line {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--blue); font-size: 12px; font-style: italic;
+    margin-top: 6px;
+  }
+  .building-line .dots::after {
+    content: "…"; animation: blink 1.4s infinite ease-in-out;
+  }
+
+  /* ── screen 4 — Map (interactive nodes + edges) ───────────────────────────────────── */
+  .map-frame {
+    max-width: 1080px; margin: 0 auto;
+    border: 1px solid var(--hair);
+    height: 460px; position: relative; background: var(--bg);
+    overflow: hidden;
+  }
+  .map-frame svg.edges { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .map-frame svg.edges line, .map-frame svg.edges path.edge { stroke: var(--hair); stroke-width: 1; fill: none; pointer-events: stroke; cursor: pointer; }
+  .map-frame svg.edges line.heavy, .map-frame svg.edges path.edge.heavy { stroke: var(--ink); }
+  .map-frame svg.edges .edge-hit { stroke: transparent; stroke-width: 14; pointer-events: stroke; cursor: pointer; }
+  .map-frame svg.edges g.edge:hover line, .map-frame svg.edges g.edge:hover path.edge,
+  .map-frame svg.edges g.edge.is-selected line, .map-frame svg.edges g.edge.is-selected path.edge {
+    stroke: var(--accent); stroke-width: 1.5;
+  }
+  .map-frame svg.edges text.card {
+    font-family: var(--mono); font-size: 10px; fill: var(--muted);
+    paint-order: stroke; stroke: var(--bg); stroke-width: 4; stroke-linejoin: round;
+    user-select: none; pointer-events: none;
+  }
+  .map-frame svg.edges g.edge:hover text.card,
+  .map-frame svg.edges g.edge.is-selected text.card { fill: var(--accent); }
+  .node {
+    position: absolute;
+    cursor: pointer;
+    appearance: none;
+    font: inherit;
+    text-align: left;
+    color: inherit;
+    border: 1px solid var(--hair);
+    padding: 12px 14px;
+    background: var(--bg);
+    min-width: 152px;
+    transition: border-color 160ms ease;
+  }
+  .node:hover { border-color: var(--ink); }
+  .node:focus { outline: none; border-color: var(--ink); }
+  .node.is-selected { border-color: var(--accent); box-shadow: 0 0 0 3px var(--tint-red); }
+  .node h4 { font-size: 14px; font-weight: 600; margin: 0 0 4px; letter-spacing: -0.003em; }
+  .node p { font-size: 12px; color: var(--muted); margin: 0; line-height: 1.4; }
+  .node .deg { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 6px; letter-spacing: 0.04em; }
+  .node.is-asked  { border-left: 2px solid var(--accent); }
+  .node.is-ready  { border-left: 2px solid var(--amber); }
+  .node.is-signed { border-left: 2px solid var(--green); }
+  .node.is-build  { border-left: 2px solid var(--blue); }
+  .node.is-arrived {
+    border-color: var(--ink);
+    box-shadow: 0 0 0 3px var(--tint-red); /* faint emphasis only */
+  }
+
+  /* inspector panel below the map */
+  .map-inspector {
+    max-width: 1080px; margin: 12px auto 0;
+    border: 1px solid var(--hair);
+    background: var(--bg);
+    display: grid; grid-template-columns: 1fr 280px;
+    min-height: 132px;
+  }
+  .map-inspector .body { padding: 14px 16px; }
+  .map-inspector .meta {
+    border-left: 1px solid var(--hair);
+    padding: 14px 16px;
+    background: var(--wash);
+    font-size: 12px; color: var(--muted);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .map-inspector .kicker {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 4px;
+  }
+  .map-inspector h4 { font-size: 16px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.005em; }
+  .map-inspector p  { font-size: 13px; line-height: 1.6; margin: 0 0 8px; color: var(--ink); }
+  .map-inspector .actions { display: flex; gap: 14px; margin-top: 8px; }
+  .map-inspector .actions a {
+    color: var(--ink); border-bottom: 1px solid var(--hair); padding-bottom: 1px; font-size: 13px;
+  }
+  .map-inspector .actions a:hover { border-bottom-color: var(--ink); }
+  .map-inspector .meta dt { color: var(--muted); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .map-inspector .meta dd { color: var(--ink); margin: 2px 0 0; font-size: 13px; }
+  .map-inspector .meta .row + .row { margin-top: 6px; }
+
+  .map-legend {
+    max-width: 1080px; margin: 14px auto 0;
+    color: var(--muted); font-size: 12px;
+  }
+  .map-legend .swatches { display: inline-flex; gap: 16px; margin-left: 16px; }
+  .map-legend .sw { display: inline-flex; align-items: center; gap: 6px; }
+  .map-legend .sw i {
+    display: inline-block; width: 12px; height: 12px; border: 1px solid var(--hair);
+    border-left-width: 2px;
+  }
+  .map-legend .sw.asked  i { border-left-color: var(--accent); }
+  .map-legend .sw.ready  i { border-left-color: var(--amber); }
+  .map-legend .sw.signed i { border-left-color: var(--green); }
+  .map-legend .sw.build  i { border-left-color: var(--blue); }
+
+  /* ── screen 5 — Workings (Index + Explain) ────────────────────────────────── */
+  .workings {
+    max-width: 1080px; margin: 0 auto;
+    border: 1px solid var(--hair);
+    display: grid; grid-template-columns: 360px 1fr;
+    background: var(--bg);
+  }
+  .workings-col {
+    display: flex; flex-direction: column;
+    min-height: 520px;
+  }
+  .workings-col + .workings-col { border-left: 1px solid var(--hair); }
+  .workings-head {
+    display: flex; align-items: baseline; gap: 10px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--hair);
+    background: var(--wash);
+  }
+  .workings-head h2 {
+    font-size: 13px; font-weight: 600; margin: 0;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .workings-head .promise {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--muted); margin-left: auto;
+  }
+
+  /* Index — always-complete mirror of Source */
+  .index-list { padding: 6px 0; font-family: var(--mono); font-size: 12.5px; line-height: 1.7; }
+  .index-list .row {
+    display: grid; grid-template-columns: 1fr auto auto;
+    gap: 8px; align-items: center;
+    padding: 3px 16px;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .index-list .row:hover { background: var(--wash); }
+  .index-list .row.is-on { background: var(--tint-red); }
+  .index-list .row .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .index-list .row .name .ico { color: var(--muted); margin-right: 6px; }
+  .index-list .row .nest { padding-left: 18px; }
+  .index-list .row .cov {
+    font-size: 10px; letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+  .index-list .row .cov.has  { color: var(--green); }
+  .index-list .row .cov.part { color: var(--amber); }
+  .index-list .row .cov.none { color: var(--muted); }
+  .index-list .row .pct {
+    font-size: 10px; color: var(--muted);
+    min-width: 40px; text-align: right;
+  }
+  .index-section {
+    padding: 8px 16px 4px;
+    color: var(--muted); font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* Explain — best-effort plain-language coverage */
+  .explain-body { padding: 4px 0; }
+  .explain-block { padding: 14px 18px; border-bottom: 1px solid var(--hair); }
+  .explain-block:last-child { border-bottom: 0; }
+  .explain-block .crumb-mini {
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+    margin: 0 0 6px;
+  }
+  .explain-block h3 {
+    font-size: 15px; font-weight: 600; margin: 0 0 8px;
+    letter-spacing: -0.005em;
+  }
+  .explain-block .contract {
+    font-size: 13.5px; line-height: 1.6; color: var(--ink); margin: 0 0 8px;
+  }
+  .explain-block .src-line {
+    font-family: var(--mono); font-size: 11px; color: var(--muted);
+    display: flex; flex-wrap: wrap; gap: 14px; align-items: baseline;
+    margin-top: 8px;
+  }
+  .explain-block .src-line a {
+    color: var(--ink); border-bottom: 1px solid var(--hair); padding-bottom: 1px;
+  }
+  .explain-block .src-line a:hover { border-bottom-color: var(--ink); }
+  .explain-block.is-gap {
+    background: var(--wash);
+  }
+  .explain-block.is-gap .gap-note {
+    font-size: 12px; color: var(--muted); font-style: italic; margin: 4px 0 0;
+  }
+  .explain-block .badge {
+    display: inline-block; padding: 1px 6px;
+    border: 1px solid var(--hair); font-size: 10px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted); margin-left: 8px; vertical-align: 2px;
+  }
+  .explain-block .badge.gap { color: var(--accent); border-color: var(--accent); }
+  .explain-block .badge.stale { color: var(--amber); border-color: var(--amber); }
+
+  /* ── screen 6 — Source (read-only repo browser) ─────────────────────────────────────── */
+  .repo-frame {
+    max-width: 1080px; margin: 0 auto;
+    border: 1px solid var(--hair);
+    display: grid; grid-template-columns: 280px 1fr;
+    min-height: 480px;
+  }
+  .tree {
+    border-right: 1px solid var(--hair);
+    padding: 14px 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px; line-height: 1.7;
+    background: var(--wash);
+  }
+  .tree .row { display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 1px 4px; }
+  .tree .row:hover { background: var(--bg); }
+  .tree .row.is-on { background: var(--bg); border-left: 2px solid var(--accent); padding-left: 2px; }
+  .tree .ico { width: 12px; color: var(--muted); }
+  .tree .nest { padding-left: 16px; }
+  .file-view { display: flex; flex-direction: column; }
+  .file-bar {
+    display: flex; align-items: center; gap: 14px;
+    padding: 10px 16px; border-bottom: 1px solid var(--hair);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px;
+    color: var(--muted);
+  }
+  .file-bar .path { color: var(--ink); }
+  .file-bar .meta { margin-left: auto; }
+  .file-bar a { color: var(--ink); border-bottom: 1px solid var(--hair); padding-bottom: 1px; }
+  .file-body {
+    padding: 14px 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px; line-height: 1.7;
+    background: var(--bg);
+    overflow-x: auto;
+  }
+  .file-body .ln {
+    display: grid; grid-template-columns: 48px 1fr; gap: 12px;
+  }
+  .file-body .ln .num { color: var(--muted); text-align: right; user-select: none; }
+  .file-body .ln .code { white-space: pre; }
+  .file-body .kw { color: var(--accent); }
+  .file-body .str { color: var(--green); }
+  .file-body .com { color: var(--muted); font-style: italic; }
+
+  /* ── screen 7 — comment-to-change run timeline ──────────────────── */
+  .run {
+    max-width: 1080px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+  }
+  @media (max-width: 880px) { .run { grid-template-columns: 1fr; } }
+  .run-col {
+    border: 1px solid var(--hair); padding: 20px 22px;
+  }
+  .run-col h3 {
+    font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 18px;
+  }
+  .timeline { position: relative; padding-left: 22px; }
+  .timeline::before {
+    content: ""; position: absolute; left: 6px; top: 4px; bottom: 4px;
+    width: 1px; background: var(--hair);
+  }
+  .step { position: relative; margin-bottom: 18px; }
+  .step::before {
+    content: ""; position: absolute; left: -22px; top: 6px;
+    width: 9px; height: 9px; border: 1px solid var(--ink); background: var(--bg);
+  }
+  .step.done::before { background: var(--ink); }
+  .step.now::before  { background: var(--blue); border-color: var(--blue); animation: blink 1.4s infinite ease-in-out; }
+  .step h4 { font-size: 13px; font-weight: 600; margin: 0 0 2px; }
+  .step p { font-size: 12px; color: var(--muted); margin: 0; }
+  .step .who {
+    display: inline-block; font-size: 11px; color: var(--muted);
+    margin-right: 6px;
+  }
+  .step .dissent {
+    display: inline-block; margin-top: 4px;
+    font-size: 11px; color: var(--accent);
+    border: 1px solid var(--accent); padding: 1px 6px;
+  }
+
+  .diff h4 { font-size: 13px; font-weight: 600; margin: 18px 0 8px; }
+  .diff h4:first-child { margin-top: 0; }
+  .diff pre {
+    margin: 0; padding: 10px 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px; line-height: 1.55;
+    background: var(--wash);
+    border-left: 2px solid var(--hair);
+    white-space: pre-wrap; word-break: break-word;
+  }
+  .diff .add { background: rgba(46,125,50,0.08); display: block; }
+  .diff .rm  { background: rgba(233,77,58,0.08); display: block; text-decoration: line-through; color: var(--muted); }
+
+  .reabs {
+    margin-top: 20px; padding: 16px 18px;
+    border: 1px solid var(--amber); background: var(--tint-amber);
+  }
+  .reabs h4 { font-size: 13px; margin: 0 0 8px; }
+  .reabs p { margin: 0 0 14px; font-size: 14px; line-height: 1.55; }
+  .reabs .row {
+    display: flex; gap: 24px; font-size: 13px;
+  }
+  .reabs .row button {
+    appearance: none; background: transparent; border: 0; padding: 4px 0; cursor: pointer; font: inherit;
+  }
+  .reabs .row .approve { color: var(--green); font-weight: 600; }
+  .reabs .row .edit    { color: var(--ink); }
+  .reabs .row .reject  { color: var(--accent); }
+
+  /* ── screen 8 — agent run console (expanded pill) ───────────────── */
+  .console {
+    max-width: 1080px; margin: 0 auto;
+    border: 1px solid var(--hair);
+  }
+  .console-bar {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 16px;
+    padding: 14px 18px; border-bottom: 1px solid var(--hair); align-items: center;
+    background: var(--wash);
+  }
+  .console-bar .title { font-size: 14px; font-weight: 600; }
+  .console-bar .summary { color: var(--muted); font-size: 13px; }
+  .console-bar .ctrl {
+    display: inline-flex; gap: 8px;
+  }
+  .console-bar .ctrl button {
+    appearance: none; background: var(--bg); border: 1px solid var(--hair);
+    padding: 6px 10px; font: inherit; font-size: 12px; cursor: pointer;
+  }
+  .console-bar .ctrl button:hover { border-color: var(--ink); }
+  .console-bar .ctrl .pause { color: var(--ink); }
+  .console-bar .ctrl .stop  { color: var(--accent); border-color: var(--accent); }
+
+  .console-body {
+    display: grid; grid-template-columns: 220px 1fr; gap: 0;
+    min-height: 480px;
+  }
+  .stages {
+    border-right: 1px solid var(--hair); padding: 16px 14px;
+  }
+  .stages .stage {
+    padding: 10px 8px; cursor: pointer; font-size: 13px;
+    display: flex; align-items: center; gap: 10px;
+    border-left: 2px solid transparent;
+  }
+  .stages .stage .num {
+    width: 18px; height: 18px; border: 1px solid var(--ink);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600;
+  }
+  .stages .stage.done .num { background: var(--ink); color: var(--bg); }
+  .stages .stage.now { border-left-color: var(--blue); background: var(--tint-blue); }
+  .stages .stage.now .num { background: var(--blue); border-color: var(--blue); color: var(--bg); }
+  .stages .stage .lbl small { display: block; color: var(--muted); font-size: 11px; }
+  .stages .stage:hover { background: var(--wash); }
+
+  .stage-detail { padding: 18px 22px; }
+  .stage-detail h3 { font-size: 16px; font-weight: 600; margin: 0 0 8px; }
+  .stage-detail .meta { color: var(--muted); font-size: 12px; margin-bottom: 16px; }
+  .agent-row {
+    display: grid; grid-template-columns: 24px 160px 1fr auto; gap: 16px;
+    padding: 12px 0; border-top: 1px solid var(--hair); align-items: baseline;
+    font-size: 13px;
+  }
+  .agent-row:first-of-type { border-top: 0; }
+  .agent-row .av {
+    width: 22px; height: 22px; border: 1px solid var(--ink);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; align-self: center;
+  }
+  .agent-row .name b { font-weight: 600; }
+  .agent-row .name small { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+  .agent-row .say { color: var(--ink); }
+  .agent-row .say .quote { font-style: italic; color: var(--muted); display: block; margin-top: 4px; font-size: 12px; }
+  .agent-row .vote {
+    font-size: 11px; padding: 2px 8px; border: 1px solid var(--hair); color: var(--muted);
+  }
+  .agent-row .vote.agree   { border-color: var(--green); color: var(--green); }
+  .agent-row .vote.dissent { border-color: var(--accent); color: var(--accent); }
+  .agent-row .vote.flag    { border-color: var(--amber); color: var(--amber); }
+
+  /* ── screen 9 — pause patterns (4 cards inline) ─────────────────── */
+  .pauses {
+    max-width: 1080px; margin: 0 auto;
+    display: grid; gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  }
+  @media (max-width: 880px) { .pauses { grid-template-columns: 1fr; } }
+  .pause-card {
+    border: 1px solid var(--hair);
+    padding: 22px 22px 18px;
+    background: var(--bg);
+  }
+  .pause-card .when {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 8px;
+  }
+  .pause-card h3 {
+    font-size: 16px; font-weight: 600; margin: 0 0 10px; letter-spacing: -0.003em;
+  }
+  .pause-card p { font-size: 13px; color: var(--muted); margin: 0 0 16px; line-height: 1.5; }
+  .ask-modal {
+    border: 1px solid var(--ink);
+    padding: 16px 18px;
+    background: var(--bg);
+  }
+  .ask-modal .lead {
+    font-size: 14px; margin: 0 0 12px; color: var(--ink);
+  }
+  .ask-modal .options {
+    display: flex; flex-direction: column; gap: 8px;
+    margin-bottom: 14px;
+  }
+  .ask-modal .option {
+    display: flex; align-items: baseline; gap: 10px;
+    padding: 8px 10px; border: 1px solid var(--hair);
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .ask-modal .option:hover { border-color: var(--ink); }
+  .ask-modal .option .tag {
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--muted); flex: none;
+  }
+  .ask-modal .option .tag.rec { color: var(--accent); }
+  .ask-modal .row { display: flex; gap: 20px; justify-content: flex-end; font-size: 13px; }
+  .ask-modal .row button { appearance: none; background: transparent; border: 0; padding: 4px 0; cursor: pointer; font: inherit; }
+  .ask-modal .row .later { color: var(--muted); }
+  .ask-modal .row .go    { color: var(--accent); font-weight: 600; }
+
+  /* ── settings & hard-mode (Screen 1, slid-out drawer) ───────────── */
+  .drawer {
+    max-width: 1080px; margin: 32px auto 0;
+    border: 1px solid var(--hair);
+    padding: 18px 22px;
+  }
+  .drawer h3 { font-size: 14px; font-weight: 600; margin: 0 0 14px; }
+  .drawer .row {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 16px; padding: 10px 0; border-top: 1px solid var(--hair);
+    align-items: center;
+  }
+  .drawer .row:first-of-type { border-top: 0; }
+  .drawer .row .label { font-size: 13px; }
+  .drawer .row .label small { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+  .toggle {
+    width: 36px; height: 20px; border: 1px solid var(--ink);
+    position: relative; cursor: pointer; background: var(--bg);
+  }
+  .toggle::after {
+    content: ""; position: absolute; top: 1px; left: 1px;
+    width: 16px; height: 16px; background: var(--ink);
+    transition: left 160ms ease;
+  }
+  .toggle.is-on::after { left: 17px; background: var(--accent); }
+
+  /* footer */
+  .pagefoot {
+    max-width: 1080px; margin: 32px auto 0;
+    padding: 24px 0 16px;
+    border-top: 1px solid var(--hair);
+    color: var(--muted); font-size: 12px;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
+
+  /* motion control */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+
+  /* responsive */
+  @media (max-width: 720px) {
+    .appbar { gap: 12px; padding: 10px 16px; flex-wrap: wrap; }
+    .appbar .legend { display: none; }
+    .toc { padding: 8px 16px; gap: 12px; }
+    .screen { padding: 40px 16px 56px; }
+    .screen-head h1 { font-size: 22px; }
+    .l1-row { grid-template-columns: 1fr; gap: 6px; }
+    .repo-frame { grid-template-columns: 1fr; }
+    .tree { border-right: 0; border-bottom: 1px solid var(--hair); }
+    .console-body { grid-template-columns: 1fr; }
+    .stages { border-right: 0; border-bottom: 1px solid var(--hair); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════
+     APP BAR · sticky on every screen (Variant A)
+     ════════════════════════════════════════════════════════════════ -->
+<nav class="appbar" aria-label="Atlas app bar">
+  <span class="brand"><span class="dot" aria-hidden="true"></span>atlas</span>
+  <span class="legend" aria-label="State legend">
+    <span><span class="sw sw-r"></span>asked</span>
+    <span><span class="sw sw-a"></span>ready</span>
+    <span><span class="sw sw-g"></span>signed</span>
+    <span><span class="sw sw-b"></span>building</span>
+  </span>
+  <span class="spacer"></span>
+  <span class="agent-pill" id="agent-pill" title="Open run console">
+    <span class="led" aria-hidden="true"></span>
+    <span><b>Codex</b> · paragraph rewrite · <span style="color:var(--muted)">2/4</span></span>
+  </span>
+  <button class="icon-btn" title="Settings" aria-label="Settings" id="settings-toggle">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+  </button>
+</nav>
+
+<nav class="toc" aria-label="Screens">
+  <a href="#s1" class="is-active">1 · Projects</a>
+  <a href="#s2">2 · Project home</a>
+  <a href="#s3">3 · Story</a>
+  <a href="#s4">4 · Map</a>
+  <a href="#s5">5 · Workings</a>
+  <a href="#s6">6 · Source</a>
+  <a href="#s7">7 · Comment → change</a>
+  <a href="#s8">8 · Run console</a>
+  <a href="#s9">9 · Pause patterns</a>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCREEN 1 · /projects
+     ════════════════════════════════════════════════════════════════ -->
+<section class="screen" id="s1">
+  <header class="screen-head">
+    <span class="num">screen 1</span>
+    <h1>/projects — your portfolio</h1>
+    <p>The single point of access. Each card is one repository, coloured by its current state. You never open GitHub.</p>
+  </header>
+
+  <div class="controls">
+    <label class="search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.35-4.35"/></svg>
+      <input type="search" placeholder="search projects, paragraphs, contracts…" />
+    </label>
+    <span class="filters" role="group" aria-label="Filter by state">
+      <button class="chip is-on">all</button>
+      <button class="chip"><span class="sw" style="background:var(--accent)"></span>asked</button>
+      <button class="chip"><span class="sw" style="background:var(--amber)"></span>ready</button>
+      <button class="chip"><span class="sw" style="background:var(--green)"></span>signed</button>
+      <button class="chip"><span class="sw" style="background:var(--blue)"></span>building</button>
+    </span>
+    <button class="new-btn">+ new project</button>
+  </div>
+
+  <div class="grid" role="list">
+    <article class="card is-asked" role="listitem">
+      <div class="top">
+        <div>
+          <h3>Atlas reader</h3>
+          <div class="repo">wilhofstrasse/atlas</div>
+        </div>
+        <span class="state-pill"><span class="sw"></span>asked</span>
+      </div>
+      <p class="summary">Logbook retention is open. GDPR review flagged it last quarter; needs a decision before the next audit.</p>
+      <div class="meta">
+        <span class="stack"><span class="tag">ts</span><span class="tag">postgres</span></span>
+        <span>opened by you · 2h ago</span>
+      </div>
+    </article>
+
+    <article class="card is-ready" role="listitem">
+      <div class="top">
+        <div>
+          <h3>Logbook</h3>
+          <div class="repo">wilhofstrasse/logbook</div>
+        </div>
+        <span class="state-pill"><span class="sw"></span>ready</span>
+      </div>
+      <p class="summary">Codex moved failure mode to fail-closed. Six sparring agents reviewed; one race-condition flag is queued.</p>
+      <div class="meta">
+        <span class="stack"><span class="tag">go</span><span class="tag">sqlite</span></span>
+        <span>answer · 18m ago</span>
+      </div>
+    </article>
+
+    <article class="card is-build" role="listitem">
+      <div class="top">
+        <div>
+          <h3>Partner mirror</h3>
+          <div class="repo">wilhofstrasse/mirror-readonly</div>
+        </div>
+        <span class="state-pill"><span class="sw"></span>building</span>
+      </div>
+      <p class="summary">Routing read-only links for two partner clients. Codex is on step 2 of 4 — drafting the access scope.</p>
+      <div class="meta">
+        <span class="stack"><span class="tag">ts</span><span class="tag">cloudflare</span></span>
+        <span>started · 11m ago</span>
+      </div>
+    </article>
+
+    <article class="card is-signed" role="listitem">
+      <div class="top">
+        <div>
+          <h3>Sign-off · Face ID</h3>
+          <div class="repo">wilhofstrasse/auth-faceid</div>
+        </div>
+        <span class="state-pill"><span class="sw"></span>signed</span>
+      </div>
+      <p class="summary">Phone sign-off requires Face ID by default. Desktop falls back to passphrase. Locked yesterday.</p>
+      <div class="meta">
+        <span class="stack"><span class="tag">swift</span><span class="tag">ts</span></span>
+        <span>signed · 1d ago</span>
+      </div>
+    </article>
+
+    <article class="card" role="listitem">
+      <div class="top">
+        <div>
+          <h3>Dispatch</h3>
+          <div class="repo">wilhofstrasse/dispatch</div>
+        </div>
+        <span class="state-pill" style="border-color:var(--hair); color:var(--muted);"><span class="sw" style="background:var(--muted)"></span>quiet</span>
+      </div>
+      <p class="summary">Background job runner. Nothing has changed since last week's full sign-off; nothing pending.</p>
+      <div class="meta">
+        <span class="stack"><span class="tag">go</span></span>
+        <span>idle · 6d</span>
+      </div>
+    </article>
+
+    <article class="card is-asked" role="listitem">
+      <div class="top">
+        <div>
+          <h3>Wilhof site</h3>
+          <div class="repo">wilhofstrasse/site</div>
+        </div>
+        <span class="state-pill"><span class="sw"></span>asked</span>
+      </div>
+      <p class="summary">Two paragraphs on the about page have a question waiting — copy review for the partners section.</p>
+      <div class="meta">
+        <span class="stack"><span class="tag">astro</span></span>
+        <span>asked · 4h</span>
+      </div>
+    </article>
+  </div>
+
+  <!-- Settings drawer (collapsible) -->
+  <div class="drawer" id="settings" hidden>
+    <h3>Settings</h3>
+    <div class="row">
+      <div class="label">Hard mode
+        <small>show Source and Workings by default and skip the layer picker on project home</small>
+      </div>
+      <div class="toggle" role="switch" aria-checked="false" tabindex="0" data-toggle></div>
+    </div>
+    <div class="row">
+      <div class="label">Agent visibility
+        <small>quiet pill (default) · expanded console · invisible</small>
+      </div>
+      <select aria-label="Agent visibility" style="font: inherit; border: 1px solid var(--hair); padding: 5px 8px;">
+        <option>Quiet pill</option>
+        <option>Expanded console</option>
+        <option>Invisible</option>
+      </select>
+    </div>
+    <div class="row">
+      <div class="label">Default consult
+        <small>which stakeholders Atlas defaults to consulting on every comment</small>
+      </div>
+      <span style="font-size:13px; color:var(--muted)">Codex · Design · Agents</span>
+    </div>
+    <div class="row">
+      <div class="label">Push to GitHub
+        <small>ask before · automatic on green · never</small>
+      </div>
+      <span style="font-size:13px; color:var(--muted)">ask before</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCREEN 2 · Project home (layer picker)
+     ════════════════════════════════════════════════════════════════ -->
+<section class="screen" id="s2">
+  <p class="crumb"><a href="#s1">projects</a><span class="sep">›</span><span class="here">logbook</span></p>
+
+  <header class="screen-head">
+    <span class="num">screen 2</span>
+    <h1>Logbook — pick a layer</h1>
+    <p>Every project opens here. Choose how deep you want to go: most reading happens in the Story.</p>
+  </header>
+
+  <div class="summary-strip">
+    <div class="left">
+      <p>Failure mode moved to <em>fail-closed</em> 18 minutes ago. One race-condition flag is queued near the flush path. Two paragraphs are awaiting your sign-off.</p>
+    </div>
+    <div class="stats">
+      <span><b>22</b> paragraphs</span>
+      <span><b>3</b> ready</span>
+      <span><b>1</b> building</span>
+      <span><b>14</b> signed</span>
+    </div>
+  </div>
+
+  <div class="layers">
+    <a class="layer-card is-recommended" href="#s3">
+      <div>
+        <span class="lvl">Story</span>
+        <h3>Read in plain English</h3>
+        <p>Decisions and changes as paragraphs you can ask about, deep-dive, and sign off.</p>
+      </div>
+      <span class="arr">→</span>
+    </a>
+    <a class="layer-card" href="#s4">
+      <div>
+        <span class="lvl">Map</span>
+        <h3>Navigate by topic</h3>
+        <p>The primary navigation surface. Tap nodes to open Workings; tap edges to see why two topics are linked.</p>
+      </div>
+      <span class="arr">→</span>
+    </a>
+    <a class="layer-card" href="#s5">
+      <div>
+        <span class="lvl">Workings</span>
+        <h3>Index &amp; Explain</h3>
+        <p>Index mirrors Source 1:1 with status. Explain is plain-language coverage where it exists.</p>
+      </div>
+      <span class="arr">→</span>
+    </a>
+    <a class="layer-card" href="#s6">
+      <div>
+        <span class="lvl">Source</span>
+        <h3>The repository</h3>
+        <p>The files themselves. Read-only here; changes always come back through the Story.</p>
+      </div>
+      <span class="arr">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCREEN 3 · Story — carries the v1 reader, scoped to project
+     ════════════════════════════════════════════════════════════════ -->
+<section class="screen" id="s3">
+  <p class="crumb"><a href="#s1">projects</a><span class="sep">›</span><a href="#s2">logbook</a><span class="sep">›</span><span class="here">Story</span></p>
+
+  <div class="layer-tabs" role="tablist" style="display:flex; margin-left: max(0px, calc(50% - 540px));">
+    <a href="#s3" class="is-active">Story</a>
+    <a href="#s4">Map</a>
+    <a href="#s5">Workings</a>
+    <a href="#s6">Source</a>
+  </div>
+
+  <div class="reader-col">
+    <h2 class="title">Logbook — recent changes</h2>
+    <p class="demo">Hover any paragraph for the three actions: ask, deep-dive, sign off.</p>
+
+    <h3 class="section">Locked decisions</h3>
+    <article class="para is-signed">
+      <p>Atlas keeps one source of truth per repository. Every change flows through the same record. There is no second place to look.<span class="stamp" aria-label="Decided by L. Wilhof on 28 Apr 2026">decided<span class="who">L.W. · 28 Apr</span></span></p>
+    </article>
+
+    <h3 class="section">Building right now</h3>
+    <article class="para is-build">
+      <p>Logbook now fails closed: writes are rejected when the database can't be reached, instead of silently retrying.</p>
+      <span class="building-line"><span class="led" aria-hidden="true" style="display:inline-block;width:6px;height:6px;background:var(--blue);"></span><span>Codex is rewriting · step 2 of 4 <span class="dots"></span></span></span>
+      <div class="actions">
+        <button title="Ask"><svg viewBox="0 0 24 24"><path d="M5 19l3.5-1.5 9.5-9.5a2.121 2.121 0 0 0-3-3l-9.5 9.5L4 18z"/><path d="M14 6.5l3 3"/></svg></button>
+        <button title="Deep-dive"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.35-4.35"/></svg></button>
+        <button title="Sign off"><svg viewBox="0 0 24 24"><path d="M5 12.5l4 4 10-10"/></svg></button>
+      </div>
+    </article>
+
+    <article class="para is-ready">
+      <p>Sign-off requires Face ID by default on phones. Desktop continues to use the passphrase as the second factor.</p>
+      <div class="actions">
+        <button title="Ask"><svg viewBox="0 0 24 24"><path d="M5 19l3.5-1.5 9.5-9.5a2.121 2.121 0 0 0-3-3l-9.5 9.5L4 18z"/><path d="M14 6.5l3 3"/></svg></button>
+        <button title="Deep-dive"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.35-4.35"/></svg></button>
+        <button title="Sign off"><svg viewBox="0 0 24 24"><path d="M5 12.5l4 4 10-10"/></svg></button>
+      </div>
+    </article>
+
+    <h3 class="section">Waiting on you</h3>
+    <article class="para is-asked">
+      <p>Logbook retention. Today, every write is kept forever. Storage is cheap, but there's no policy on the books — flagged in the GDPR review last quarter.</p>
+      <div class="actions">
+        <button title="Ask"><svg viewBox="0 0 24 24"><path d="M5 19l3.5-1.5 9.5-9.5a2.121 2.121 0 0 0-3-3l-9.5 9.5L4 18z"/><path d="M14 6.5l3 3"/></svg></button>
+        <button title="Deep-dive"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.35-4.35"/></svg></button>
+        <button title="Sign off"><svg viewBox="0 0 24 24"><path d="M5 12.5l4 4 10-10"/></svg></button>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCREEN 4 · Map (primary navigation surface)
+     ════════════════════════════════════════════════════════════════ -->
+<section class="screen" id="s4">
+  <p class="crumb"><a href="#s1">projects</a><span class="sep">›</span><a href="#s2">logbook</a><span class="sep">›</span><span class="here">Map</span></p>
+
+  <header class="screen-head">
+    <span class="num">screen 4</span>
+    <h1>Map of the project</h1>
+    <p>Every paragraph is a node. Lines show how topics relate. The node you arrived from is highlighted.</p>
+  </header>
+
+  <div class="layer-tabs" style="margin-left: max(0px, calc(50% - 540px));">
+    <a href="#s3">Story</a>
+    <a href="#s4" class="is-active">Map</a>
+    <a href="#s5">Workings</a>
+    <a href="#s6">Source</a>
+  </div>
+
+  <div class="map-frame" id="map-frame">
+    <svg class="edges" viewBox="0 0 1080 460" preserveAspectRatio="none" aria-hidden="true">
+      <!-- Each edge: hit-area path for clicking + visible line + cardinality label -->
+      <g class="edge" data-edge="truth-failure" data-from="truth" data-to="failure" data-card="1 ↔ 1">
+        <line class="edge-hit" x1="220" y1="80"  x2="540" y2="220" />
+        <line class="heavy"    x1="220" y1="80"  x2="540" y2="220" />
+        <text class="card" x="368" y="142">1 ↔ 1</text>
+      </g>
+      <g class="edge" data-edge="failure-signoff" data-from="failure" data-to="signoff" data-card="n ↔ 1">
+        <line class="edge-hit" x1="540" y1="220" x2="860" y2="100" />
+        <line                  x1="540" y1="220" x2="860" y2="100" />
+        <text class="card" x="710" y="155">n ↔ 1</text>
+      </g>
+      <g class="edge" data-edge="failure-retention" data-from="failure" data-to="retention" data-card="? open">
+        <line class="edge-hit" x1="540" y1="220" x2="380" y2="380" />
+        <line                  x1="540" y1="220" x2="380" y2="380" />
+        <text class="card" x="430" y="304">? open</text>
+      </g>
+      <g class="edge" data-edge="failure-sla" data-from="failure" data-to="sla" data-card="implies">
+        <line class="edge-hit" x1="540" y1="220" x2="780" y2="360" />
+        <line                  x1="540" y1="220" x2="780" y2="360" />
+        <text class="card" x="668" y="296">implies</text>
+      </g>
+      <g class="edge" data-edge="truth-retention" data-from="truth" data-to="retention" data-card="governs">
+        <line class="edge-hit" x1="220" y1="80"  x2="380" y2="380" />
+        <line                  x1="220" y1="80"  x2="380" y2="380" />
+        <text class="card" x="290" y="234">governs</text>
+      </g>
+      <g class="edge" data-edge="sla-signoff" data-from="sla" data-to="signoff" data-card="depends">
+        <line class="edge-hit" x1="780" y1="360" x2="860" y2="100" />
+        <line                  x1="780" y1="360" x2="860" y2="100" />
+        <text class="card" x="838" y="232">depends</text>
+      </g>
+    </svg>
+
+    <button class="node is-signed" data-node="truth" type="button" style="left: 12%; top: 12%;">
+      <h4>Source of truth</h4>
+      <p>one record per repo</p>
+      <div class="deg">degree 2 · signed</div>
+    </button>
+    <button class="node is-arrived is-build" data-node="failure" type="button" style="left: 42%; top: 42%;">
+      <h4>Failure mode</h4>
+      <p>arrived from here · building</p>
+      <div class="deg">degree 4 · building</div>
+    </button>
+    <button class="node is-signed" data-node="signoff" type="button" style="left: 72%; top: 16%;">
+      <h4>Sign-off</h4>
+      <p>face-id flow</p>
+      <div class="deg">degree 2 · signed</div>
+    </button>
+    <button class="node is-asked" data-node="retention" type="button" style="left: 26%; top: 70%;">
+      <h4>Retention</h4>
+      <p>GDPR review · awaiting decision</p>
+      <div class="deg">degree 2 · asked</div>
+    </button>
+    <button class="node is-ready" data-node="sla" type="button" style="left: 64%; top: 70%;">
+      <h4>SLA on outage</h4>
+      <p>partial answer · needs sign-off</p>
+      <div class="deg">degree 2 · ready</div>
+    </button>
+  </div>
+
+  <!-- Inspector — updates from JS on node/edge click -->
+  <aside class="map-inspector" id="map-inspector" aria-live="polite">
+    <div class="body">
+      <p class="kicker" id="ins-kicker">Selected · node</p>
+      <h4 id="ins-title">Failure mode</h4>
+      <p id="ins-summary">Atlas defines failure mode as a paragraph that doesn't yet have a sign-off but is needed to make a decision elsewhere. We're building the model now.</p>
+      <div class="actions">
+        <a href="#s3" id="ins-link-story">Open in Story</a>
+        <a href="#s5" id="ins-link-workings">Open in Workings</a>
+        <a href="#s6" id="ins-link-source">Open in Source</a>
+      </div>
+    </div>
+    <div class="meta">
+      <div class="row"><dt>Status</dt><dd id="ins-status">building</dd></div>
+      <div class="row"><dt>Edges</dt><dd id="ins-edges">4 — to truth, sign-off, retention, SLA</dd></div>
+      <div class="row"><dt>Updated</dt><dd id="ins-updated">2 min ago · M.K.</dd></div>
+    </div>
+  </aside>
+
+  <p class="map-legend">
+    Click a node to inspect. Click an edge for cardinality and provenance.
+    <span class="swatches">
+      <span class="sw asked"><i></i>asked</span>
+      <span class="sw ready"><i></i>ready</span>
+      <span class="sw signed"><i></i>signed</span>
+      <span class="sw build"><i></i>building</span>
+    </span>
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCREEN 5 · Workings — Index + Explain
+     ════════════════════════════════════════════════════════════════ -->
+<section class="screen" id="s5">
+  <p class="crumb"><a href="#s1">projects</a><span class="sep">›</span><a href="#s2">logbook</a><span class="sep">›</span><span class="here">Workings</span></p>
+
+  <header class="screen-head">
+    <span class="num">screen 5</span>
+    <h1>Workings — Index &amp; Explain</h1>
+    <p><strong>Index</strong> mirrors Source 1:1 with status (always complete). <strong>Explain</strong> is best-effort plain-language coverage — may be sparse. Edits go up to the Story (a comment) — never directly here.</p>
+  </header>
+
+  <div class="layer-tabs" style="margin-left: max(0px, calc(50% - 540px));">
+    <a href="#s3">Story</a>
+    <a href="#s4">Map</a>
+    <a href="#s5" class="is-active">Workings</a>
+    <a href="#s6">Source</a>
+  </div>
+
+  <div class="workings">
+    <!-- INDEX — mirrors Source 1:1, always complete -->
+    <div class="workings-col">
+      <header class="workings-head">
+        <h2>Index</h2>
+        <span class="promise">complete · 1:1 with Source</span>
+      </header>
+      <div class="index-list" role="list">
+        <div class="index-section">src/</div>
+        <div class="row is-on" role="listitem">
+          <span class="name"><span class="ico">·</span>writer.go</span>
+          <span class="cov has">explained</span>
+          <span class="pct">100%</span>
+        </div>
+        <div class="row" role="listitem">
+          <span class="name"><span class="ico">·</span>reader.go</span>
+          <span class="cov part">partial</span>
+          <span class="pct">62%</span>
+        </div>
+        <div class="row" role="listitem">
+          <span class="name"><span class="ico">·</span>contract.go</span>
+          <span class="cov has">explained</span>
+          <span class="pct">100%</span>
+        </div>
+        <div class="row" role="listitem">
+          <span class="name"><span class="ico">·</span>retention.go</span>
+          <span class="cov none">—</span>
+          <span class="pct">0%</span>
+        </div>
+
+        <div class="index-section">docs/</div>
+        <div class="row" role="listitem">
+          <span class="name"><span class="ico">·</span>sla.md</span>
+          <span class="cov has">explained</span>
+          <span class="pct">100%</span>
+        </div>
+        <div class="row" role="listitem">
+          <span class="name"><span class="ico">·</span>auth-faceid.md</span>
+          <span class="cov has">explained</span>
+          <span class="pct">100%</span>
+        </div>
+        <div class="row" role="listitem">
+          <span class="name"><span class="ico">·</span>retention.md</span>
+          <span class="cov none">—</span>
+          <span class="pct">0%</span>
+        </div>
+
+        <div class="index-section">tests/</div>
+        <div class="row" role="listitem">
+          <span class="name"><span class="ico">·</span>writer_test.go</span>
+          <span class="cov part">partial</span>
+          <span class="pct">40%</span>
+        </div>
+        <div class="row" role="listitem">
+          <span class="name"><span class="ico">·</span>reader_test.go</span>
+          <span class="cov none">—</span>
+          <span class="pct">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPLAIN — best-effort plain-language coverage -->
+    <div class="workings-col">
+      <header class="workings-head">
+        <h2>Explain</h2>
+        <span class="promise">best-effort · may be sparse</span>
+      </header>
+      <div class="explain-body">
+
+        <article class="explain-block">
+          <p class="crumb-mini">src/writer.go · Write()</p>
+          <h3>Failure mode <span class="badge">contract · v3</span></h3>
+          <p class="contract">The write fails closed when the database is unreachable. The error is returned to the caller; we do not retry on the writer's behalf.</p>
+          <div class="src-line">
+            <a href="#s6">↓ src/writer.go : 5–10</a>
+            <a href="#s3">↑ Story · ¶22</a>
+            <span>signed yesterday · M.K.</span>
+          </div>
+        </article>
+
+        <article class="explain-block">
+          <p class="crumb-mini">docs/sla.md · §2.1</p>
+          <h3>SLA on db outage</h3>
+          <p class="contract">Writes are rejected during an outage. Reads continue from the local snapshot for up to five minutes; after that, reads also fail.</p>
+          <div class="src-line">
+            <a href="#s6">↓ docs/sla.md</a>
+            <a href="#s3">↑ Story · ¶24</a>
+            <span>ready · awaiting sign-off</span>
+          </div>
+        </article>
+
+        <article class="explain-block">
+          <p class="crumb-mini">src/contract.go · retryPolicy</p>
+          <h3>Retry policy</h3>
+          <p class="contract">No automatic retries. The caller decides whether to retry, with what backoff, and what to log. This is a deliberate inversion from v2.</p>
+          <div class="src-line">
+            <a href="#s6">↓ src/contract.go : 41–58</a>
+            <a href="#s3">↑ Story · this run</a>
+            <span>changed this run · P.B.</span>
+          </div>
+        </article>
+
+        <article class="explain-block">
+          <p class="crumb-mini">docs/auth-faceid.md</p>
+          <h3>Sign-off (mobile)</h3>
+          <p class="contract">Face ID is required by default on phones; the passphrase remains the second factor on desktop.</p>
+          <div class="src-line">
+            <a href="#s6">↓ docs/auth-faceid.md</a>
+            <a href="#s3">↑ Story · ¶31</a>
+            <span>signed yesterday · M.K.</span>
+          </div>
+        </article>
+
+        <article class="explain-block is-gap">
+          <p class="crumb-mini">src/retention.go · docs/retention.md</p>
+          <h3>Retention <span class="badge gap">gap</span></h3>
+          <p class="contract">Today, every write is kept forever. There's no policy on the books; GDPR review flagged it last quarter.</p>
+          <p class="gap-note">No plain-language coverage yet. Index lists the file; Story has an open question (¶35). Edits go up to the Story.</p>
+          <div class="src-line">
+            <a href="#s3">↑ Story · ¶35 (open)</a>
+            <span>asked · 1 hour ago</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </div>
+
+  <p class="map-legend" style="margin-top: 14px;">
+    Index is exhaustive — every file and symbol appears, with a coverage indicator. Explain is human-curated and may be sparse.
+    <strong>Edits go up to the Story (a comment), never directly here.</strong>
+  </p>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCREEN 6 · Source (read-only repository browser)
+     ════════════════════════════════════════════════════════════════ -->
+<section class="screen" id="s6">
+  <p class="crumb"><a href="#s1">projects</a><span class="sep">›</span><a href="#s2">logbook</a><span class="sep">›</span><span class="here">Source</span></p>
+
+  <header class="screen-head">
+    <span class="num">screen 6</span>
+    <h1>Source — the repository, read-only</h1>
+    <p>The files. You can browse and read; changes always come back through a comment in the Story.</p>
+  </header>
+
+  <div class="layer-tabs" style="margin-left: max(0px, calc(50% - 540px));">
+    <a href="#s3">Story</a>
+    <a href="#s4">Map</a>
+    <a href="#s5">Workings</a>
+    <a href="#s6" class="is-active">Source</a>
+  </div>
+
+  <div class="repo-frame">
+    <aside class="tree" aria-label="File tree">
+      <div class="row"><span class="ico">▾</span> logbook/</div>
+      <div class="nest">
+        <div class="row"><span class="ico">▸</span> .github/</div>
+        <div class="row"><span class="ico">▾</span> src/</div>
+        <div class="nest">
+          <div class="row is-on"><span class="ico">·</span> writer.go</div>
+          <div class="row"><span class="ico">·</span> reader.go</div>
+          <div class="row"><span class="ico">·</span> contract.go</div>
+        </div>
+        <div class="row"><span class="ico">▸</span> docs/</div>
+        <div class="row"><span class="ico">▸</span> tests/</div>
+        <div class="row"><span class="ico">·</span> README.md</div>
+        <div class="row"><span class="ico">·</span> go.mod</div>
+      </div>
+    </aside>
+
+    <div class="file-view">
+      <div class="file-bar">
+        <span class="path">src/writer.go</span>
+        <span>· 84 lines · go</span>
+        <span class="meta"><a href="#s5">curated view ↑</a></span>
+      </div>
+      <div class="file-body" aria-label="File contents">
+        <div class="ln"><span class="num">1</span><span class="code"><span class="kw">package</span> logbook</span></div>
+        <div class="ln"><span class="num">2</span><span class="code"></span></div>
+        <div class="ln"><span class="num">3</span><span class="code"><span class="com">// Write fails closed when the db is unreachable.</span></span></div>
+        <div class="ln"><span class="num">4</span><span class="code"><span class="com">// The caller receives the error; we do not retry.</span></span></div>
+        <div class="ln"><span class="num">5</span><span class="code"><span class="kw">func</span> Write(ctx ctx.Context, e Entry) <span class="kw">error</span> {</span></div>
+        <div class="ln"><span class="num">6</span><span class="code">    <span class="kw">if</span> err := db.Ping(ctx); err != <span class="kw">nil</span> {</span></div>
+        <div class="ln"><span class="num">7</span><span class="code">        <span class="kw">return</span> fmt.Errorf(<span class="str">"logbook: db unreachable: %w"</span>, err)</span></div>
+        <div class="ln"><span class="num">8</span><span class="code">    }</span></div>
+        <div class="ln"><span class="num">9</span><span class="code">    <span class="kw">return</span> db.InsertEntry(ctx, e)</span></div>
+        <div class="ln"><span class="num">10</span><span class="code">}</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCREEN 7 · Comment-to-change run
+     ════════════════════════════════════════════════════════════════ -->
+<section class="screen" id="s7">
+  <p class="crumb"><a href="#s1">projects</a><span class="sep">›</span><a href="#s2">logbook</a><span class="sep">›</span><span class="here">comment → change</span></p>
+
+  <header class="screen-head">
+    <span class="num">screen 7</span>
+    <h1>From a comment to a re-abstracted paragraph</h1>
+    <p>Left: the run as it unfolds. Right: the diff per layer, ending with the new Story paragraph awaiting your sign-off.</p>
+  </header>
+
+  <div class="run">
+    <div class="run-col">
+      <h3>Run timeline</h3>
+      <div class="timeline">
+        <div class="step done">
+          <h4>You commented</h4>
+          <p><span class="who">12:04</span>“What does the caller actually see when this fails?”</p>
+        </div>
+        <div class="step done">
+          <h4>Codex took the lead</h4>
+          <p><span class="who">12:04</span>read writer.go · drafted change to fail-closed contract</p>
+        </div>
+        <div class="step done">
+          <h4>Sparring agents reviewed</h4>
+          <p><span class="who">12:05</span>6 agents · 5 agreed · 1 dissent (race near flush)</p>
+          <span class="dissent">test-engineer · race condition queued</span>
+        </div>
+        <div class="step done">
+          <h4>Claude design re-abstracted the Story</h4>
+          <p><span class="who">12:06</span>rewrote the paragraph in your reading voice</p>
+        </div>
+        <div class="step now">
+          <h4>Awaiting your approval</h4>
+          <p><span class="who">12:06</span>approve · edit · reject (right →)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="run-col diff">
+      <h4>Source · src/writer.go</h4>
+<pre><span class="rm">  return db.InsertEntry(ctx, e) // retries silently on error</span>
+<span class="add">  if err := db.Ping(ctx); err != nil {</span>
+<span class="add">      return fmt.Errorf("logbook: db unreachable: %w", err)</span>
+<span class="add">  }</span>
+  return db.InsertEntry(ctx, e)</pre>
+
+      <h4>Workings · failure mode</h4>
+<pre><span class="rm">open — retries silently, write may be lost</span>
+<span class="add">closed — write rejected on db error, error surfaced to caller</span></pre>
+
+      <h4>Map</h4>
+      <pre>node "Failure mode" · state: signed → building
+new edge: Failure mode ↔ SLA on outage</pre>
+
+      <div class="reabs">
+        <h4>Story · re-abstracted paragraph</h4>
+        <p>The logbook now fails closed. If the database is unreachable when a write comes in, Atlas refuses the write and surfaces the failure to the caller, instead of retrying silently and losing the change.</p>
+        <div class="row">
+          <button class="reject" type="button">reject</button>
+          <button class="edit"   type="button">edit</button>
+          <button class="approve" type="button">approve & sign off</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCREEN 8 · Agent run console (expanded pill)
+     ════════════════════════════════════════════════════════════════ -->
+<section class="screen" id="s8">
+  <p class="crumb"><a href="#s1">projects</a><span class="sep">›</span><a href="#s2">logbook</a><span class="sep">›</span><span class="here">run console</span></p>
+
+  <header class="screen-head">
+    <span class="num">screen 8</span>
+    <h1>Run console — agent visibility</h1>
+    <p>Click the agent pill in the top right to see the four stages, who took part, and any dissent. Quiet by default.</p>
+  </header>
+
+  <div class="console">
+    <div class="console-bar">
+      <span class="title">Codex · paragraph rewrite</span>
+      <span class="summary">step 2 of 4 · 6 sparring agents · 1 dissent · started 12:04</span>
+      <span class="ctrl">
+        <button class="pause">pause</button>
+        <button class="stop">stop</button>
+      </span>
+    </div>
+    <div class="console-body">
+      <aside class="stages" aria-label="Stages">
+        <div class="stage done">
+          <span class="num">1</span>
+          <span class="lbl">Codex<small>lead · drafted change</small></span>
+        </div>
+        <div class="stage now">
+          <span class="num">2</span>
+          <span class="lbl">Sparring agents<small>6 reviewing · 1 dissent</small></span>
+        </div>
+        <div class="stage">
+          <span class="num">3</span>
+          <span class="lbl">Claude design<small>re-abstract Story</small></span>
+        </div>
+        <div class="stage">
+          <span class="num">4</span>
+          <span class="lbl">OpenRouter overflow<small>only if capacity</small></span>
+        </div>
+      </aside>
+      <div class="stage-detail">
+        <h3>Sparring agents · review</h3>
+        <p class="meta">6 agents consulted · majority agree · 1 dissent flagged for follow-up</p>
+
+        <div class="agent-row">
+          <span class="av">SE</span>
+          <span class="name"><b>system-architect</b><small>fail-closed alignment</small></span>
+          <span class="say">Aligns with the SLA we already publish; the rejection path is consistent across writers.<span class="quote">“No SLA contradiction.”</span></span>
+          <span class="vote agree">agree</span>
+        </div>
+        <div class="agent-row">
+          <span class="av">DB</span>
+          <span class="name"><b>db-engineer</b><small>storage path</small></span>
+          <span class="say">Insert path is single-statement; rejection on Ping failure is cheap and avoids partial writes.</span>
+          <span class="vote agree">agree</span>
+        </div>
+        <div class="agent-row">
+          <span class="av">TE</span>
+          <span class="name"><b>test-engineer</b><small>flush path</small></span>
+          <span class="say">e2e suite races on the flush boundary when Ping returns mid-flush. Suggest a small queue drain before the new check.<span class="quote">“Edge case, but reproducible.”</span></span>
+          <span class="vote dissent">dissent</span>
+        </div>
+        <div class="agent-row">
+          <span class="av">SC</span>
+          <span class="name"><b>security</b><small>error surface</small></span>
+          <span class="say">Surfacing the wrapped error is fine; the underlying connection string is not leaked.</span>
+          <span class="vote agree">agree</span>
+        </div>
+        <div class="agent-row">
+          <span class="av">PE</span>
+          <span class="name"><b>perf-engineer</b><small>tail latency</small></span>
+          <span class="say">Adds one Ping round-trip per write; measured at 0.4 ms median against the local cluster.</span>
+          <span class="vote flag">flag · monitor</span>
+        </div>
+        <div class="agent-row">
+          <span class="av">DX</span>
+          <span class="name"><b>dx</b><small>caller experience</small></span>
+          <span class="say">Caller sees a typed error; downstream wrappers already handle errors.Wrap.</span>
+          <span class="vote agree">agree</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     SCREEN 9 · Pause patterns (the four moments Atlas asks)
+     ════════════════════════════════════════════════════════════════ -->
+<section class="screen" id="s9">
+  <p class="crumb"><a href="#s1">projects</a><span class="sep">›</span><span class="here">pause patterns</span></p>
+
+  <header class="screen-head">
+    <span class="num">screen 9</span>
+    <h1>Ask-on-pause</h1>
+    <p>Four moments where Atlas stops the run and asks you. Everything else is automatic.</p>
+  </header>
+
+  <div class="pauses">
+    <article class="pause-card">
+      <span class="when">pause 1 · validation split</span>
+      <h3>Sparring agents disagree</h3>
+      <p>Atlas pauses when sparring agents split on a material question — not on style, on substance.</p>
+      <div class="ask-modal" role="dialog" aria-label="Validation split">
+        <p class="lead">5 of 6 agents agree. <b>test-engineer</b> dissents on a race near the flush path.</p>
+        <div class="options">
+          <label class="option">
+            <span class="tag rec">recommended</span>
+            <span>Apply now, queue the race fix as its own paragraph for sign-off.</span>
+          </label>
+          <label class="option">
+            <span class="tag">option</span>
+            <span>Hold the change until the race is resolved.</span>
+          </label>
+          <label class="option">
+            <span class="tag">option</span>
+            <span>Open the dissenter's note for a second pass.</span>
+          </label>
+        </div>
+        <div class="row">
+          <button class="later" type="button">decide later</button>
+          <button class="go" type="button">apply & queue</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="pause-card">
+      <span class="when">pause 2 · destructive change</span>
+      <h3>About to remove signed work</h3>
+      <p>If a run would delete a paragraph that has already been signed off, Atlas always asks before doing it.</p>
+      <div class="ask-modal">
+        <p class="lead">This change replaces a <b>signed</b> paragraph in <em>Source of truth</em>.</p>
+        <div class="options">
+          <label class="option">
+            <span class="tag">option</span>
+            <span>Replace and require fresh sign-off.</span>
+          </label>
+          <label class="option">
+            <span class="tag rec">recommended</span>
+            <span>Append as a new paragraph; keep the old one, marked superseded.</span>
+          </label>
+          <label class="option">
+            <span class="tag">option</span>
+            <span>Cancel the change.</span>
+          </label>
+        </div>
+        <div class="row">
+          <button class="later" type="button">cancel</button>
+          <button class="go" type="button">append</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="pause-card">
+      <span class="when">pause 3 · push to GitHub</span>
+      <h3>Going public</h3>
+      <p>Atlas writes locally first. Pushing to GitHub is an explicit step you confirm — never silent.</p>
+      <div class="ask-modal">
+        <p class="lead">Ready to push <b>3 commits</b> to <em>wilhofstrasse/logbook</em>.</p>
+        <div class="options">
+          <label class="option">
+            <span class="tag rec">recommended</span>
+            <span>Push to a new branch and open a draft PR.</span>
+          </label>
+          <label class="option">
+            <span class="tag">option</span>
+            <span>Push directly to <em>main</em>.</span>
+          </label>
+          <label class="option">
+            <span class="tag">option</span>
+            <span>Hold — keep local until I sign more paragraphs.</span>
+          </label>
+        </div>
+        <div class="row">
+          <button class="later" type="button">later</button>
+          <button class="go" type="button">push & open PR</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="pause-card">
+      <span class="when">pause 4 · Story replacement</span>
+      <h3>Re-abstracted paragraph awaiting you</h3>
+      <p>Whenever Claude design rewrites the Story paragraph, you get the final say — approve, edit, or reject.</p>
+      <div class="ask-modal">
+        <p class="lead">New Story reads:<br/><em>“The logbook now fails closed. Atlas refuses the write and surfaces the failure to the caller, instead of retrying silently…”</em></p>
+        <div class="row">
+          <button class="later" type="button">reject</button>
+          <button class="later" type="button" style="color:var(--ink)">edit</button>
+          <button class="go" type="button" style="color:var(--green)">approve & sign</button>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Atlas · Stage 2 · Variant A spine · 1 May 2026</span>
+    <span><a href="../reader/atlas-reader-wireframe-v1.hifi.html" style="border-bottom:1px solid var(--hair);padding-bottom:1px">v1 reader hi-fi →</a></span>
+  </footer>
+</section>
+
+<script>
+  // TOC active-state on scroll
+  (function () {
+    var links = document.querySelectorAll('.toc a[href^="#"]');
+    var ids = Array.prototype.map.call(links, function (a) { return a.getAttribute('href').slice(1); });
+    function update() {
+      var y = window.scrollY + 160;
+      var active = ids[0];
+      ids.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el && el.offsetTop <= y) active = id;
+      });
+      links.forEach(function (a) {
+        a.classList.toggle('is-active', a.getAttribute('href') === '#' + active);
+      });
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+
+  // Settings drawer toggle
+  (function () {
+    var btn = document.getElementById('settings-toggle');
+    var drawer = document.getElementById('settings');
+    if (!btn || !drawer) return;
+    btn.addEventListener('click', function () {
+      drawer.hidden = !drawer.hidden;
+      if (!drawer.hidden) drawer.scrollIntoView ? null : null;
+    });
+  })();
+
+  // Toggle switches
+  document.querySelectorAll('[data-toggle]').forEach(function (t) {
+    t.addEventListener('click', function () {
+      t.classList.toggle('is-on');
+      t.setAttribute('aria-checked', t.classList.contains('is-on') ? 'true' : 'false');
+    });
+    t.addEventListener('keydown', function (e) {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); t.click(); }
+    });
+  });
+
+  // Filter chip toggling (cosmetic)
+  document.querySelectorAll('.filters .chip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      document.querySelectorAll('.filters .chip').forEach(function (x) { x.classList.remove('is-on'); });
+      c.classList.add('is-on');
+    });
+  });
+
+  // Agent pill jumps to console
+  (function () {
+    var p = document.getElementById('agent-pill');
+    if (!p) return;
+    p.addEventListener('click', function () {
+      var t = document.getElementById('s8');
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  })();
+
+  // ── Map inspector (screen 4) ──────────────────────────────────────
+  (function () {
+    var frame = document.getElementById('map-frame');
+    var ins   = document.getElementById('map-inspector');
+    if (!frame || !ins) return;
+
+    var nodes = {
+      truth:     { title: 'Source of truth',     status: 'signed',   summary: 'Each repository has exactly one Atlas record. The record carries the project\u2019s spine \u2014 the load-bearing paragraphs and their state.', edges: '2 \u2014 to failure mode, retention', updated: 'yesterday \u00b7 P.B.' },
+      failure:   { title: 'Failure mode',        status: 'building', summary: 'A paragraph that doesn\u2019t yet have a sign-off but is needed to make a decision elsewhere. We\u2019re modelling it now.',                                  edges: '4 \u2014 to truth, sign-off, retention, SLA', updated: '2 min ago \u00b7 M.K.' },
+      signoff:   { title: 'Sign-off',            status: 'signed',   summary: 'Face ID by default on phones. Desktop continues to use the passphrase as the second factor.',                                                       edges: '2 \u2014 to failure mode, SLA', updated: '4 days ago \u00b7 M.K.' },
+      retention: { title: 'Retention',           status: 'asked',    summary: 'Today, every write is kept forever. Storage is cheap, but there\u2019s no policy on the books \u2014 flagged in the GDPR review.',                       edges: '2 \u2014 to truth, failure mode',  updated: '1 hour ago \u00b7 P.B.' },
+      sla:       { title: 'SLA on outage',       status: 'ready',    summary: 'A partial answer is drafted: 99.5% monthly with two-hour response. Still needs sign-off from the on-call lead.',                                       edges: '2 \u2014 to failure mode, sign-off', updated: '15 min ago \u00b7 agent' }
+    };
+
+    var edges = {
+      'truth-failure':     { kicker: 'Edge \u00b7 1 \u2194 1',     title: 'Source of truth \u2192 Failure mode',     summary: 'Every failure-mode paragraph is anchored to exactly one truth record. Cardinality is 1 \u2194 1.',                       updated: 'derived from logbook \u00a712, \u00a719' },
+      'failure-signoff':   { kicker: 'Edge \u00b7 n \u2194 1',     title: 'Failure mode \u2192 Sign-off',            summary: 'Many failure-mode paragraphs roll up into a single sign-off ceremony. n \u2194 1.',                                       updated: 'derived from logbook \u00a722' },
+      'failure-retention': { kicker: 'Edge \u00b7 ? open',         title: 'Failure mode \u2192 Retention',           summary: 'Open question: does failure-mode evidence inherit project retention, or its own? Awaiting decision.',                  updated: 'flagged \u00b7 GDPR review Q1'   },
+      'failure-sla':       { kicker: 'Edge \u00b7 implies',        title: 'Failure mode \u2192 SLA on outage',       summary: 'Failure-mode coverage implies a numeric SLA target downstream. Provenance: \u00a724.',                                  updated: 'derived from logbook \u00a724' },
+      'truth-retention':   { kicker: 'Edge \u00b7 governs',        title: 'Source of truth \u2192 Retention',        summary: 'Retention policy governs the truth record\u2019s lifespan. Provenance: GDPR review.',                                   updated: 'flagged \u00b7 GDPR review Q1'   },
+      'sla-signoff':       { kicker: 'Edge \u00b7 depends',        title: 'SLA on outage \u2192 Sign-off',           summary: 'The SLA can\u2019t ship until sign-off ceremony is finalised. Soft dependency.',                                          updated: 'derived from logbook \u00a722, \u00a724' }
+    };
+
+    var $ = function (id) { return document.getElementById(id); };
+
+    function clearSel() {
+      frame.querySelectorAll('.node.is-selected').forEach(function (n) { n.classList.remove('is-selected'); });
+      frame.querySelectorAll('svg.edges g.edge.is-selected').forEach(function (g) { g.classList.remove('is-selected'); });
+    }
+
+    function showNode(id, el) {
+      var d = nodes[id]; if (!d) return;
+      clearSel(); el.classList.add('is-selected');
+      $('ins-kicker').textContent = 'Selected \u00b7 node';
+      $('ins-title').textContent  = d.title;
+      $('ins-summary').textContent = d.summary;
+      $('ins-status').textContent  = d.status;
+      $('ins-edges').textContent   = d.edges;
+      $('ins-updated').textContent = d.updated;
+    }
+
+    function showEdge(id, gEl) {
+      var d = edges[id]; if (!d) return;
+      clearSel(); gEl.classList.add('is-selected');
+      $('ins-kicker').textContent  = d.kicker;
+      $('ins-title').textContent   = d.title;
+      $('ins-summary').textContent = d.summary;
+      $('ins-status').textContent  = 'relationship';
+      $('ins-edges').textContent   = d.title.replace(' \u2192 ', ' \u2014 ');
+      $('ins-updated').textContent = d.updated;
+    }
+
+    frame.querySelectorAll('.node').forEach(function (n) {
+      n.addEventListener('click', function (e) { e.preventDefault(); showNode(n.dataset.node, n); });
+    });
+    frame.querySelectorAll('svg.edges g.edge').forEach(function (g) {
+      g.addEventListener('click', function (e) { e.preventDefault(); showEdge(g.dataset.edge, g); });
+    });
+  })();
+</script>
+
+</body>
+</html>
