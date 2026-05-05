@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cross-review brief — context recipe spec</title>
+<style>
+  body { font-family: 'Calibri', 'Calibri Light', sans-serif; font-weight: 300; color: #000; background: #FFFFFF; margin: 0 auto; padding: 32px 24px; max-width: 900px; line-height: 1.65; font-size: 16px; text-align: justify; }
+  h1 { color: #14324E; font-size: 28px; font-weight: 700; margin: 0 0 8px 0; }
+  h2 { color: #14324E; font-size: 21px; font-weight: 700; margin-top: 28px; padding-bottom: 6px; border-bottom: 2px solid #14324E; }
+  h3 { color: #14324E; font-size: 17px; font-weight: 700; margin-top: 18px; }
+  .subtitle { color: #5B5D64; font-size: 17px; font-weight: 300; margin-bottom: 24px; }
+  .accent { color: #E94D3A; font-weight: 600; }
+  .intro { background: #E8EDF3; padding: 18px 22px; border-radius: 4px; margin: 16px 0 24px 0; }
+  .ask-box { background: #FFF4E0; padding: 18px 22px; border-radius: 4px; margin: 16px 0 24px 0; border-left: 4px solid #E94D3A; }
+  ul, ol { padding-left: 24px; line-height: 1.65; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; margin: 12px 0; }
+  th { background: #E8EDF3; padding: 6px 10px; text-align: left; border: 1px solid #C2C2C2; }
+  td { padding: 6px 10px; border: 1px solid #C2C2C2; vertical-align: top; }
+  .footer-note { color: #5B5D64; font-size: 13px; margin-top: 36px; padding-top: 14px; border-top: 1px solid #C2C2C2; }
+  code { background: #F0F0F0; padding: 1px 5px; border-radius: 3px; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<h1>Cross-review — the "context recipe" spec</h1>
+<p class="subtitle">Brief for Theresa. <span class="accent">~30 minutes.</span> Plain English; no implementation knowledge needed.</p>
+
+<div class="intro">
+  <strong>What this is.</strong> A design document defining exactly what the AI sees every time a consultant clicks "fill" on a shape inside the H&amp;C PowerPoint add-in. Right now the AI gets very little context — just the shape's raw data and the deck's high-level theme. The spec adds three layers of context: what the firm-wide library template intends, what the consultant has decided for this specific deck, and any per-shape overrides. Plus shape renaming so consultants can label shapes in plain language ("the headline" instead of "TextBox 4").
+  <br><br>
+  <strong>Why your eyes are needed.</strong> Filipe and I have been heads-down for two days. Codex (the second AI used as reviewer) has run six rounds and reduced the open-issues list to nothing structural. But Codex doesn't know what it feels like to walk into this for the first time as a fresh consultant. <span class="accent">You do.</span> Filipe's words: "Theresa reviews after Codex, not before." That's now.
+</div>
+
+<h2>What I need from you</h2>
+
+<div class="ask-box">
+  <h3 style="margin-top:0;">One question, one paragraph each, in your own words:</h3>
+  <ol>
+    <li><strong>If you read the spec cold, what's the picture?</strong> Three sentences. If the picture isn't clear in three sentences, the spec has a comprehension problem and I want to know.</li>
+    <li><strong>Where did you have to re-read?</strong> Mark the sections that made you stop and back up. Those are signals.</li>
+    <li><strong>What would a new consultant on day one not understand?</strong> You're closer to that perspective than Filipe or me — we've been steeping in this for weeks.</li>
+    <li><strong>Anything that feels wrong or off?</strong> Trust the gut. Even "I can't explain why, but this feels weird" is useful.</li>
+    <li><strong>Anything missing?</strong> If you'd expect a feature, a safeguard, or a behavior to be described and it isn't, say so.</li>
+  </ol>
+  <p style="margin:6px 0 0 0;"><strong>Format:</strong> reply on the GitHub pull request as a comment, OR send Filipe a Slack DM and he'll forward. Whichever feels easier.</p>
+</div>
+
+<h2>What the spec actually says, in 5 minutes</h2>
+
+<h3>The mental model</h3>
+<p>Three "roles" each contribute context to every AI fill:</p>
+<table>
+  <thead><tr><th>Role</th><th>Who</th><th>What they contribute</th></tr></thead>
+  <tbody>
+    <tr><td>i — PowerPoint</td><td>The base layer</td><td>Shape geometry, font, position, the deck's overall theme. This already exists today.</td></tr>
+    <tr><td>ii — Admin</td><td>The library curator</td><td>What this slide template is for, what guidance applies, what format constraints (e.g., "verbs in bold"). Brand-new in this spec.</td></tr>
+    <tr><td>iii — User</td><td>The consultant filling the deck</td><td>"For this specific deck, override the library — use Bain not Bloomberg as primary source." Brand-new in this spec.</td></tr>
+  </tbody>
+</table>
+
+<p>Three "context levels" — deck / slide / shape — and two dimensions — content (what to say) and format (how to say it). That gives a 17-cell grid covering everything the AI could be told.</p>
+
+<h3>The big rules</h3>
+<ul>
+  <li><strong>No silent overrides.</strong> If a consultant overrides a library default, the spec defines exactly how that's recorded so the next person looking at the deck can see "this was changed and why".</li>
+  <li><strong>Shape identity must survive copy-paste, slide duplication, and deck-to-deck transfers.</strong> The spec defines a unique stable identifier per shape that doesn't break when consultants do normal PowerPoint things.</li>
+  <li><strong>Schema versions are negotiated up-front.</strong> When the add-in starts, it asks the AI service "what version do you understand?" and locks that for the session. No mid-session surprises.</li>
+  <li><strong>Tombstones for deleted guidance.</strong> If a consultant says "ignore this admin guidance", the deck records that suppression in a way that survives even if the original admin entry later gets renamed or deleted.</li>
+  <li><strong>Conflict surfacing.</strong> If the admin says "verb in bold" but the AI generates content with no verb, the consultant sees a clear modal: drop the format constraint, drop the content override, or cancel. Never silent.</li>
+</ul>
+
+<h3>What it explicitly does NOT do</h3>
+<ul>
+  <li>It does NOT add the admin authoring UI yet (deferred to a later wave).</li>
+  <li>It does NOT add multilingual authoring yet (also deferred).</li>
+  <li>It does NOT change the trust contract from the safety-check spec — those guarantees stay intact.</li>
+</ul>
+
+<h2>How to access the actual spec</h2>
+<p>The full document is in the repository at <code>architecture-notes/context-layers-v0.md</code>. It's about 75 KB, ~900 lines, formatted in Markdown. GitHub renders it cleanly in the browser — no special viewer needed. <strong>Direct link will be in the PR comment that pings you.</strong></p>
+
+<h3>Where the spec is in its lifecycle</h3>
+<table>
+  <thead><tr><th>Stage</th><th>Status</th></tr></thead>
+  <tbody>
+    <tr><td>Initial draft + multi-agent specialist review</td><td>Done</td></tr>
+    <tr><td>Codex review rounds 1–6</td><td>Done — converged from 5 blockers to 0 blockers</td></tr>
+    <tr><td>Codex round 7 (final, target green)</td><td>Running while you read this</td></tr>
+    <tr><td><strong>Your cross-review</strong></td><td><strong>Up next, after Codex returns green</strong></td></tr>
+    <tr><td>Filipe's final sign-off</td><td>After your review</td></tr>
+  </tbody>
+</table>
+
+<h2>Context that helps</h2>
+<ul>
+  <li>The spec lands as <strong>v0.10</strong> — separate from the current v6 wave (which is the safety-check feature you might have seen in PR #17). v0.10 ships AFTER v6 merges to main.</li>
+  <li>The spec has been bouncing between Filipe + me + Codex rapidly all week. If something looks like it had multiple authors patching the same paragraph, that's why. Flag those.</li>
+  <li>If you find a contradiction between two sections — that's exactly the kind of thing Codex caught in earlier rounds. Saying "section X says A but section Y says B" is gold.</li>
+</ul>
+
+<div class="footer-note">
+  Brief prepared 06.05.2026 overnight per Filipe directive: Theresa reviews after Codex, not before. The spec link + GitHub comment thread will be added to this brief once Codex round 7 confirms green. ETA: within the next hour or so.
+</div>
+
+</body>
+</html>
