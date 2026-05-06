@@ -88,6 +88,40 @@
 <p class="subtitle">For Filipe, partners, clients, and anyone who needs the picture before the spec. <span class="accent">Three modules, one foundation.</span></p>
 
 <div style="background:#FFFFFF; padding:18px 24px; border-radius:4px; margin:20px 0 16px 0; border:2px solid #2E7D32;" data-commentable-block="true">
+  <h2 id="today-07052026" style="color:#2E7D32; margin:0 0 12px 0; font-size:20px;">Today — 07.05.2026 (format-fidelity spike + v6 modal redesign)</h2>
+<div class="section-comment-row"><a class="comment-link tick-link" data-page="arch-l3-reader" data-anchor="today-07052026" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader%2Csignoff&title=%5Bsignoff%5D+%C2%A7Today+%E2%80%94+07.05.2026&body=Section%3A+%C2%A7Today+%E2%80%94+07.05.2026%0AAnchor%3A+%23today-07052026%0APage%3A+arch-l3-reader%0A%0A%F0%9F%91%8D+signed+off%0A%0A---%0A_Posted+from+arch-l3-reader+via+tick+button._" target="_blank" rel="noopener" title="✓ Signed off">✓</a> <a class="comment-link" data-page="arch-l3-reader" data-anchor="today-07052026" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7Today+%E2%80%94+07.05.2026&body=Section%3A+%C2%A7Today+%E2%80%94+07.05.2026%0AAnchor%3A+%23today-07052026%0APage%3A+arch-l3-reader%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">💬 Comment on §Today — 07.05.2026</a></div>
+
+  <p style="margin:6px 0 14px 0; line-height:1.6;"><strong>Two things tested empirically.</strong> First: the AI fill-with-format-preservation pattern in the locked design doc actually works end-to-end. Second: the ugly safety-check modal you complained about yesterday now shows real shape thumbnails instead of plain text.</p>
+
+  <h3 id="format-spike-result" style="color:#14324E; margin-top:14px; font-size:16px;">Format-fidelity spike — what works, what doesn't</h3>
+  <p style="margin:6px 0 10px 0; line-height:1.6;">I built a six-paragraph stress-test shape with mixed alignments, mixed bullets, multiple font sizes, multiple colors, plus every formatting flag (bold, italic, underline, strikethrough, ALL CAPS, small caps, subscript, superscript). Sent the shape to the AI with instructions to rewrite the content keeping all the formatting in place. Got the result back, wrote it into a fresh shape, compared.</p>
+  <ul style="margin:6px 0 16px 0; line-height:1.6;">
+    <li><strong>Works:</strong> alignment per paragraph (left/center/right/justify), bullets (numbered, bulleted, indent levels), bold spans, italic, underline (with 17 line styles), font family, size, color, small caps, double strikethrough, superscript. <strong>Nine of twelve formatting attributes round-trip cleanly.</strong></li>
+    <li><strong>Mac PowerPoint silently drops three writes:</strong> strikethrough, ALL CAPS, subscript. We catch it now via the diff helper but can't fix it — those are platform bugs in PowerPoint Mac itself, not in our code.</li>
+    <li><strong>Six things PowerPoint Mac doesn't expose at all:</strong> line spacing, Before/After paragraph spacing, indent in inches, hanging indent, tab stops, highlight color (yellow text background). The Office.js API simply doesn't surface them. They live in the underlying file format but the API can't see them.</li>
+  </ul>
+
+  <h3 id="strategic-answer" style="color:#14324E; margin-top:14px; font-size:16px;">Strategic answer — already in the locked design</h3>
+  <p style="margin:6px 0 16px 0; line-height:1.6;">The locked context-recipe design doesn't try to round-trip arbitrary user formatting. Instead, admins author library templates with all the formatting baked into the template file once. Consultants bind their slides to those templates. The AI only generates new content — formatting never leaves PowerPoint, so there's nothing to lose. The spike empirically validates that this is the right architecture: the things Office.js can't read or write are exactly the things that should be locked into admin templates anyway.</p>
+
+  <h3 id="production-write-pattern" style="color:#14324E; margin-top:14px; font-size:16px;">The production write pattern (discovered)</h3>
+  <p style="margin:6px 0 16px 0; line-height:1.6;">When the AI fills an existing shape, we write the new text into the same shape (not a fresh shape) using a specific code pattern that leaves the paragraph structure intact. PowerPoint preserves all the hidden formatting properties because we don't touch them. Confirmed: when an admin sets line spacing 1.5 on a template paragraph, then the AI fills that paragraph, the line spacing 1.5 stays. Same for the other five hidden properties. This is the production-realistic write path documented in <code>architecture-notes/format-fidelity-findings-v1.md</code> alongside the locked design.</p>
+
+  <h3 id="modal-redesign" style="color:#14324E; margin-top:14px; font-size:16px;">The ugly modal — fixed</h3>
+  <p style="margin:6px 0 16px 0; line-height:1.6;">The safety-check modal that surfaces when the AI wants to overwrite your edits used to show plain text current/proposed columns with all formatting stripped. Now it shows the actual rendered shape as a thumbnail in the CURRENT column, plus a formatted preview in the PROPOSED column with bold/italic/underline visible. You see what the shape ACTUALLY looks like, not a watered-down text version. Closes the "looks like shit" complaint from yesterday.</p>
+
+  <h3 id="grounding-aside" style="color:#14324E; margin-top:14px; font-size:16px;">The hallucination thing — separate problem</h3>
+  <p style="margin:6px 0 16px 0; line-height:1.6;">During the spike I asked the AI to cite "past projects from filipeandrade.com" and it fabricated some plausible-sounding fake projects. That's the classic AI hallucination problem and it's already designed for in a separate locked module — the grounding module — which adds source verification, traffic-light confidence per shape, and an audit invariant that blocks any text without a verifiable source. The format-fidelity spike doesn't try to solve that.</p>
+
+  <h3 id="next-steps-07" style="color:#14324E; margin-top:14px; font-size:16px;">What's next</h3>
+  <ul style="margin:6px 0 0 0; line-height:1.6;">
+    <li>Theresa's cross-review of the locked context-recipe design — still the next gate. She was briefed today with these findings as empirical context.</li>
+    <li>Your sign-off after Theresa.</li>
+    <li>Then the v6 wave merges to main, and the v0.10+ work (admin library templates + AI content fills with the production write pattern) becomes the next implementation wave.</li>
+  </ul>
+</div>
+
+<div style="background:#FFFFFF; padding:18px 24px; border-radius:4px; margin:20px 0 16px 0; border:2px solid #2E7D32;" data-commentable-block="true">
   <h2 id="tonight-06052026" style="color:#2E7D32; margin:0 0 12px 0; font-size:20px;">Tonight — 06.05.2026 (overnight review work · GREEN)</h2>
 <div class="section-comment-row"><a class="comment-link tick-link" data-page="arch-l3-reader" data-anchor="tonight-06052026" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader%2Csignoff&title=%5Bsignoff%5D+%C2%A7Tonight+%E2%80%94+06.05.2026&body=Section%3A+%C2%A7Tonight+%E2%80%94+06.05.2026%0AAnchor%3A+%23tonight-06052026%0APage%3A+arch-l3-reader%0A%0A%F0%9F%91%8D+signed+off%0A%0A---%0A_Posted+from+arch-l3-reader+via+tick+button._" target="_blank" rel="noopener" title="✓ Signed off">✓</a> <a class="comment-link" data-page="arch-l3-reader" data-anchor="tonight-06052026" href="https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/new?labels=filipe-comment%2Carch-l3-reader&title=%5Bcomment%5D+%C2%A7Tonight+%E2%80%94+06.05.2026&body=Section%3A+%C2%A7Tonight+%E2%80%94+06.05.2026%0AAnchor%3A+%23tonight-06052026%0APage%3A+arch-l3-reader%0A%0A%5Byour+comment%3A%0A%0A%0A%0A%0A%5D%0A%0A---%0A_Posted+from+arch-l3-reader._" target="_blank" rel="noopener">💬 Comment on §Tonight — 06.05.2026</a></div>
 
