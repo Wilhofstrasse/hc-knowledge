@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consultant aktualisiert MBR — Anforderungen + Flags (spike-v2)</title>
+<style>
+  /* H&C brand tokens — locked v1.0.0 (hc-design-system) */
+  :root {
+    --hc-blue:        #14324E;
+    --hc-blue-deep:   #0E2438;
+    --hc-coral:       #E94D3A;
+    --hc-coral-soft:  #F9E1DD;
+    --hc-green:       #2E7D4F;
+    --hc-green-soft:  #E6F1EA;
+    --hc-amber:       #C98A1A;
+    --hc-amber-soft:  #FBF1DE;
+    --hc-red:         #A12B1F;
+    --hc-red-soft:    #FBE5E2;
+    --hc-black:       #000000;
+    --hc-white:       #FFFFFF;
+    --hc-bg-soft:     #F7F7F7;
+    --hc-bg-alt:      #F0F0F0;
+    --hc-bg-canvas:   #E8E9EC;
+    --hc-gray-1:      #C2C2C2;
+    --hc-gray-2:      #A4A3A7;
+    --hc-gray-3:      #87878B;
+    --hc-gray-4:      #5B5D64;
+    --font:  'Calibri Light','Calibri','Segoe UI Light','Segoe UI','Helvetica Neue',Arial,sans-serif;
+    --mono:  'Consolas','Menlo','Courier New',monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { font-family: var(--font); color: var(--hc-black); background: var(--hc-bg-alt); font-weight: 300; line-height: 1.45; font-size: 15px; }
+
+  /* Masthead */
+  .masthead {
+    background: var(--hc-blue);
+    color: var(--hc-white);
+    padding: 40px 56px 36px;
+  }
+  .wordmark { font-size: 22px; font-weight: 300; letter-spacing: 0.02em; color: var(--hc-white); display: inline-block; }
+  .wordmark .coral { color: var(--hc-coral); }
+  .wordmark .sep   { color: var(--hc-white); opacity: 0.7; margin: 0 4px; }
+  h1 { font-size: 34px; font-weight: 300; letter-spacing: -0.01em; margin-top: 18px; line-height: 1.15; }
+  .masthead .subtitle { margin-top: 10px; font-size: 14px; color: var(--hc-white); opacity: 0.82; font-weight: 300; }
+  .masthead .meta { margin-top: 6px; font-family: var(--mono); font-size: 11px; opacity: 0.6; letter-spacing: 0.02em; }
+
+  main { max-width: 1280px; margin: 0 auto; padding: 0 56px 72px; background: var(--hc-white); }
+
+  /* Intro */
+  .intro { padding: 36px 0 28px; border-bottom: 1px solid var(--hc-gray-1); margin-bottom: 40px; }
+  .intro .lead { font-size: 18px; line-height: 1.55; max-width: 860px; color: var(--hc-black); font-weight: 300; }
+  .intro .rationale { font-size: 14px; color: var(--hc-gray-4); margin-top: 14px; max-width: 860px; }
+  .intro .legend { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 28px; font-size: 12px; color: var(--hc-gray-4); }
+  .legend-item { display: inline-flex; align-items: center; gap: 8px; }
+  .legend-sw { display: inline-block; width: 14px; height: 14px; border-radius: 2px; }
+
+  /* Frame */
+  .frame { margin-bottom: 56px; padding-bottom: 40px; border-bottom: 1px solid var(--hc-bg-alt); }
+  .frame:last-of-type { border-bottom: none; }
+  .frame-head { display: flex; align-items: baseline; gap: 18px; margin-bottom: 16px; flex-wrap: wrap; }
+  .frame-n { font-family: var(--mono); font-size: 13px; color: var(--hc-coral); font-weight: 400; letter-spacing: 0.06em; }
+  h2 { font-size: 22px; font-weight: 300; letter-spacing: -0.005em; color: var(--hc-blue); flex: 1; }
+  .frame-phase { font-size: 11px; color: var(--hc-gray-4); font-family: var(--mono); letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 8px; background: var(--hc-bg-alt); border-radius: 2px; }
+  .load-bearing { background: var(--hc-coral); color: var(--hc-white); }
+
+  /* Mockup iframe */
+  .mockup-wrap { width: 1080px; max-width: 100%; height: 607px; overflow: hidden; position: relative; border: 1px solid var(--hc-gray-1); background: var(--hc-white); margin: 0 auto; }
+  .mockup-wrap iframe { width: 1920px; height: 1080px; transform: scale(0.5625); transform-origin: top left; border: none; display: block; }
+  @media (max-width: 1180px) { .mockup-wrap { height: 480px; } .mockup-wrap iframe { transform: scale(0.43); } }
+  @media (max-width: 760px)  { .mockup-wrap { height: 320px; } .mockup-wrap iframe { transform: scale(0.30); } }
+
+  .frame-caption { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .cap-col h3 { font-size: 12px; color: var(--hc-coral); font-family: var(--mono); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 400; margin-bottom: 6px; }
+  .cap-col p { font-size: 14.5px; color: var(--hc-black); line-height: 1.55; }
+
+  /* Requirements panel — three columns, the spike-v2 trust-contract surface */
+  .req-panel { margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  @media (max-width: 980px) { .req-panel { grid-template-columns: 1fr; } }
+  .req-col { padding: 14px 16px; border-radius: 3px; font-size: 13px; line-height: 1.55; }
+  .req-silent   { background: var(--hc-bg-soft);  border-left: 3px solid var(--hc-gray-3); }
+  .req-surface  { background: var(--hc-green-soft); border-left: 3px solid var(--hc-green); }
+  .req-refuse   { background: var(--hc-coral-soft); border-left: 3px solid var(--hc-coral); }
+  .req-col h4 { font-size: 11px; color: var(--hc-gray-4); font-family: var(--mono); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; margin-bottom: 8px; }
+  .req-silent  h4 { color: var(--hc-gray-4); }
+  .req-surface h4 { color: var(--hc-green); }
+  .req-refuse  h4 { color: var(--hc-coral); }
+  .req-col ul { margin: 0; padding-left: 18px; }
+  .req-col li { margin-bottom: 6px; }
+  .req-col code { font-family: var(--mono); font-size: 12px; background: rgba(255,255,255,0.6); padding: 1px 4px; border-radius: 2px; color: var(--hc-blue-deep); }
+  .req-col .none { font-style: italic; color: var(--hc-gray-3); }
+
+  /* State pills inside requirements */
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 400; font-family: var(--font); letter-spacing: 0.02em; }
+  .pill-amber { background: var(--hc-amber-soft); color: var(--hc-amber); }
+  .pill-green { background: var(--hc-green-soft); color: var(--hc-green); }
+  .pill-red   { background: var(--hc-red-soft);   color: var(--hc-red); }
+  .pill-gray  { background: var(--hc-bg-alt);     color: var(--hc-gray-4); }
+
+  /* Kill-criteria table */
+  .kill-table { margin-top: 48px; }
+  .kill-table h2 { color: var(--hc-blue); font-weight: 300; font-size: 22px; margin-bottom: 14px; }
+  .kill-table p.intro-line { color: var(--hc-gray-4); font-size: 14px; margin-bottom: 16px; max-width: 860px; }
+  table.kill { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  table.kill th { background: var(--hc-blue); color: var(--hc-white); text-align: left; padding: 10px 14px; font-weight: 400; }
+  table.kill td { padding: 10px 14px; border-bottom: 1px solid var(--hc-bg-alt); vertical-align: top; }
+  table.kill tr:last-child td { border-bottom: none; }
+  table.kill .sev { white-space: nowrap; }
+
+  /* Transition arrow */
+  .transition { display: flex; justify-content: center; margin: -28px 0 28px; color: var(--hc-coral); font-size: 22px; font-weight: 300; opacity: 0.6; }
+
+  /* Outro */
+  .outro { padding: 40px 0 0; border-top: 2px solid var(--hc-blue); margin-top: 48px; }
+  .outro h2 { color: var(--hc-blue); font-weight: 300; font-size: 22px; margin-bottom: 16px; }
+  .outro ol { padding-left: 24px; font-size: 14.5px; line-height: 1.7; color: var(--hc-black); }
+  .outro ol li { margin-bottom: 6px; }
+  .outro .refs { margin-top: 24px; padding: 16px 20px; background: var(--hc-bg-alt); font-family: var(--mono); font-size: 11.5px; color: var(--hc-gray-4); line-height: 1.8; }
+  .outro .refs strong { color: var(--hc-blue); font-family: var(--font); font-size: 12px; }
+
+  /* Footer */
+  footer { background: var(--hc-blue); color: var(--hc-white); padding: 24px 56px; margin-top: 48px; font-size: 12px; opacity: 0.9; text-align: center; }
+  footer .wordmark { font-size: 14px; }
+  footer a { color: var(--hc-coral); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  .mockup-stub { width: 100%; max-width: 1080px; margin: 0 auto; padding: 32px 24px; background: var(--hc-bg-soft); border: 1px dashed var(--hc-gray-2); border-radius: 3px; text-align: center; }
+  .mockup-stub .ms-label { font-family: var(--mono); font-size: 12px; color: var(--hc-coral); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 400; margin-bottom: 8px; }
+  .mockup-stub .ms-hint  { font-size: 13px; color: var(--hc-gray-4); font-style: italic; }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wordmark">horn <span class="sep">&amp;</span> c<span class="coral">o</span>mpany</div>
+  <h1>Consultant aktualisiert MBR &mdash; Anforderungen + Flags</h1>
+  <div class="subtitle">H&amp;C PowerPoint Add-in &middot; spike-v2 Trust Contract Surface &middot; Mai 2026</div>
+  <div class="meta">hc-knowledge/spike-v2-journey-requirements.html (Mobile-Standalone) &middot; 2026-05-13</div>
+</header>
+
+<main>
+
+  <section class="intro">
+    <p class="lead">
+      Begleitet die monatliche MBR-Journey des Consultants und zeigt pro Frame, <strong>was das Add-in im Hintergrund prüft, was es dem Consultant sichtbar zur&uuml;ckmeldet, und wann es eine Aktion verweigert</strong>. Drei Spalten unter jedem Frame. Drei Farben. Ein Blick: wo steigt das Add-in ein, wo bleibt der Consultant Herr des Decks.
+    </p>
+    <p class="rationale">
+      Quelle: <code>architecture-notes/partial-update-spike-v2.md</code> (LOCKED v1.0 GREEN nach 5 Codex-Runden, 13.05.2026). Diese Seite ist die <strong>Sign-Off-Oberfl&auml;che</strong> f&uuml;r den Trust Contract, bevor die Mid-Band-UX-Politur startet. Drei Frames sind &bdquo;load-bearing&ldquo; (Frame 07 Mark, Frame 08 Fill, Frame 10 Durability) &mdash; dort steigt das Add-in wirklich ein. Die anderen acht sind Read-Only oder ausserhalb des Spike-Umfangs.
+    </p>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-sw" style="background:var(--hc-bg-soft);border-left:3px solid var(--hc-gray-3)"></span> SILENT &mdash; Add-in pr&uuml;ft im Hintergrund, Consultant sieht nichts</span>
+      <span class="legend-item"><span class="legend-sw" style="background:var(--hc-green-soft);border-left:3px solid var(--hc-green)"></span> SURFACES &mdash; sichtbar f&uuml;r den Consultant: Button-Labels, Pills, Modals</span>
+      <span class="legend-item"><span class="legend-sw" style="background:var(--hc-coral-soft);border-left:3px solid var(--hc-coral)"></span> REFUSES &mdash; Add-in lehnt ab, mit klarer Begr&uuml;ndung</span>
+      <span class="legend-item"><span class="legend-sw" style="background:var(--hc-coral);"></span> Frame-Phase &bdquo;load-bearing&ldquo; &mdash; Add-in greift hier wirklich ein</span>
+    </div>
+  </section>
+
+  <!-- ================= FRAME 01 ================= -->
+  <section class="frame" id="frame-01">
+    <header class="frame-head">
+      <span class="frame-n">Frame 01</span>
+      <h2>Consultant &ouml;ffnet das bestehende MBR-Deck</h2>
+      <span class="frame-phase">Einstieg</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="../../../mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(0); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Consultant &ouml;ffnet <code>MBR-April-2026.pptx</code> in PowerPoint. Deck enth&auml;lt bereits die Zahlen des Vormonats. H&amp;C Tool noch nicht aktiviert.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>PowerPoint l&auml;dt das Deck. Add-in-Panel ist noch nicht ge&ouml;ffnet. Consultant sieht die M&auml;rz-2026-Zahlen.</p>
+      </div>
+    </div>
+    <div class="req-panel">
+      <div class="req-col req-silent">
+        <h4>Silent</h4>
+        <ul>
+          <li>Shape-Identit&auml;t-Stamping aktiv: jede Form bekommt einen stabilen <code>shape_guid</code> beim ersten Zugriff (Phase-A-Invariante #1).</li>
+          <li>Audit-Log <code>urn:hc-deck-audit/v1</code> wird gelesen, falls vorhanden.</li>
+          <li>Bestehende <code>urn:hc-update-targets/v1</code> Rows werden vorgeladen.</li>
+        </ul>
+      </div>
+      <div class="req-col req-surface">
+        <h4>Surfaces</h4>
+        <ul>
+          <li>Keine direkte R&uuml;ckmeldung &mdash; das Add-in ist noch nicht aktiv.</li>
+          <li>Sobald aktiviert (Frame 02): Z&auml;hler &bdquo;X markierte Targets bereits im Deck&ldquo; falls vorhanden.</li>
+        </ul>
+      </div>
+      <div class="req-col req-refuse">
+        <h4>Refuses</h4>
+        <p class="none">Nichts. Read-only-Phase.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 02 ================= -->
+  <section class="frame" id="frame-02">
+    <header class="frame-head">
+      <span class="frame-n">Frame 02</span>
+      <h2>Consultant aktiviert das H&amp;C Tool</h2>
+      <span class="frame-phase">Aktivierung</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="../../../mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(1); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Consultant klickt auf das H&amp;C-Symbol im Ribbon &mdash; das Aufgaben-Panel &ouml;ffnet sich rechts.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Add-in-Panel l&auml;dt. H&amp;C-Schriftzug oben. Sektion &bdquo;Partial-update (spike-v2)&ldquo; sichtbar mit vier Buttons: Mark / List / Fill / Unmark.</p>
+      </div>
+    </div>
+    <div class="req-panel">
+      <div class="req-col req-silent">
+        <h4>Silent</h4>
+        <ul>
+          <li><code>KNOWN_HC_NAMESPACES</code>-Registry geladen (10 Namespaces inkl. <code>urn:hc-update-targets/v1</code>).</li>
+          <li>Purger-Regressions-Check feuert paranoid: jede neue Namespace muss in <code>addin/src/invariants.ts</code> <code>knownNs</code> erscheinen.</li>
+          <li>Auto-Guard-Hook attached: <code>ai-usage-monitor-guard check</code> vor jedem LLM-Call.</li>
+          <li>Office.js-API-Version-Check: PowerPointApi 1.7+ erforderlich.</li>
+        </ul>
+      </div>
+      <div class="req-col req-surface">
+        <h4>Surfaces</h4>
+        <ul>
+          <li>Sidebar-Sektion &bdquo;Partial-update (spike-v2)&ldquo; wird gerendert.</li>
+          <li>Vier Buttons sichtbar: <strong>Mark whole-shape target</strong> (coral), <strong>List marked targets</strong>, <strong>Fill from spreadsheet</strong> (coral), <strong>Unmark selected shape</strong>.</li>
+          <li>Eligibility-Hinweis unter den Buttons: &bdquo;Spike-v2 verlangt genau 1 Paragraph + 1 Run mit homogener Formatierung.&ldquo;</li>
+        </ul>
+      </div>
+      <div class="req-col req-refuse">
+        <h4>Refuses</h4>
+        <ul>
+          <li>Falls Office.js-API &lt; 1.7 (z.B. alte Mac-PowerPoint): blockierende Meldung &bdquo;Add-in erfordert PowerPoint 16.92 oder neuer (Mac) / aktuelle Version (Windows)&ldquo;.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 03 ================= -->
+  <section class="frame" id="frame-03">
+    <header class="frame-head">
+      <span class="frame-n">Frame 03</span>
+      <h2>Consultant w&auml;hlt die H&amp;C Standard-Bibliothek</h2>
+      <span class="frame-phase">Einrichtung</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="../../../mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(2); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Consultant w&auml;hlt die H&amp;C Standard-Bibliothek (v1.0) &mdash; dieselbe Vorlage wie f&uuml;r alle MBR-Decks.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Bibliothek geladen. Vorlagen und Shape-Mappings f&uuml;r das MBR-Template bereit.</p>
+      </div>
+    </div>
+    <div class="req-panel">
+      <div class="req-col req-silent">
+        <p class="none">Library-Binding-Flow &mdash; ausserhalb spike-v2-Umfang. (Mid-Band &uuml;bernimmt MA-B.)</p>
+      </div>
+      <div class="req-col req-surface">
+        <p class="none">Library-Picker &mdash; separater Flow.</p>
+      </div>
+      <div class="req-col req-refuse">
+        <p class="none">Nichts spike-v2-spezifisch.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 04 ================= -->
+  <section class="frame" id="frame-04">
+    <header class="frame-head">
+      <span class="frame-n">Frame 04</span>
+      <h2>Consultant w&auml;hlt den Einstiegsmodus Jumpstart / customized</h2>
+      <span class="frame-phase">Einrichtung</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="../../../mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(3); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Consultant w&auml;hlt &bdquo;Jumpstart / customized&ldquo; &mdash; vorhandenes Deck als Basis, gezielte Updates.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Modus aktiviert. Add-in zeigt die fokussierte Partial-Update-Oberfl&auml;che.</p>
+      </div>
+    </div>
+    <div class="req-panel">
+      <div class="req-col req-silent"><p class="none">Mode-Selection &mdash; ausserhalb spike-v2.</p></div>
+      <div class="req-col req-surface"><p class="none">Mode-Toggle &mdash; separater Flow.</p></div>
+      <div class="req-col req-refuse"><p class="none">Nichts spike-v2-spezifisch.</p></div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 05 ================= -->
+  <section class="frame" id="frame-05">
+    <header class="frame-head">
+      <span class="frame-n">Frame 05</span>
+      <h2>Consultant pr&uuml;ft das Deck-Brief</h2>
+      <span class="frame-phase">Brief</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="../../../mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(4); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Consultant liest das gespeicherte Deck-Brief: &bdquo;Aktualisiere April-Zahlen aus Finance-Ordner&ldquo;.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Brief aus Deck-Metadaten geladen. Consultant kann anpassen.</p>
+      </div>
+    </div>
+    <div class="req-panel">
+      <div class="req-col req-silent"><p class="none">Deck-Brief-Storage &mdash; ausserhalb spike-v2.</p></div>
+      <div class="req-col req-surface"><p class="none">Brief-Edit-Feld &mdash; separater Flow.</p></div>
+      <div class="req-col req-refuse"><p class="none">Nichts spike-v2-spezifisch.</p></div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 05B ================= -->
+  <section class="frame" id="frame-05b">
+    <header class="frame-head">
+      <span class="frame-n">Frame 05B</span>
+      <h2>Consultant best&auml;tigt Format-Pr&auml;ferenzen</h2>
+      <span class="frame-phase">Brief</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="../../../mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(5); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Consultant best&auml;tigt: &bdquo;Zahlen in TEUR, eine Nachkommastelle, EBIT in fett&ldquo;.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Format-Pr&auml;ferenzen pro Deck gespeichert.</p>
+      </div>
+    </div>
+    <div class="req-panel">
+      <div class="req-col req-silent"><p class="none">Format-Pr&auml;ferenzen &mdash; ausserhalb spike-v2.</p></div>
+      <div class="req-col req-surface"><p class="none">Pr&auml;ferenz-Confirm-UI &mdash; separater Flow.</p></div>
+      <div class="req-col req-refuse"><p class="none">Nichts spike-v2-spezifisch.</p></div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 06 ================= -->
+  <section class="frame" id="frame-06">
+    <header class="frame-head">
+      <span class="frame-n">Frame 06</span>
+      <h2>Consultant &ouml;ffnet Folie 03</h2>
+      <span class="frame-phase">&Uuml;berpr&uuml;fung</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="../../../mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(6); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Consultant navigiert zu Folie 03 mit den Umsatzzahlen. Folie zeigt noch M&auml;rz-Werte.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Folie 03 selektiert. Add-in-Sidebar zeigt Folien-Thumbnail + Status &bdquo;Auswahl: 1 Folie&ldquo;.</p>
+      </div>
+    </div>
+    <div class="req-panel">
+      <div class="req-col req-silent">
+        <h4>Silent</h4>
+        <ul>
+          <li>Selected-Slide-Listener aktiv: Selection-Changed-Event aus Office.js feuert.</li>
+          <li>Slide-Index-Resolution: <code>presentation.slides.findIndex(s =&gt; s.id === selected.id) + 1</code>.</li>
+        </ul>
+      </div>
+      <div class="req-col req-surface">
+        <h4>Surfaces</h4>
+        <ul>
+          <li>Folien-Thumbnail in der Sidebar.</li>
+          <li>Status-Zeile: <strong>&bdquo;Auswahl: 1 Folie (Folie 3 von 12)&ldquo;</strong>.</li>
+        </ul>
+      </div>
+      <div class="req-col req-refuse">
+        <p class="none">Nichts. Read-only-Navigation.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 07 (LOAD-BEARING) ================= -->
+  <section class="frame" id="frame-07">
+    <header class="frame-head">
+      <span class="frame-n">Frame 07</span>
+      <h2>Consultant pr&uuml;ft einzelne Form &mdash; <span style="color:var(--hc-coral)">MARK STEP</span></h2>
+      <span class="frame-phase load-bearing">&Uuml;berpr&uuml;fung &middot; Add-in greift ein</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="../../../mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(7); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Consultant klickt auf eine Form (z.B. die Zelle mit &bdquo;EUR 9,675&ldquo;) und dr&uuml;ckt <strong>&bdquo;Mark whole-shape target&ldquo;</strong>. Er gibt das Brief ein: &bdquo;Q2 2026 Umsatz YTD in TEUR&ldquo;.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Form bekommt einen Marker (Tag <code>hc_update_target</code>). Im Deck wird die Target-Zeile geschrieben. Audit-Log h&auml;lt fest, dass markiert wurde.</p>
+      </div>
+    </div>
+    <div class="req-panel">
+      <div class="req-col req-silent">
+        <h4>Silent (vor dem Schreiben)</h4>
+        <ul>
+          <li><code>ensureShapeGuid(shape)</code> &mdash; First-write-wins UUID stamping.</li>
+          <li><code>checkMarkEligibility(shape)</code> pr&uuml;ft vier Bedingungen:
+            <ol style="padding-left:18px;margin-top:4px;">
+              <li>Shape-Type nicht in <code>{table, chart, smartArt, ole, graphicFrame, group, picture, image}</code></li>
+              <li><code>textFrame.hasText === true</code></li>
+              <li>Keine Paragraph-Breaks (<code>\v\n\r\f</code>) im Text</li>
+              <li>Alle 12 <code>ShapeFont</code>-Attribute non-null (homogene Run-Formatierung): <code>name, size, bold, italic, underline, color, allCaps, smallCaps, strikethrough, doubleStrikethrough, subscript, superscript</code></li>
+            </ol>
+          </li>
+          <li><code>format_signature_hash</code> = SHA-256 &uuml;ber die 12 Attribute &mdash; als Baseline f&uuml;r die Fill-Zeit-Revalidation persistiert.</li>
+          <li><code>UpdateTarget</code>-Row in <code>urn:hc-update-targets/v1</code> customXmlPart (JSON in CDATA).</li>
+          <li>Audit-Row mit <code>note=update_target_marked:{target_id}</code>.</li>
+        </ul>
+      </div>
+      <div class="req-col req-surface">
+        <h4>Surfaces (sichtbar)</h4>
+        <ul>
+          <li>Form-Highlight zeigt die ausgew&auml;hlte Form.</li>
+          <li>Button <strong>&bdquo;Mark whole-shape target&ldquo;</strong> aktiv (coral).</li>
+          <li>Prompt: <em>&bdquo;Brief for this target (&lt;=500 chars). What value should the AI fill in?&ldquo;</em></li>
+          <li>Erfolgsmeldung im Activity-Log: <code>Marked. target_id=abc12345&hellip; Use 'Fill from spreadsheet' next.</code></li>
+          <li><span class="pill pill-gray">unmarked</span> &rarr; <span class="pill pill-amber">marked</span> Pill-Transition.</li>
+        </ul>
+      </div>
+      <div class="req-col req-refuse">
+        <h4>Refuses (mit Begr&uuml;ndung)</h4>
+        <ul>
+          <li><strong>Falscher Shape-Type:</strong> &bdquo;Spike-v2 does not support shape type 'table'; mid-band only.&ldquo;</li>
+          <li><strong>Kein Text:</strong> &bdquo;Shape has no text content; nothing to fill.&ldquo;</li>
+          <li><strong>Mehrere Paragraphen:</strong> &bdquo;Spike-v2 requires exactly 1 paragraph; shape has 3.&ldquo;</li>
+          <li><strong>Gemischte Formatierung:</strong> &bdquo;Shape has mixed-format text runs (mixed: <em>name, underline, strikethrough</em>); spike-v2 requires a single run.&ldquo;</li>
+          <li><strong>Brief zu lang:</strong> &bdquo;Brief exceeds 500 chars (got 612).&ldquo;</li>
+        </ul>
+        <p style="margin-top:8px;font-size:12px;color:var(--hc-gray-4);"><em>Jede Ablehnung kommt mit einem klaren Grund &mdash; der Consultant weiss sofort, warum.</em></p>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 08 (LOAD-BEARING) ================= -->
+  <section class="frame" id="frame-08">
+    <header class="frame-head">
+      <span class="frame-n">Frame 08</span>
+      <h2>Consultant startet die KI-Bef&uuml;llung &mdash; <span style="color:var(--hc-coral)">FILL STEP</span></h2>
+      <span class="frame-phase load-bearing">Bef&uuml;llen &middot; Add-in greift ein</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="../../../mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(8); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Consultant w&auml;hlt die Finance-Excel-Datei und klickt <strong>&bdquo;Fill from spreadsheet (selected target)&ldquo;</strong>. Das Tool zieht den passenden Wert (z.B. &bdquo;10,618&ldquo;) f&uuml;r April 2026 YTD.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Form-Text wird ersetzt. Coral-Shimmer-Overlay best&auml;tigt die &Auml;nderung visuell. State-Pill: <span class="pill pill-amber">pending durability</span>.</p>
+      </div>
+    </div>
+    <div class="req-panel">
+      <div class="req-col req-silent">
+        <h4>Silent</h4>
+        <ul>
+          <li><code>getUpdateTargetForShape</code> findet die Target-Zeile per <code>shape_guid</code>.</li>
+          <li><strong>Fill-Zeit-Revalidation</strong> (Codex R3): <code>computeFormatSignatureHash(shape)</code> &mdash; muss exakt dem Mark-Zeit-Baseline gleichen.</li>
+          <li><code>prev_text_hash</code> = SHA-256(textRange.text) &mdash; Safety-Check-Anker.</li>
+          <li><strong>RAG-Retrieval</strong> via <code>scripts/rag-single-file.py</code> &mdash; Top-5 Evidence[] mit <code>embedding_score</code> + <code>locator</code> (z.B. <code>sheet:KPIs!B3</code>).</li>
+          <li>Confidence-Gate: <code>delta_to_runner_up &gt;= 0.15</code> &rarr; autofill; sonst Picker-Modal (mid-band).</li>
+          <li><code>textRange.text = proposed_value</code> &mdash; Office.js write.</li>
+          <li><code>next_text_hash</code> = SHA-256(textRange.text) post-write; Write-back-Verify.</li>
+          <li><code>markAiFilled(shape)</code> &mdash; flippt <code>hc_filled_by</code> auf <code>"ai"</code>.</li>
+          <li>Audit-Row <strong>pending</strong>: <code>note=update_target_filled_pending</code>. <em>Noch keine</em> <code>source_backed</code> ClaimLedgerEntry &mdash; Durability ist noch nicht bewiesen.</li>
+        </ul>
+      </div>
+      <div class="req-col req-surface">
+        <h4>Surfaces</h4>
+        <ul>
+          <li>Prompt (floor band) f&uuml;r <code>proposed_value</code>; mid-band ersetzt durch Evidence-Picker-Modal mit Top-5 + Provenance-Locators.</li>
+          <li>Coral-Shimmer-Overlay &uuml;ber der Form &mdash; visuelle Best&auml;tigung der &Auml;nderung.</li>
+          <li>State-Pill: <span class="pill pill-amber">pending durability</span>.</li>
+          <li>Activity-Log: <code>spike_v2: filled-pending  target_id=abc12345&hellip;  prev=def67890&hellip;  next=ghi23456&hellip;</code></li>
+          <li>Hinweis: &bdquo;Filled (pending durability). Save+close+reopen the deck, then byte-diff verify.&ldquo;</li>
+        </ul>
+      </div>
+      <div class="req-col req-refuse">
+        <h4>Refuses (mit Begr&uuml;ndung)</h4>
+        <ul>
+          <li><strong>Nicht markiert:</strong> &bdquo;Shape is not marked. Call markWholeShape first.&ldquo;</li>
+          <li><strong>Eligibility verloren:</strong> &bdquo;Shape is no longer eligible &mdash; was edited between mark and fill. Re-mark required.&ldquo;</li>
+          <li><strong>Format gedriftet:</strong> &bdquo;Format drifted between mark and fill &mdash; baseline abc12345, current xyz67890. Re-mark required.&ldquo;</li>
+          <li><strong>Niedrige Confidence:</strong> &bdquo;delta_to_runner_up &lt; 0.15 &mdash; picker required (mid-band).&ldquo;</li>
+          <li><strong>Write-back fehlgeschlagen:</strong> &bdquo;Write-back verification failed. Expected 'X', got 'Y'.&ldquo;</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 09 ================= -->
+  <section class="frame" id="frame-09">
+    <header class="frame-head">
+      <span class="frame-n">Frame 09</span>
+      <h2>KI aktualisiert Zahlen &mdash; Shimmer best&auml;tigt &Auml;nderungen</h2>
+      <span class="frame-phase">Ergebnis</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="../../../mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(9); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Consultant beobachtet die Form: Die alte M&auml;rz-Zahl wird kurz von einem Coral-Shimmer &uuml;berstrahlt und durch die neue April-Zahl ersetzt.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Animation und State-Pill machen die &Auml;nderung sofort sichtbar. <em>Hinweis: die Durability ist noch nicht best&auml;tigt &mdash; Frame 10 verifiziert.</em></p>
+      </div>
+    </div>
+    <div class="req-panel">
+      <div class="req-col req-silent">
+        <h4>Silent</h4>
+        <ul>
+          <li>State-Pill bleibt <span class="pill pill-amber">pending</span> bis Frame 10 abgeschlossen.</li>
+          <li><code>state.json</code> Checkpoint geschrieben (<code>/tmp/spike-v2-runs/&lt;run_id&gt;/state.json</code>) mit <code>current_step=patch</code>.</li>
+          <li>Falls Crash zwischen jetzt und Frame 10: Audit-Walker findet die <code>pending</code>-Zeile beim n&auml;chsten Deck-&Ouml;ffnen und schl&auml;gt Reconciliation vor.</li>
+        </ul>
+      </div>
+      <div class="req-col req-surface">
+        <h4>Surfaces</h4>
+        <ul>
+          <li>Coral-Shimmer-Animation (ca. 600 ms).</li>
+          <li>State-Pill bleibt <span class="pill pill-amber">pending durability</span>.</li>
+          <li>Sidebar-Hinweis: &bdquo;Save+close+reopen, then run byte-diff to finalize.&ldquo;</li>
+        </ul>
+      </div>
+      <div class="req-col req-refuse">
+        <p class="none">Animation nur, keine ablehnende Logik in diesem Frame.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 10 (LOAD-BEARING) ================= -->
+  <section class="frame" id="frame-10">
+    <header class="frame-head">
+      <span class="frame-n">Frame 10</span>
+      <h2>Consultant pr&uuml;ft und speichert &mdash; <span style="color:var(--hc-coral)">DURABILITY VERIFY</span></h2>
+      <span class="frame-phase load-bearing">Fertig &middot; Add-in greift ein</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="../../../mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(10); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Consultant pr&uuml;ft das aktualisierte Deck visuell, speichert mit <code>Cmd+S</code>, schliesst und &ouml;ffnet das Deck neu. Tool best&auml;tigt &bdquo;Durable&ldquo;.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Add-in l&auml;uft den byte-diff-Validator. Wenn nur die markierte Form ge&auml;ndert wurde: <span class="pill pill-green">Durable</span>. Audit-Trail wird final geschrieben.</p>
+      </div>
+    </div>
+    <div class="req-panel">
+      <div class="req-col req-silent">
+        <h4>Silent</h4>
+        <ul>
+          <li><code>Cmd+S</code> &rarr; PowerPoint speichert &mdash; <code>customXmlPart</code> + Tags persistieren (Round-Trip-v1 25.04.2026 best&auml;tigt).</li>
+          <li>Reopen &rarr; <code>shape.tags["hc_update_target"]</code> &uuml;berlebt (Round-Trip-v1 ✓).</li>
+          <li><code>scripts/pptx-bytediff-v2.py before.pptx after.pptx --target-slide 3 --target-xpath './/a:t' --mutation-kind text-only</code> l&auml;uft.</li>
+          <li>Klassifikator: nur die <code>&lt;a:t&gt;</code> auf Folie 3 hat sich ge&auml;ndert + die <code>urn:hc-update-targets/v1</code> customXmlPart wurde angeh&auml;ngt + Package-Scaffold (<code>[Content_Types].xml</code> + presentation.rels) scoped allowed. Alles andere = zero drift.</li>
+          <li><code>finalizePatchAfterDurabilityCheck</code>: Audit-Row Promotion <code>pending</code> &rarr; <code>update_target_filled_durable</code>.</li>
+          <li>In-deck ClaimLedgerEntry geschrieben mit <code>state: "source_backed"</code>, <code>source_kind: "local_fixture_xlsx"</code> (Dev-Build; Produktion ersetzt durch echte source_kinds).</li>
+          <li><code>state.json</code> Checkpoint: <code>current_step=completed</code>, <code>status=completed</code>.</li>
+        </ul>
+      </div>
+      <div class="req-col req-surface">
+        <h4>Surfaces</h4>
+        <ul>
+          <li>Save-Best&auml;tigung von PowerPoint.</li>
+          <li>Reopen-Best&auml;tigung im Activity-Log.</li>
+          <li>State-Pill flippt: <span class="pill pill-amber">pending durability</span> &rarr; <span class="pill pill-green">Durable</span>.</li>
+          <li>Activity-Log: <code>spike_v2: filled-durable  target_id=abc12345&hellip;  bytediff_exit_code=0</code>.</li>
+          <li>Audit-Panel zeigt die volle Provenance-Kette: <em>target_id &rarr; claim_id &rarr; evidence_locators</em>.</li>
+          <li>Optionaler &bdquo;Send to partner&ldquo;-Hinweis (mid-band).</li>
+        </ul>
+      </div>
+      <div class="req-col req-refuse">
+        <h4>Refuses (mit Begr&uuml;ndung)</h4>
+        <ul>
+          <li><strong>byte-diff exit 1</strong> <span class="pill pill-red">UNEXPECTED DRIFT</span>: &bdquo;Diff in non-whitelisted part&ldquo; &mdash; Rollback-Row geschrieben; Consultant wird gebeten zu pr&uuml;fen, welcher Teil unerwartet gedriftet ist.</li>
+          <li><strong>byte-diff exit 3</strong> <span class="pill pill-red">INVARIANT VIOLATION</span>: &bdquo;Whitelisted part diff exceeds mutation_kind scope&ldquo; &mdash; Rollback-Row geschrieben; Spike eskaliert per Kill-Criteria zur Architektur-Re-Evaluation.</li>
+          <li><strong>claim_id-Cross-Reference fehlgeschlagen</strong>: &bdquo;Audit walker reconciliation pending&ldquo; &mdash; nicht-blockierend, manueller Check empfohlen.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= KILL CRITERIA ROLL-UP ================= -->
+  <section class="kill-table">
+    <h2>Kill-Kriterien-Roll-up &mdash; was passiert, wenn etwas Grunds&auml;tzliches schiefgeht</h2>
+    <p class="intro-line">
+      Aus dem Spec <code>partial-update-spike-v2.md</code> §&bdquo;Kill criteria roll-up&ldquo;. Sechs Triggers, drei davon sind <span class="pill pill-amber">acceptable iterate</span> (das Add-in pivotiert intern), drei sind <span class="pill pill-red">BLOCKER</span> (escalation per GitHub-Issue mit <code>decision-class</code>-Label + Atlas-Update + Push-Benachrichtigung an Filipe).
+    </p>
+    <table class="kill">
+      <thead>
+        <tr><th>Trigger (was schiefgehen kann)</th><th>Resolution (was das Add-in dann tut)</th><th class="sev">Severity</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Office.js auf Mac kann lokale Datei-Inhalte nicht offline lesen.</td>
+          <td>Pivot zu einem kleinen lokalen Node-Helper auf 127.0.0.1, der mit dem Add-in &uuml;ber localhost spricht. Kein externer Netzwerk-Call.</td>
+          <td class="sev"><span class="pill pill-amber">acceptable</span></td>
+        </tr>
+        <tr>
+          <td>Das ONNX-Embedding-Modell kann im WebView nicht laufen.</td>
+          <td>Pivot: das Embedding l&auml;uft im lokalen Node-Helper, das Add-in fragt &uuml;ber localhost an. Selbe Architektur wie oben.</td>
+          <td class="sev"><span class="pill pill-amber">acceptable</span></td>
+        </tr>
+        <tr>
+          <td>OOXML-Write erfordert jedes Mal einen Save-As-Dialog.</td>
+          <td>Pivot: lokaler Node-Helper schreibt direkt; Add-in benutzt diesen statt der Office.js-Write-API.</td>
+          <td class="sev"><span class="pill pill-amber">acceptable</span></td>
+        </tr>
+        <tr>
+          <td><code>hc_update_target</code>-Tag verschwindet nach Save+Reopen.</td>
+          <td><strong>BLOCKER.</strong> Architektur-Rethink notwendig: Shape-Identit&auml;t muss anders getragen werden (z.B. customXmlPart-only). Eskalation an Filipe per Issue mit <code>decision-class</code>-Label.</td>
+          <td class="sev"><span class="pill pill-red">BLOCKER</span></td>
+        </tr>
+        <tr>
+          <td>Byte-diff schl&auml;gt auf irrelevantem OOXML-Drift fehl.</td>
+          <td>Validator-Scope erweitern (Normalizer-Regeln pr&auml;zisieren). Bisher gel&ouml;st durch 5 Codex-Runden &mdash; weitere Drift-Klassen f&uuml;hren zu inkrementellen Updates.</td>
+          <td class="sev"><span class="pill pill-amber">acceptable</span></td>
+        </tr>
+        <tr>
+          <td>Zero-Unexpected-Drift auf dem allowed-Region-Patch-Path ist nicht erreichbar.</td>
+          <td><strong>BLOCKER.</strong> MVP-Rethink: die fundamentale Annahme &bdquo;wir k&ouml;nnen einen Wert ersetzen, ohne Anderes zu ver&auml;ndern&ldquo; w&auml;re gebrochen. Eskalation an Filipe.</td>
+          <td class="sev"><span class="pill pill-red">BLOCKER</span></td>
+        </tr>
+        <tr>
+          <td>Codex-Bridge nicht erreichbar (Reviewer-AI offline).</td>
+          <td>Add-in funktioniert weiter; geplante Reviews werden in einer Queue gehalten und feuern, sobald die Bridge wieder antwortet. (Vorgang vom 13.05.2026 vormittag &mdash; Issue #19.)</td>
+          <td class="sev"><span class="pill pill-amber">acceptable</span></td>
+        </tr>
+        <tr>
+          <td>Auto-Guard-Quota erreicht.</td>
+          <td>Loop pausiert sauber via <code>exit 75</code>. <code>state.json</code> bleibt erhalten. Auto-Guard schreibt nach Quota-Reset eine Resume-Anfrage; Loop f&auml;hrt vom letzten Checkpoint fort.</td>
+          <td class="sev"><span class="pill pill-amber">acceptable</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ================= OUTRO ================= -->
+  <section class="outro">
+    <h2>Was diese Sign-off-Seite validiert</h2>
+    <ol>
+      <li>Der Consultant kann an drei Stellen aktiv werden: <strong>markieren (Frame 07), bef&uuml;llen (Frame 08), speichern+verifizieren (Frame 10)</strong>. Alles andere ist Read-only.</li>
+      <li>An jeder dieser drei Stellen wird das Add-in entweder <span class="pill pill-green">durable best&auml;tigen</span>, <span class="pill pill-amber">pending halten</span> oder <span class="pill pill-red">mit klarer Begr&uuml;ndung ablehnen</span>. Es gibt kein stilles &Uuml;berschreiben.</li>
+      <li>Die Provenance-Kette ist liegt nach Frame 10 vollst&auml;ndig vor: <em>target_id &rarr; claim_id &rarr; evidence_locators &rarr; source_kind &rarr; confidence</em>. Jede gef&uuml;llte Zelle hat eine nachvollziehbare Herkunft.</li>
+      <li>Eskalations-Triggers sind explizit. Drei sind &bdquo;acceptable iterate&ldquo; (das Add-in pivotiert intern), zwei sind &bdquo;BLOCKER&ldquo; (Filipe wird per GitHub-Issue benachrichtigt).</li>
+    </ol>
+    <div class="refs">
+      <strong>Quellen</strong><br>
+      Spec (LOCKED v1.0 GREEN): <code>architecture-notes/partial-update-spike-v2.md</code><br>
+      User Journey (Mockup): <code>design/flows/UserJourney_Alex_MBR_v1.0.0.html</code><br>
+      Visueller Mockup (kanonisch): <a href="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/UserJourney_Alex_MBR_v1.0.0.html" target="_blank" rel="noopener" style="color:var(--hc-coral);">UserJourney_Alex_MBR (htmlpreview)</a><br>
+      Add-in-Code: <code>addin/src/marking.ts</code>, <code>addin/src/patch-whole-shape.ts</code><br>
+      Byte-Diff: <code>scripts/pptx-bytediff-v2.py</code><br>
+      Canvas-Sync-Topic: <code>spike-v2-journey-requirements</code> (siehe <code>design/.canvas-sync.yaml</code>)
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wordmark">horn <span class="sep">&amp;</span> c<span class="coral" style="color:var(--hc-coral)">o</span>mpany</div>
+  <div style="margin-top: 6px; opacity: 0.7;">Corporate PPT Tool &middot; spike-v2-journey-requirements wireframe v1.0.0 &middot; 2026-05-13 &middot; <a href="../../../architecture-notes/partial-update-spike-v2.md">Specification</a></div>
+</footer>
+
+</body>
+</html>
