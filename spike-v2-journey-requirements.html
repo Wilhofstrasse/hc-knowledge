@@ -384,12 +384,18 @@
   footer .stamp { opacity: 0.55; margin-top: 8px; font-family: var(--mono); font-size: 10.5px; }
 
   /* ─────────────────── Responsive: stack at 880px, iPhone-ready at 375px ─────────────────── */
+  /* Iframe shrinks to fit container at every breakpoint. Default 0.5625 = 1080px container.
+     Below that, scale relative to viewport — main padding is 32px each side at ≤1080, 22px at ≤720. */
   @media (max-width: 1080px) {
     main { padding: 0 32px 56px; }
     .req-panel { grid-template-columns: 1fr; }
     .req-col.silent { order: 3; }
     .req-col.surface { order: 1; }
     .req-col.refuse { order: 2; }
+    .mockup-wrap iframe {
+      transform: scale(calc((100vw - 64px) / 1920));
+      transform-origin: top left;
+    }
   }
   @media (max-width: 720px) {
     .masthead { padding: 28px 22px 24px; }
@@ -398,7 +404,7 @@
     h2 { font-size: 18px; min-width: 0; }
     .frame { margin-bottom: 28px; padding-bottom: 22px; }
     .mockup-wrap iframe {
-      /* allow the iframe to scale to whatever the wrap width is */
+      transform: scale(calc((100vw - 44px) / 1920));
       transform-origin: top left;
     }
     table.killtable .trigger,
