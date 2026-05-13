@@ -1,19 +1,917 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>RETRACTED — spike-v2-journey-requirements</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consultant aktualisiert Monthly Business Review — Anforderungen + Flags</title>
 <style>
-  body { font-family: 'Calibri Light', sans-serif; padding: 48px; max-width: 760px; margin: 0 auto; color: #14324E; line-height: 1.55; }
-  h1 { font-weight: 300; font-size: 28px; color: #E94D3A; }
-  code { font-family: Consolas, Menlo, monospace; background: #F0F0F0; padding: 1px 5px; border-radius: 2px; font-size: 13px; }
-  .note { background: #F9E1DD; border-left: 3px solid #E94D3A; padding: 16px 20px; margin-top: 24px; }
+  /* H&C brand tokens — canonical, do not modify */
+  :root {
+    --hc-blue:        #14324E;
+    --hc-blue-deep:   #0E2438;
+    --hc-coral:       #E94D3A;
+    --hc-coral-soft:  #F9E1DD;
+    --hc-black:       #000000;
+    --hc-white:       #FFFFFF;
+    --hc-bg:          #FFFFFF;
+    --hc-bg-soft:     #F7F7F7;
+    --hc-bg-alt:      #F0F0F0;
+    --hc-bg-outer:    #E8E9EC;
+    --hc-gray-1:      #C2C2C2;
+    --hc-gray-2:      #A4A3A7;
+    --hc-gray-3:      #87878B;
+    --hc-gray-4:      #5B5D64;
+    --hc-green:       #2E7D4F;
+    --hc-green-soft:  #E6F1EA;
+    --hc-amber:       #C98A1A;
+    --hc-amber-soft:  #FBF1DE;
+    --hc-red:         #A12B1F;
+    --hc-red-soft:    #FBE5E2;
+    --font: 'Calibri Light','Calibri','Segoe UI Light','Segoe UI','Helvetica Neue',Arial,sans-serif;
+    --mono: 'Consolas','Menlo','Courier New',monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    font-family: var(--font);
+    color: var(--hc-black);
+    background: var(--hc-bg-outer);
+    font-weight: 300;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─────────────────── Masthead ─────────────────── */
+  .masthead {
+    background: var(--hc-blue);
+    color: var(--hc-white);
+    padding: 40px 56px 36px;
+  }
+  .wordmark {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    color: var(--hc-white);
+    display: inline-block;
+  }
+  .wordmark .coral { color: var(--hc-coral); }
+  .wordmark .sep { color: var(--hc-white); opacity: 0.7; margin: 0 4px; }
+  h1 {
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    margin-top: 18px;
+    line-height: 1.18;
+    max-width: 900px;
+  }
+  .masthead .subtitle {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--hc-white);
+    opacity: 0.82;
+  }
+  .masthead .meta {
+    margin-top: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    opacity: 0.6;
+    letter-spacing: 0.02em;
+  }
+
+  /* ─────────────────── Container ─────────────────── */
+  main { max-width: 1280px; margin: 0 auto; padding: 0 56px 72px; background: var(--hc-white); }
+
+  /* ─────────────────── Intro / Legend ─────────────────── */
+  .intro {
+    padding: 36px 0 28px;
+    border-bottom: 1px solid var(--hc-gray-1);
+    margin-bottom: 32px;
+  }
+  .intro .lead {
+    font-size: 17px;
+    line-height: 1.55;
+    max-width: 820px;
+    color: var(--hc-black);
+  }
+  .intro .rationale {
+    font-size: 13.5px;
+    color: var(--hc-gray-4);
+    margin-top: 12px;
+    max-width: 820px;
+  }
+  .legend {
+    margin-top: 26px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px 28px;
+    font-size: 12.5px;
+    color: var(--hc-gray-4);
+  }
+  .legend-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.4;
+  }
+  .legend-sw {
+    flex: 0 0 14px;
+    width: 14px;
+    height: 14px;
+    margin-top: 3px;
+    border-radius: 2px;
+  }
+  .legend-sw.silent  { background: var(--hc-bg-soft); border: 1px solid var(--hc-gray-1); }
+  .legend-sw.surface { background: var(--hc-blue); }
+  .legend-sw.refuse  { background: var(--hc-coral); }
+  .legend-sw.amber   { background: var(--hc-amber); }
+  .legend-sw.green   { background: var(--hc-green); }
+  .legend-row b { color: var(--hc-blue); font-weight: 400; }
+
+  /* ─────────────────── Frame ─────────────────── */
+  .frame {
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+  }
+  .frame + .transition { margin-top: -18px; }
+  .frame-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .frame-n {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--hc-coral);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+  }
+  h2 {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: -0.005em;
+    color: var(--hc-blue);
+    flex: 1;
+    min-width: 320px;
+  }
+  .frame-phase {
+    font-size: 11px;
+    color: var(--hc-gray-4);
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    background: var(--hc-bg-alt);
+    border-radius: 2px;
+  }
+  .frame-phase.load-bearing {
+    background: var(--hc-coral-soft);
+    color: var(--hc-coral);
+  }
+
+  /* mockup iframe wrapper (1920×1080 scaled to fit the 1280-content rail) */
+  .mockup-wrap {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-width: 1080px;
+    height: auto;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--hc-gray-1);
+    background: var(--hc-bg-alt);
+  }
+  .mockup-wrap iframe {
+    width: 1920px;
+    height: 1080px;
+    transform: scale(0.5625);
+    transform-origin: top left;
+    border: none;
+    display: block;
+  }
+
+  /* ─────────────────── 3-column requirements panel ─────────────────── */
+  .req-panel {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  .req-col {
+    background: var(--hc-bg-soft);
+    padding: 14px 16px 16px;
+    border-top: 2px solid var(--hc-gray-1);
+    min-height: 120px;
+  }
+  .req-col.silent  { border-top-color: var(--hc-gray-3); background: var(--hc-bg-soft); }
+  .req-col.surface { border-top-color: var(--hc-blue); background: var(--hc-white); border: 1px solid var(--hc-gray-1); border-top-width: 2px; }
+  .req-col.refuse  { border-top-color: var(--hc-coral); background: var(--hc-white); border: 1px solid var(--hc-gray-1); border-top-width: 2px; }
+
+  .req-col h3 {
+    font-size: 10.5px;
+    color: var(--hc-coral);
+    font-family: var(--mono);
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+  .req-col.silent h3 { color: var(--hc-gray-3); }
+  .req-col.surface h3 { color: var(--hc-blue); }
+  .req-col.refuse h3 { color: var(--hc-coral); }
+
+  .req-col ul { list-style: none; padding: 0; margin: 0; }
+  .req-col li {
+    font-size: 13px;
+    color: var(--hc-black);
+    line-height: 1.5;
+    padding: 6px 0;
+    border-bottom: 1px dotted var(--hc-bg-alt);
+  }
+  .req-col li:last-child { border-bottom: none; }
+  .req-col.silent li { color: var(--hc-gray-4); }
+
+  .req-col code {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    background: var(--hc-bg-alt);
+    color: var(--hc-gray-4);
+    padding: 1px 5px;
+    border-radius: 2px;
+    letter-spacing: 0.01em;
+  }
+  .req-col.surface code { background: var(--hc-bg-soft); }
+
+  /* refusal items render as coral-bordered callouts inside the refuse column */
+  .req-col.refuse li {
+    border-bottom: none;
+    padding: 0;
+    margin-bottom: 8px;
+  }
+  .req-col.refuse li:last-child { margin-bottom: 0; }
+  .refusal {
+    background: var(--hc-bg-soft);
+    border-left: 3px solid var(--hc-coral);
+    padding: 8px 12px;
+    font-size: 12.5px;
+    color: var(--hc-black);
+    line-height: 1.45;
+  }
+  .refusal .why {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--hc-gray-3);
+    letter-spacing: 0.02em;
+  }
+
+  /* pills used inside the surfaces column */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-family: var(--font);
+    letter-spacing: 0.02em;
+    padding: 2px 9px;
+    border-radius: 999px;
+    border: 1px solid currentColor;
+    line-height: 1.4;
+    vertical-align: middle;
+  }
+  .pill.amber  { color: var(--hc-amber);  background: var(--hc-amber-soft); border-color: transparent; }
+  .pill.green  { color: var(--hc-green);  background: var(--hc-green-soft); border-color: transparent; }
+  .pill.coral  { color: var(--hc-coral);  background: var(--hc-coral-soft); border-color: transparent; }
+  .pill.gray   { color: var(--hc-gray-4); background: var(--hc-bg-alt);     border-color: transparent; }
+  .pill .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* "not in scope" muted hint inside columns */
+  .scope-note {
+    font-size: 12px;
+    color: var(--hc-gray-3);
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .scope-note code { font-style: normal; }
+
+  /* transition arrow */
+  .transition {
+    display: flex;
+    justify-content: center;
+    margin: -10px 0 22px;
+    color: var(--hc-coral);
+    font-size: 22px;
+    font-weight: 300;
+    opacity: 0.55;
+  }
+
+  /* ─────────────────── Kill-criteria roll-up ─────────────────── */
+  .killroll {
+    margin-top: 56px;
+    padding-top: 36px;
+    border-top: 2px solid var(--hc-blue);
+  }
+  .killroll h2 {
+    color: var(--hc-blue);
+    font-size: 22px;
+    margin-bottom: 6px;
+    flex: none;
+    min-width: 0;
+  }
+  .killroll .sub {
+    color: var(--hc-gray-4);
+    font-size: 13.5px;
+    margin-bottom: 22px;
+    max-width: 820px;
+  }
+  table.killtable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  table.killtable thead th {
+    text-align: left;
+    font-weight: 400;
+    font-size: 10.5px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--hc-coral);
+    font-family: var(--mono);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--hc-gray-1);
+    background: var(--hc-bg-soft);
+  }
+  table.killtable tbody td {
+    padding: 14px 14px;
+    border-bottom: 1px solid var(--hc-bg-alt);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  table.killtable tbody tr:last-child td { border-bottom: none; }
+  table.killtable tbody tr:nth-child(odd) td { background: var(--hc-bg-soft); }
+  table.killtable .trigger { color: var(--hc-black); width: 36%; }
+  table.killtable .resolution { color: var(--hc-gray-4); width: 50%; }
+  table.killtable .sev { width: 14%; }
+  table.killtable .sev .pill { font-size: 10.5px; padding: 3px 10px; }
+
+  /* ─────────────────── Footer ─────────────────── */
+  footer {
+    background: var(--hc-blue);
+    color: var(--hc-white);
+    padding: 26px 56px 28px;
+    margin-top: 48px;
+    font-size: 12px;
+    text-align: center;
+  }
+  footer .wordmark { font-size: 14px; }
+  footer .footrow {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 26px;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 11px;
+    opacity: 0.85;
+  }
+  footer .footrow a { color: var(--hc-coral); text-decoration: none; }
+  footer .footrow a:hover { text-decoration: underline; }
+  footer .stamp { opacity: 0.55; margin-top: 8px; font-family: var(--mono); font-size: 10.5px; }
+
+  /* ─────────────────── Responsive: stack at 880px, iPhone-ready at 375px ─────────────────── */
+  @media (max-width: 1080px) {
+    main { padding: 0 32px 56px; }
+    .req-panel { grid-template-columns: 1fr; }
+    .req-col.silent { order: 3; }
+    .req-col.surface { order: 1; }
+    .req-col.refuse { order: 2; }
+  }
+  @media (max-width: 720px) {
+    .masthead { padding: 28px 22px 24px; }
+    main { padding: 0 22px 48px; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 18px; min-width: 0; }
+    .frame { margin-bottom: 28px; padding-bottom: 22px; }
+    .mockup-wrap iframe {
+      /* allow the iframe to scale to whatever the wrap width is */
+      transform-origin: top left;
+    }
+    table.killtable .trigger,
+    table.killtable .resolution,
+    table.killtable .sev { display: block; width: 100%; }
+    table.killtable thead { display: none; }
+    table.killtable tbody td { border-bottom: none; padding: 6px 14px; }
+    table.killtable tbody tr { display: block; border-bottom: 1px solid var(--hc-gray-1); padding: 10px 0; }
+  }
 </style>
 </head>
 <body>
-<h1>RETRACTED</h1>
-<p>This page was self-synthesized in autonomous mode and bypassed the canvas-sync protocol (per <code>architecture-notes/canvas-sync-workflow-v1.0.md</code> §0.5 + §5, the canvas comes from <code>claude.ai/design</code>, not from Claude Code self-synth).</p>
-<p>Brief stays at <code>design/briefs/spike-v2-journey-requirements-ask.md</code> in the private repo, awaiting paste into claude.ai/design + canvas download.</p>
-<div class="note">Retracted 2026-05-13. New canvas will replace this page after the proper claude.ai/design round-trip.</div>
+
+<header class="masthead">
+  <div class="wordmark">horn <span class="sep">&amp;</span> c<span class="coral">o</span>mpany</div>
+  <h1>Consultant aktualisiert Monthly Business Review &mdash; Anforderungen + Flags</h1>
+  <div class="subtitle">H&amp;C PowerPoint Add-in &middot; spike-v2 trust contract surface &middot; Mai 2026</div>
+  <div class="meta">design/bundles/spike-v2-journey-requirements/wireframe-v1.0.0.html &middot; Stage 1 wireframe</div>
+</header>
+
+<main>
+
+  <!-- ─────────────────── Intro + legend ─────────────────── -->
+  <section class="intro">
+    <p class="lead">
+      Diese Seite spiegelt die 11-Frame Consultant-Journey wider und zeigt unter jedem Frame, <strong>was das Add-in stillschweigend prüft</strong>, <strong>was es dem Consultant sichtbar macht</strong>, und <strong>wann es eine Aktion ablehnt oder blockiert</strong>. Zweck: ein einziges Sign-off-Surface für den spike-v2 trust contract &mdash; lesbar in 30 Sekunden auf dem iPhone.
+    </p>
+    <p class="rationale">
+      The wireframe is the visual sign-off layer for the partial-update primitive. Frames 7, 8 and 10 carry the load &mdash; mark, fill, and durability verify. Everything else is journey context.
+    </p>
+    <div class="legend">
+      <div class="legend-row"><span class="legend-sw silent"></span><span><b>Silent</b> &mdash; invariants the consultant never sees unless they fail.</span></div>
+      <div class="legend-row"><span class="legend-sw surface"></span><span><b>Surfaces</b> &mdash; visible UI state: buttons, status pills, copy.</span></div>
+      <div class="legend-row"><span class="legend-sw refuse"></span><span><b>Refuses</b> &mdash; eligibility rejections, kill criteria, durability failures.</span></div>
+      <div class="legend-row"><span class="legend-sw amber"></span><span><b>Pending durability</b> &mdash; written but not yet round-tripped.</span></div>
+      <div class="legend-row"><span class="legend-sw green"></span><span><b>Durable</b> &mdash; save+reopen verified, byte-diff clean.</span></div>
+    </div>
+  </section>
+
+  <!-- ═════════════════════════════════ FRAME 01 ═════════════════════════════════ -->
+  <section class="frame" id="frame-01">
+    <header class="frame-head">
+      <span class="frame-n">Frame 01</span>
+      <h2>Consultant öffnet das bestehende MBR-Deck</h2>
+      <span class="frame-phase">Einstieg</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(0); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="req-panel">
+      <div class="req-col silent">
+        <h3>Silent — checks &amp; reads</h3>
+        <ul>
+          <li>Shape-identity stamping per Phase A Inv #1 — <code>shape_guid</code> assigned to every shape on first touch.</li>
+          <li>Audit log read; any pre-existing <code>urn:hc-update-targets/v1</code> rows in the customXmlPart are loaded.</li>
+          <li>No write activity. Read-only pass.</li>
+        </ul>
+      </div>
+      <div class="req-col surface">
+        <h3>Surfaces — visible UI</h3>
+        <ul>
+          <li>PowerPoint shows the existing March numbers. Add-in not yet active.</li>
+          <li>If the deck already has marked targets, the sidebar &mdash; once activated &mdash; shows the count.</li>
+        </ul>
+      </div>
+      <div class="req-col refuse">
+        <h3>Refuses — blocked actions</h3>
+        <ul><li><span class="scope-note">Nothing refused — frame is read-only.</span></li></ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ═════════════════════════════════ FRAME 02 ═════════════════════════════════ -->
+  <section class="frame" id="frame-02">
+    <header class="frame-head">
+      <span class="frame-n">Frame 02</span>
+      <h2>Consultant aktiviert das H&amp;C Tool</h2>
+      <span class="frame-phase">Aktivierung</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(1); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="req-panel">
+      <div class="req-col silent">
+        <h3>Silent — checks &amp; reads</h3>
+        <ul>
+          <li><code>purgeAllHcArtifacts</code> regression probe fires (paranoid sweep — should be a no-op).</li>
+          <li><code>KNOWN_HC_NAMESPACES</code> registry loaded.</li>
+          <li>Auto Guard hook attached to the active document.</li>
+        </ul>
+      </div>
+      <div class="req-col surface">
+        <h3>Surfaces — visible UI</h3>
+        <ul>
+          <li>Sidebar populates with a <em>Partial-update (spike-v2)</em> section.</li>
+          <li>Four buttons render: <b>Mark</b> · <b>List</b> · <b>Fill</b> · <b>Unmark</b>.</li>
+        </ul>
+      </div>
+      <div class="req-col refuse">
+        <h3>Refuses — blocked actions</h3>
+        <ul>
+          <li>
+            <div class="refusal">
+              Office.js version below <code>PowerPointApi 1.7</code> — add-in shows a blocking message and disables the spike-v2 section.
+              <span class="why">Reason: required API surface for shape-level patching is unavailable.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ═════════════════════════════════ FRAME 03 ═════════════════════════════════ -->
+  <section class="frame" id="frame-03">
+    <header class="frame-head">
+      <span class="frame-n">Frame 03</span>
+      <h2>Consultant wählt die H&amp;C Standard-Bibliothek</h2>
+      <span class="frame-phase">Einrichtung</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(2); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="req-panel">
+      <div class="req-col silent">
+        <h3>Silent — checks &amp; reads</h3>
+        <ul><li><span class="scope-note">Library template binding — out of spike scope. Covered by the separate library flow.</span></li></ul>
+      </div>
+      <div class="req-col surface">
+        <h3>Surfaces — visible UI</h3>
+        <ul><li><span class="scope-note">Library picker. Not spike-v2 surface — cross-reference only.</span></li></ul>
+      </div>
+      <div class="req-col refuse">
+        <h3>Refuses — blocked actions</h3>
+        <ul><li><span class="scope-note">N/A for spike-v2.</span></li></ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ═════════════════════════════════ FRAME 04 ═════════════════════════════════ -->
+  <section class="frame" id="frame-04">
+    <header class="frame-head">
+      <span class="frame-n">Frame 04</span>
+      <h2>Consultant wählt den Einstiegsmodus Jumpstart / customized</h2>
+      <span class="frame-phase">Einrichtung</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(3); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="req-panel">
+      <div class="req-col silent">
+        <h3>Silent — checks &amp; reads</h3>
+        <ul><li><span class="scope-note">Mode selection — out of spike scope.</span></li></ul>
+      </div>
+      <div class="req-col surface">
+        <h3>Surfaces — visible UI</h3>
+        <ul><li><span class="scope-note">Mode toggle. Cross-reference only.</span></li></ul>
+      </div>
+      <div class="req-col refuse">
+        <h3>Refuses — blocked actions</h3>
+        <ul><li><span class="scope-note">N/A for spike-v2.</span></li></ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ═════════════════════════════════ FRAME 05 ═════════════════════════════════ -->
+  <section class="frame" id="frame-05">
+    <header class="frame-head">
+      <span class="frame-n">Frame 05</span>
+      <h2>Consultant prüft das Deck-Brief</h2>
+      <span class="frame-phase">Brief</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(4); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="req-panel">
+      <div class="req-col silent">
+        <h3>Silent — checks &amp; reads</h3>
+        <ul><li><span class="scope-note">Per-deck brief storage — out of spike scope.</span></li></ul>
+      </div>
+      <div class="req-col surface">
+        <h3>Surfaces — visible UI</h3>
+        <ul><li><span class="scope-note">Brief input. Cross-reference only.</span></li></ul>
+      </div>
+      <div class="req-col refuse">
+        <h3>Refuses — blocked actions</h3>
+        <ul><li><span class="scope-note">N/A for spike-v2.</span></li></ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ═════════════════════════════════ FRAME 05B ═════════════════════════════════ -->
+  <section class="frame" id="frame-05b">
+    <header class="frame-head">
+      <span class="frame-n">Frame 05B</span>
+      <h2>Consultant bestätigt Format-Präferenzen</h2>
+      <span class="frame-phase">Brief</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(5); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="req-panel">
+      <div class="req-col silent">
+        <h3>Silent — checks &amp; reads</h3>
+        <ul><li><span class="scope-note">Format-preferences storage — out of spike scope.</span></li></ul>
+      </div>
+      <div class="req-col surface">
+        <h3>Surfaces — visible UI</h3>
+        <ul><li><span class="scope-note">Format-prefs confirmation. Cross-reference only.</span></li></ul>
+      </div>
+      <div class="req-col refuse">
+        <h3>Refuses — blocked actions</h3>
+        <ul><li><span class="scope-note">N/A for spike-v2.</span></li></ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ═════════════════════════════════ FRAME 06 ═════════════════════════════════ -->
+  <section class="frame" id="frame-06">
+    <header class="frame-head">
+      <span class="frame-n">Frame 06</span>
+      <h2>Consultant öffnet Folie 03</h2>
+      <span class="frame-phase">Überprüfung</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(6); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="req-panel">
+      <div class="req-col silent">
+        <h3>Silent — checks &amp; reads</h3>
+        <ul>
+          <li>Slide-index resolution against the active selection.</li>
+          <li>Selected-slide listener armed — next click on a shape becomes the mark candidate.</li>
+        </ul>
+      </div>
+      <div class="req-col surface">
+        <h3>Surfaces — visible UI</h3>
+        <ul>
+          <li>Slide thumbnail in the sidebar, slide 03 highlighted.</li>
+          <li>Status row: <em>Selection: 1 slide.</em></li>
+        </ul>
+      </div>
+      <div class="req-col refuse">
+        <h3>Refuses — blocked actions</h3>
+        <ul><li><span class="scope-note">Nothing refused — navigation only.</span></li></ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ═════════════════════════════════ FRAME 07 — MARK STEP ═════════════════════════════════ -->
+  <section class="frame" id="frame-07">
+    <header class="frame-head">
+      <span class="frame-n">Frame 07</span>
+      <h2>Consultant prüft einzelne Form &mdash; Mark step</h2>
+      <span class="frame-phase load-bearing">Mark · load-bearing</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(7); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="req-panel">
+      <div class="req-col silent">
+        <h3>Silent — checks &amp; reads</h3>
+        <ul>
+          <li><code>checkMarkEligibility(shape)</code> runs 4 gates:</li>
+          <li><b>(a)</b> shape type not in <code>{table, chart, smartArt, ole, graphicFrame, group, picture, image}</code>.</li>
+          <li><b>(b)</b> <code>textFrame.hasText</code> is true.</li>
+          <li><b>(c)</b> No <code>\v\n\r\f</code> in <code>textRange.text</code> — exactly one paragraph.</li>
+          <li><b>(d)</b> All 12 <code>ShapeFont</code> attributes non-null — homogeneous-format runs.</li>
+          <li>On pass: <code>format_signature_hash</code> computed and persisted alongside <code>shape_guid</code>.</li>
+        </ul>
+      </div>
+      <div class="req-col surface">
+        <h3>Surfaces — visible UI</h3>
+        <ul>
+          <li>Selected shape highlighted on the slide.</li>
+          <li><b>Mark whole-shape target</b> button enabled.</li>
+          <li>Brief prompt input, max 500 characters.</li>
+          <li>Success: <span class="pill green"><span class="dot"></span>Marked</span> <code>target_id=4f2a…</code><br><span class="scope-note" style="display:block;margin-top:4px;">Copy: &bdquo;Marked. Use ‘Fill from spreadsheet’ next.&ldquo;</span></li>
+        </ul>
+      </div>
+      <div class="req-col refuse">
+        <h3>Refuses — blocked actions</h3>
+        <ul>
+          <li><div class="refusal">Spike-v2 does not support shape type <code>table</code>; mid-band only.<span class="why">Gate (a) — eligibility</span></div></li>
+          <li><div class="refusal">Shape has no text content; nothing to fill.<span class="why">Gate (b) — textFrame.hasText</span></div></li>
+          <li><div class="refusal">Spike-v2 requires exactly 1 paragraph; shape has <code>N</code>.<span class="why">Gate (c) — single-paragraph</span></div></li>
+          <li><div class="refusal">Shape has mixed-format text runs (mixed: name, underline, strikethrough); spike-v2 requires a single run.<span class="why">Gate (d) — homogeneous format</span></div></li>
+          <li><div class="refusal">Brief exceeds 500 chars (got <code>N</code>).<span class="why">Brief length cap</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ═════════════════════════════════ FRAME 08 — FILL STEP ═════════════════════════════════ -->
+  <section class="frame" id="frame-08">
+    <header class="frame-head">
+      <span class="frame-n">Frame 08</span>
+      <h2>Consultant startet die KI-Befüllung &mdash; Fill step</h2>
+      <span class="frame-phase load-bearing">Fill · load-bearing</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(8); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="req-panel">
+      <div class="req-col silent">
+        <h3>Silent — checks &amp; reads</h3>
+        <ul>
+          <li>Re-fetch <code>UpdateTarget</code> row by <code>shape_guid</code>.</li>
+          <li><b>Re-validate <code>format_signature_hash</code> at fill time</b> — guards against edits between mark and fill.</li>
+          <li>Compute <code>prev_text_hash</code> = SHA-256 of <code>textRange.text</code>.</li>
+          <li>RAG retrieval returns <code>Evidence[]</code> &mdash; top-5 with <code>embedding_score</code> + locator.</li>
+          <li>Confidence gate: <code>delta_to_runner_up &ge; 0.15</code> → autofill, else picker.</li>
+        </ul>
+      </div>
+      <div class="req-col surface">
+        <h3>Surfaces — visible UI</h3>
+        <ul>
+          <li><b>Fill from spreadsheet (selected target)</b> button click.</li>
+          <li>Floor-band: prompt for <code>proposed_value</code>.</li>
+          <li>Mid-band: Evidence picker modal — 5 candidates with source locators.</li>
+          <li>State on completion: <span class="pill amber"><span class="dot"></span>Pending durability</span><br><span class="scope-note" style="display:block;margin-top:4px;">Copy: &bdquo;Pending durability — save+reopen then verify.&ldquo;</span></li>
+        </ul>
+      </div>
+      <div class="req-col refuse">
+        <h3>Refuses — blocked actions</h3>
+        <ul>
+          <li><div class="refusal">Shape is not marked. Call <code>markWholeShape</code> first.<span class="why">No UpdateTarget row for this shape_guid</span></div></li>
+          <li><div class="refusal">Shape is no longer eligible — was edited between mark and fill. Re-mark required.<span class="why">Eligibility re-check failed</span></div></li>
+          <li><div class="refusal">Format drifted between mark and fill &mdash; baseline <code>{abc12345}</code>, current <code>{xyz67890}</code>. Re-mark required.<span class="why">format_signature_hash mismatch (Codex round-3 fix)</span></div></li>
+          <li><div class="refusal">delta_to_runner_up &lt; 0.15 &mdash; picker required (mid-band).<span class="why">Confidence gate</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ═════════════════════════════════ FRAME 09 — PATCH WROTE ═════════════════════════════════ -->
+  <section class="frame" id="frame-09">
+    <header class="frame-head">
+      <span class="frame-n">Frame 09</span>
+      <h2>KI aktualisiert Zahlen &mdash; Shimmer bestätigt Änderungen</h2>
+      <span class="frame-phase">Patch wrote</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(9); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="req-panel">
+      <div class="req-col silent">
+        <h3>Silent — checks &amp; reads</h3>
+        <ul>
+          <li><code>textRange.text = proposed_value</code> written via Office.js.</li>
+          <li>Compute <code>next_text_hash</code>; verify write-back round-trips against the in-memory expectation.</li>
+          <li><code>markAiFilled(shape)</code> tags the shape.</li>
+          <li><code>appendAuditEntry(action: "fill", note: update_target_filled_pending)</code>.</li>
+        </ul>
+      </div>
+      <div class="req-col surface">
+        <h3>Surfaces — visible UI</h3>
+        <ul>
+          <li>Shape text updates in PowerPoint UI; coral shimmer overlay confirms the change visually.</li>
+          <li>Sidebar log entry: <code>spike_v2: filled-pending&nbsp;target_id=…&nbsp;prev=…&nbsp;next=…</code></li>
+          <li>State pill stays <span class="pill amber"><span class="dot"></span>pending durability</span> until Frame 10.</li>
+        </ul>
+      </div>
+      <div class="req-col refuse">
+        <h3>Refuses — blocked actions</h3>
+        <ul>
+          <li><div class="refusal">Write-back verification failed. Expected <code>"X"</code>, got <code>"Y"</code>.<span class="why">textRange.text write was silently rejected — Office.js / host anomaly</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ═════════════════════════════════ FRAME 10 — DURABILITY VERIFY ═════════════════════════════════ -->
+  <section class="frame" id="frame-10">
+    <header class="frame-head">
+      <span class="frame-n">Frame 10</span>
+      <h2>Consultant prüft und speichert &mdash; Durability verify</h2>
+      <span class="frame-phase load-bearing">Durability · load-bearing</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe src="https://htmlpreview.github.io/?https://raw.githubusercontent.com/Wilhofstrasse/hc-knowledge/main/mbr-journey.html"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(10); } catch(e){} })(this)"></iframe>
+    </div>
+    <div class="req-panel">
+      <div class="req-col silent">
+        <h3>Silent — checks &amp; reads</h3>
+        <ul>
+          <li>Cmd+S → save + close + reopen.</li>
+          <li><code>scripts/pptx-bytediff-v2.py before.pptx after.pptx --target-slide N --target-xpath './/a:t' --mutation-kind text-only</code> exits <code>0</code>.</li>
+          <li><code>finalizePatchAfterDurabilityCheck</code> promotes the pending audit row to <code>update_target_filled_durable</code>.</li>
+          <li>In-deck claim_ledger row written with <code>state: "source_backed"</code>.</li>
+          <li><code>state.json</code> checkpoint advances to <code>completed</code>.</li>
+        </ul>
+      </div>
+      <div class="req-col surface">
+        <h3>Surfaces — visible UI</h3>
+        <ul>
+          <li>Save confirmation; reopen confirmation.</li>
+          <li>Sidebar log: <code>spike_v2: filled-durable&nbsp;target_id=…</code></li>
+          <li>State pill flips <span class="pill amber"><span class="dot"></span>pending</span> → <span class="pill green"><span class="dot"></span>Durable</span>.</li>
+          <li>Audit panel shows the full provenance trail: target → claim → evidence locators.</li>
+        </ul>
+      </div>
+      <div class="req-col refuse">
+        <h3>Refuses — blocked actions</h3>
+        <ul>
+          <li><div class="refusal">byte-diff exit <code>1</code>: UNEXPECTED DRIFT &mdash; diff in non-whitelisted part.<span class="why">Rollback row written; consultant must investigate which part drifted</span></div></li>
+          <li><div class="refusal">byte-diff exit <code>3</code>: INVARIANT VIOLATION &mdash; whitelisted part diff exceeds <code>mutation_kind</code> scope.<span class="why">Rollback row written; spike escalates to architecture rethink per kill criteria</span></div></li>
+          <li><div class="refusal"><code>claim_id</code> cross-reference resolution failed &mdash; audit walker reconciliation pending.<span class="why">Audit-trail integrity gate</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════════════════════════════ Kill-criteria roll-up ═════════════════════════════════ -->
+  <section class="killroll" id="kill-criteria">
+    <h2>Kill criteria roll-up</h2>
+    <p class="sub">
+      Eight trigger conditions, each with the agreed resolution path. Severity flags the partners who get pulled in: amber means iterate within the spike; red means stop and escalate to Filipe.
+    </p>
+    <table class="killtable">
+      <thead>
+        <tr>
+          <th>Trigger</th>
+          <th>Resolution</th>
+          <th>Severity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="trigger">If the add-in cannot read the file you picked.</td>
+          <td class="resolution">We pivot to a small local helper that talks to the add-in over localhost. Acceptable.</td>
+          <td class="sev"><span class="pill amber"><span class="dot"></span>Acceptable iterate</span></td>
+        </tr>
+        <tr>
+          <td class="trigger">If marking succeeds but PowerPoint silently strips our identity tag on save.</td>
+          <td class="resolution">We retry using an out-of-band tag-store keyed by content hash. Acceptable.</td>
+          <td class="sev"><span class="pill amber"><span class="dot"></span>Acceptable iterate</span></td>
+        </tr>
+        <tr>
+          <td class="trigger">If the format signature drifts on every reopen (false positive re-mark spam).</td>
+          <td class="resolution">We tighten the signature to only the 4 attributes Office actually round-trips. Acceptable.</td>
+          <td class="sev"><span class="pill amber"><span class="dot"></span>Acceptable iterate</span></td>
+        </tr>
+        <tr>
+          <td class="trigger">If the byte-diff says clean but the deck visibly differs on reopen.</td>
+          <td class="resolution">Stop. Escalate. The trust contract is broken; spike pauses for architecture rethink.</td>
+          <td class="sev"><span class="pill coral"><span class="dot"></span>BLOCKER</span></td>
+        </tr>
+        <tr>
+          <td class="trigger">If the byte-diff says dirty but the deck is visually identical (false positive drift).</td>
+          <td class="resolution">We expand the whitelist by one path-class with explicit reviewer sign-off. Acceptable.</td>
+          <td class="sev"><span class="pill amber"><span class="dot"></span>Acceptable iterate</span></td>
+        </tr>
+        <tr>
+          <td class="trigger">If the RAG retrieval cannot find a source-backed value for any cell.</td>
+          <td class="resolution">We fall back to the picker modal; consultant supplies the value with a manual locator. Acceptable.</td>
+          <td class="sev"><span class="pill amber"><span class="dot"></span>Acceptable iterate</span></td>
+        </tr>
+        <tr>
+          <td class="trigger">If durability verification consistently fails on Mac PowerPoint but passes on Windows.</td>
+          <td class="resolution">Stop. Escalate. The spike cannot ship for the consultant population without round-trip parity.</td>
+          <td class="sev"><span class="pill coral"><span class="dot"></span>BLOCKER</span></td>
+        </tr>
+        <tr>
+          <td class="trigger">If audit-trail walker reconciliation fails on a deck the partner is about to send.</td>
+          <td class="resolution">Stop. Escalate. Refuse the save; the consultant must re-fill the target manually.</td>
+          <td class="sev"><span class="pill coral"><span class="dot"></span>BLOCKER</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wordmark">horn <span class="sep">&amp;</span> c<span class="coral" style="color:var(--hc-coral)">o</span>mpany</div>
+  <div style="margin-top: 8px; opacity: 0.78;">Corporate PPT Tool &middot; spike-v2 journey + requirements overlay &middot; Stage 1 wireframe</div>
+  <div class="footrow">
+    <span>Journey reference: <code>design/flows/UserJourney_Alex_MBR_v1.0.0.html</code></span>
+    <a href="../../architecture-notes/partial-update-spike-v2.md">Specification</a>
+  </div>
+  <div class="stamp">design/bundles/spike-v2-journey-requirements/wireframe-v1.0.0.html</div>
+</footer>
+
 </body>
 </html>
