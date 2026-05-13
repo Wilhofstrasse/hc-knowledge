@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consultant aktualisiert Monthly Business Review</title>
+<style>
+  /* H&C brand tokens */
+  :root {
+    --hc-blue:    #14324E;
+    --hc-coral:   #E94D3A;
+    --hc-black:   #000000;
+    --hc-white:   #FFFFFF;
+    --hc-bg-alt:  #F0F0F0;
+    --hc-gray-1:  #C2C2C2;
+    --hc-gray-2:  #A4A3A7;
+    --hc-gray-3:  #87878B;
+    --hc-gray-4:  #5B5D64;
+    --font:  'Calibri Light','Calibri','Segoe UI Light','Segoe UI','Helvetica Neue',Arial,sans-serif;
+    --mono:  'Consolas','Menlo','Courier New',monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { font-family: var(--font); color: var(--hc-black); background: var(--hc-bg-alt); font-weight: 300; line-height: 1.45; }
+
+  /* Masthead */
+  .masthead {
+    background: var(--hc-blue);
+    color: var(--hc-white);
+    padding: 40px 56px 36px;
+  }
+  .wordmark {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    color: var(--hc-white);
+    display: inline-block;
+  }
+  .wordmark .coral { color: var(--hc-coral); }
+  .wordmark .sep { color: var(--hc-white); opacity: 0.7; margin: 0 4px; }
+  h1 {
+    font-size: 34px;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    margin-top: 18px;
+    line-height: 1.15;
+  }
+  .masthead .subtitle {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--hc-white);
+    opacity: 0.82;
+    font-weight: 300;
+  }
+  .masthead .meta {
+    margin-top: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    opacity: 0.6;
+    letter-spacing: 0.02em;
+  }
+
+  /* Container */
+  main { max-width: 1280px; margin: 0 auto; padding: 0 56px 72px; background: var(--hc-white); }
+
+  /* Intro */
+  .intro {
+    padding: 36px 0 28px;
+    border-bottom: 1px solid var(--hc-gray-1);
+    margin-bottom: 40px;
+  }
+  .intro .lead {
+    font-size: 18px;
+    line-height: 1.55;
+    max-width: 760px;
+    color: var(--hc-black);
+    font-weight: 300;
+  }
+  .intro .rationale {
+    font-size: 14px;
+    color: var(--hc-gray-4);
+    margin-top: 14px;
+    max-width: 760px;
+  }
+  .intro .legend {
+    margin-top: 22px;
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--hc-gray-4);
+  }
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .legend-sw {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+  }
+
+  /* Frame */
+  .frame {
+    margin-bottom: 56px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--hc-bg-alt);
+  }
+  .frame:last-of-type { border-bottom: none; }
+  .frame-head {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .frame-n {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--hc-coral);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+  }
+  h2 {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: -0.005em;
+    color: var(--hc-blue);
+    flex: 1;
+  }
+  .frame-phase {
+    font-size: 11px;
+    color: var(--hc-gray-4);
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    background: var(--hc-bg-alt);
+    border-radius: 2px;
+  }
+
+  /* Mockup iframe wrapper */
+  .mockup-wrap {
+    width: 1080px;
+    height: 607px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--hc-gray-1);
+    background: var(--hc-white);
+  }
+  .mockup-wrap iframe {
+    width: 1920px;
+    height: 1080px;
+    transform: scale(0.5625);
+    transform-origin: top left;
+    border: none;
+    display: block;
+  }
+
+  .frame-caption {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+  .cap-col h3 {
+    font-size: 12px;
+    color: var(--hc-coral);
+    font-family: var(--mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+  .cap-col p {
+    font-size: 14.5px;
+    color: var(--hc-black);
+    line-height: 1.55;
+  }
+  .design-note {
+    grid-column: 1 / -1;
+    margin-top: 10px;
+    padding: 12px 16px;
+    background: var(--hc-bg-alt);
+    border-left: 3px solid var(--hc-coral);
+    font-size: 13.5px;
+    color: var(--hc-gray-4);
+    line-height: 1.5;
+  }
+  .design-note strong { color: var(--hc-blue); font-weight: 400; }
+
+  /* Outro */
+  .outro {
+    padding: 40px 0 0;
+    border-top: 2px solid var(--hc-blue);
+    margin-top: 48px;
+  }
+  .outro h2 { margin-bottom: 16px; }
+  .outro ol {
+    padding-left: 24px;
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--hc-black);
+  }
+  .outro ol li { margin-bottom: 6px; }
+  .outro .refs {
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: var(--hc-bg-alt);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--hc-gray-4);
+    line-height: 1.8;
+  }
+  .outro .refs strong { color: var(--hc-blue); font-family: var(--font); font-size: 12px; }
+
+  /* Footer */
+  footer {
+    background: var(--hc-blue);
+    color: var(--hc-white);
+    padding: 24px 56px;
+    margin-top: 48px;
+    font-size: 12px;
+    opacity: 0.9;
+    text-align: center;
+  }
+  footer .wordmark { font-size: 14px; }
+
+  /* Transition arrow between frames */
+  .transition {
+    display: flex;
+    justify-content: center;
+    margin: -28px 0 28px;
+    color: var(--hc-coral);
+    font-size: 22px;
+    font-weight: 300;
+    opacity: 0.6;
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wordmark">horn <span class="sep">&amp;</span> c<span class="coral">o</span>mpany</div>
+  <h1>Consultant aktualisiert Monthly Business Review</h1>
+  <div class="subtitle">H&amp;C PowerPoint Add-in &middot; monatliche MBR-Aktualisierung &middot; Mai 2026 &middot; Storyboard v1.0.0</div>
+  <div class="meta">design/flows/UserJourney_Alex_MBR_v1.0.0.html &middot; 2026-05-08</div>
+</header>
+
+<main>
+
+  <section class="intro">
+    <p class="lead">
+      Der Consultant ist bei H&amp;C für den monatlichen Business Review (MBR) zuständig. Jeden Monat aktualisiert er das MBR-Deck &mdash; aktuelle Kennzahlen aus dem Finance-Ordner einpflegen, den Kommentar anpassen und die finale Version an die Partner weitergeben. Diese User Journey zeigt den vollständigen Workflow: vom Öffnen des bestehenden Decks bis zum Speichern und Verteilen der aktualisierten Version. <strong>11 Frames.</strong> Gesamtdauer: ca. 4 Minuten.
+    </p>
+    <p class="rationale">
+      Die MBR-Journey ist der am häufigsten wiederkehrende Anwendungsfall des H&amp;C PPT Tools &mdash; viele Consultants durchlaufen diesen Ablauf jeden Monat. Sie validiert den Einstiegsmodus &bdquo;Jumpstart / customized&ldquo; und den KI-Befüllungs-Loop auf Deck-Ebene.
+    </p>
+    <div class="legend">
+      <span class="legend-item"><span class="legend-sw" style="background:var(--hc-blue)"></span> H&amp;C Marineblau &mdash; Panel-Kopfzeile, Marke</span>
+      <span class="legend-item"><span class="legend-sw" style="background:var(--hc-coral)"></span> H&amp;C Coral &mdash; Fokus, CTA, Hervorhebung</span>
+      <span class="legend-item"><span class="legend-sw" style="background:var(--hc-bg-alt);border:1px solid var(--hc-gray-1)"></span> PowerPoint-Oberfläche &mdash; neutral</span>
+      <span class="legend-item"><span class="legend-sw" style="background:var(--hc-white);border:1px solid var(--hc-gray-1)"></span> Folienrahmen</span>
+    </div>
+  </section>
+
+  <!-- ================= FRAME 01 ================= -->
+  <section class="frame" id="frame-01">
+    <header class="frame-head">
+      <span class="frame-n">Frame 01</span>
+      <h2>Consultant öffnet das bestehende MBR-Deck</h2>
+      <span class="frame-phase">Einstieg</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe id="f01" src="../../mbr-journey.html" width="1920" height="1080"
+        style="transform: scale(0.5625); transform-origin: top left; border: none;"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(0); } catch(e){} })(this)">
+      </iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Der Consultant öffnet <code>MBR-April-2026.pptx</code> in PowerPoint &mdash; das Deck enthält bereits die Zahlen des Vormonats. Er aktiviert das H&amp;C Tool über das Ribbon.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>PowerPoint wird mit dem bestehenden MBR-Deck geladen. Das H&amp;C Panel ist noch nicht aktiv &mdash; der Consultant sieht die Folie mit den März-2026-Zahlen.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 02 ================= -->
+  <section class="frame" id="frame-02">
+    <header class="frame-head">
+      <span class="frame-n">Frame 02</span>
+      <h2>Consultant aktiviert das H&amp;C Tool</h2>
+      <span class="frame-phase">Aktivierung</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe id="f02" src="../../mbr-journey.html" width="1920" height="1080"
+        style="transform: scale(0.5625); transform-origin: top left; border: none;"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(1); } catch(e){} })(this)">
+      </iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Der Consultant klickt im Ribbon auf die Schaltfläche des H&amp;C Corporate PPT Tools, um den Aufgabenbereich zu öffnen.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Das Add-in-Panel wird geladen. Der H&amp;C-Schriftzug erscheint. Dem Consultant werden die Einstiegspunkte angezeigt.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 03 ================= -->
+  <section class="frame" id="frame-03">
+    <header class="frame-head">
+      <span class="frame-n">Frame 03</span>
+      <h2>Consultant wählt die H&amp;C Standard-Bibliothek</h2>
+      <span class="frame-phase">Einrichtung</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe id="f03" src="../../mbr-journey.html" width="1920" height="1080"
+        style="transform: scale(0.5625); transform-origin: top left; border: none;"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(2); } catch(e){} })(this)">
+      </iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Der Consultant wählt die H&amp;C Standard-Bibliothek (v1.0) &mdash; dieselbe Vorlage, die für alle MBR-Decks verwendet wird.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Bibliothek geladen. Vorlagen und Shape-Mappings für das MBR-Template sind bereit.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 04 ================= -->
+  <section class="frame" id="frame-04">
+    <header class="frame-head">
+      <span class="frame-n">Frame 04</span>
+      <h2>Consultant wählt den Einstiegsmodus Jumpstart / customized</h2>
+      <span class="frame-phase">Einrichtung</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe id="f04" src="../../mbr-journey.html" width="1920" height="1080"
+        style="transform: scale(0.5625); transform-origin: top left; border: none;"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(3); } catch(e){} })(this)">
+      </iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Der Consultant wählt &bdquo;Jumpstart / customized&ldquo; &mdash; er hat ein bestehendes Deck mit den Zahlen des Vormonats und möchte es direkt aktualisieren.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Das Tool wechselt in den Fill-Modus. Das bestehende Deck des Consultants ist der Ausgangspunkt; es werden keine neuen Folien erstellt.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 05 ================= -->
+  <section class="frame" id="frame-05">
+    <header class="frame-head">
+      <span class="frame-n">Frame 05</span>
+      <h2>Consultant prüft das Deck-Brief</h2>
+      <span class="frame-phase">Brief</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe id="f05" src="../../mbr-journey.html" width="1920" height="1080"
+        style="transform: scale(0.5625); transform-origin: top left; border: none;"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(4); } catch(e){} })(this)">
+      </iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Der Consultant prüft das Deck-Brief. Er bestätigt das Inhalts-Brief: Zahlen aus <code>/finance/MBR-2026-04/</code> aktualisieren, bestehende Textstruktur beibehalten.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Brief auf Deck-Ebene angezeigt. Modus L1 &middot; Deck aktiv.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 05B ================= -->
+  <section class="frame" id="frame-05b">
+    <header class="frame-head">
+      <span class="frame-n">Frame 05B</span>
+      <h2>Consultant bestätigt Format-Präferenzen</h2>
+      <span class="frame-phase">Brief</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe id="f05b" src="../../mbr-journey.html" width="1920" height="1080"
+        style="transform: scale(0.5625); transform-origin: top left; border: none;"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(5); } catch(e){} })(this)">
+      </iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Der Consultant prüft das Format-Brief &mdash; bestehendes Formatting beibehalten.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Format-Brief bestätigt. Keine Format-Überschreibungen gesetzt.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 06 ================= -->
+  <section class="frame" id="frame-06">
+    <header class="frame-head">
+      <span class="frame-n">Frame 06</span>
+      <h2>Consultant öffnet Folie 03</h2>
+      <span class="frame-phase">Überprüfung</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe id="f06" src="../../mbr-journey.html" width="1920" height="1080"
+        style="transform: scale(0.5625); transform-origin: top left; border: none;"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(6); } catch(e){} })(this)">
+      </iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Der Consultant öffnet Folie 03 (Umsatz), um die Shape-Daten vor der Befüllung zu prüfen.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Folie 03 wird im Panel angezeigt. Alle 5 befüllbaren Formen aufgelistet. Der Consultant kann jede Form einzeln prüfen oder überschreiben.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 07 ================= -->
+  <section class="frame" id="frame-07">
+    <header class="frame-head">
+      <span class="frame-n">Frame 07</span>
+      <h2>Consultant prüft einzelne Form</h2>
+      <span class="frame-phase">Überprüfung</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe id="f07" src="../../mbr-journey.html" width="1920" height="1080"
+        style="transform: scale(0.5625); transform-origin: top left; border: none;"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(7); } catch(e){} })(this)">
+      </iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Der Consultant klickt auf die Stat-Form &bdquo;April-Abrechnungen&ldquo;, um eine folienbezogene Überschreibung hinzuzufügen: positive, verkaufsorientierte Tonalität verwenden.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Die Shape-Ansicht zeigt den aktuellen Wert und das Brief. Überschreibung erfasst.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 08 ================= -->
+  <section class="frame" id="frame-08">
+    <header class="frame-head">
+      <span class="frame-n">Frame 08</span>
+      <h2>Consultant startet die KI-Befüllung</h2>
+      <span class="frame-phase">Befüllen</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe id="f08" src="../../mbr-journey.html" width="1920" height="1080"
+        style="transform: scale(0.5625); transform-origin: top left; border: none;"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(8); } catch(e){} })(this)">
+      </iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Der Consultant bestätigt das Brief und klickt auf &bdquo;Deck entwerfen&ldquo;, um die KI-Befüllung aller Formen auszulösen.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Das Tool sendet das Brief und den Finance-Datenpfad an das LLM. Die Befüllung beginnt.</p>
+      </div>
+      <div class="design-note"><strong>Design-Hinweis:</strong> Das ist der entscheidende Commit-Moment. Das Brief wird gesperrt; das LLM befüllt alle 11 Formen im Deck.</div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 09 ================= -->
+  <section class="frame" id="frame-09">
+    <header class="frame-head">
+      <span class="frame-n">Frame 09</span>
+      <h2>KI aktualisiert Zahlen &mdash; Shimmer bestätigt Änderungen</h2>
+      <span class="frame-phase">Ergebnis</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe id="f09" src="../../mbr-journey.html" width="1920" height="1080"
+        style="transform: scale(0.5625); transform-origin: top left; border: none;"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(9); } catch(e){} })(this)">
+      </iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Der Consultant wartet ca. 15 Sekunden, während das Tool verarbeitet. Shimmer-Hervorhebungen auf den aktualisierten Formen zeigen, was geändert wurde.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>11 Formen aktualisiert. Umsatzzahlen auf April-Werte aktualisiert; April-Abrechnungs-Stat mit verkaufsorientiertem Text neu formuliert. Blinkende Elemente zeigen genau, was die KI verändert hat.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="transition">&#8595;</div>
+
+  <!-- ================= FRAME 10 ================= -->
+  <section class="frame" id="frame-10">
+    <header class="frame-head">
+      <span class="frame-n">Frame 10</span>
+      <h2>Consultant prüft und speichert das aktualisierte Deck</h2>
+      <span class="frame-phase">Fertig</span>
+    </header>
+    <div class="mockup-wrap">
+      <iframe id="f10" src="../../mbr-journey.html" width="1920" height="1080"
+        style="transform: scale(0.5625); transform-origin: top left; border: none;"
+        onload="(function(fr){ try { fr.contentDocument.querySelector('deck-stage').goTo(10); } catch(e){} })(this)">
+      </iframe>
+    </div>
+    <div class="frame-caption">
+      <div class="cap-col">
+        <h3>Benutzeraktion</h3>
+        <p>Der Consultant prüft die Zusammenfassung (Bibliothek, Quelle, Tonalität, Status). Alles stimmt &mdash; er klickt auf &bdquo;Speichern und teilen&ldquo;.</p>
+      </div>
+      <div class="cap-col">
+        <h3>Systemreaktion</h3>
+        <p>Deck unter SharePoint <code>/H&amp;C/Internal/MBR/2026-04</code> gespeichert und lokal kopiert. Optionale Partner-Benachrichtigung bereit.</p>
+      </div>
+      <div class="design-note"><strong>Design-Hinweis:</strong> Der Consultant hat ca. 4 Minuten benötigt. Ohne das Tool erforderte dieselbe Aktualisierung ca. 45 Minuten manuelles Kopieren und Nachformatieren.</div>
+    </div>
+  </section>
+
+  <!-- ================= OUTRO ================= -->
+  <section class="outro">
+    <h2 style="color: var(--hc-blue); font-weight: 300; font-size: 22px;">Was diese User Journey validiert</h2>
+    <ol>
+      <li>Der Einstiegsmodus Jumpstart / customized funktioniert für wiederkehrende monatliche Aktualisierungen.</li>
+      <li>Die Kombination aus Deck-Brief und folienbezogener Überschreibung bietet das richtige Maß an Kontrolle.</li>
+      <li>Die Shimmer-Bestätigung macht sofort deutlich, was die KI verändert hat.</li>
+      <li>Speichern und teilen schließt den Ablauf, ohne PowerPoint zu verlassen.</li>
+    </ol>
+    <div class="refs">
+      <strong>Referenzen</strong><br>
+      MBR-Journey-Mockup: <code>mbr-journey.html</code><br>
+      Canvas-Sync-Konfiguration: <code>design/.canvas-sync.yaml</code> topic: <code>v6-modal</code><br>
+      Architekturnotizen: <code>architecture-notes/canvas-sync-workflow-v1.0.md</code>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wordmark">horn <span class="sep">&amp;</span> c<span class="coral" style="color:var(--hc-coral)">o</span>mpany</div>
+  <div style="margin-top: 6px; opacity: 0.7;">Corporate PPT Tool &middot; UserJourney_Consultant_MBR_v1.0.0 &middot; 2026-05-08</div>
+</footer>
+
+</body>
+</html>
