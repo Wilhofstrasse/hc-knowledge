@@ -171,7 +171,11 @@
     color: var(--hc-coral);
   }
 
-  /* mockup iframe wrapper (1920×1080 scaled to fit the 1280-content rail) */
+  /* mockup iframe wrapper (1920×1080 scaled to fit any container width).
+     v1.1.0 — iframe transform is now JS-driven (see <script> at end of body)
+     so the scale follows .mockup-wrap.clientWidth at every viewport,
+     including iPhone Safari at 375–414px. CSS default below is the
+     desktop-equivalent (1080/1920 = 0.5625) used as no-JS fallback. */
   .mockup-wrap {
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -383,19 +387,13 @@
   footer .footrow a:hover { text-decoration: underline; }
   footer .stamp { opacity: 0.55; margin-top: 8px; font-family: var(--mono); font-size: 10.5px; }
 
-  /* ─────────────────── Responsive: stack at 880px, iPhone-ready at 375px ─────────────────── */
-  /* Iframe shrinks to fit container at every breakpoint. Default 0.5625 = 1080px container.
-     Below that, scale relative to viewport — main padding is 32px each side at ≤1080, 22px at ≤720. */
+  /* ─────────────────── Responsive: stack at 1080px, iPhone-ready at 720px ─────────────────── */
   @media (max-width: 1080px) {
     main { padding: 0 32px 56px; }
     .req-panel { grid-template-columns: 1fr; }
     .req-col.silent { order: 3; }
     .req-col.surface { order: 1; }
     .req-col.refuse { order: 2; }
-    .mockup-wrap iframe {
-      transform: scale(calc((100vw - 64px) / 1920));
-      transform-origin: top left;
-    }
   }
   @media (max-width: 720px) {
     .masthead { padding: 28px 22px 24px; }
@@ -403,10 +401,10 @@
     h1 { font-size: 24px; }
     h2 { font-size: 18px; min-width: 0; }
     .frame { margin-bottom: 28px; padding-bottom: 22px; }
-    .mockup-wrap iframe {
-      transform: scale(calc((100vw - 44px) / 1920));
-      transform-origin: top left;
-    }
+    /* iframe transform is JS-driven at every breakpoint — see script below.
+       Keep transform-origin pinned at top-left so the JS-computed scale
+       still anchors the 1920×1080 surface to the wrap's top-left corner. */
+    .mockup-wrap iframe { transform-origin: top left; }
     table.killtable .trigger,
     table.killtable .resolution,
     table.killtable .sev { display: block; width: 100%; }
@@ -422,7 +420,7 @@
   <div class="wordmark">horn <span class="sep">&amp;</span> c<span class="coral">o</span>mpany</div>
   <h1>Consultant aktualisiert Monthly Business Review &mdash; Anforderungen + Flags</h1>
   <div class="subtitle">H&amp;C PowerPoint Add-in &middot; spike-v2 trust contract surface &middot; Mai 2026</div>
-  <div class="meta">design/bundles/spike-v2-journey-requirements/wireframe-v1.0.0.html &middot; Stage 1 wireframe</div>
+  <div class="meta">design/bundles/spike-v2-journey-requirements/wireframe-v1.1.2.html &middot; Stage 1 wireframe &middot; iPhone light-chrome crop</div>
 </header>
 
 <main>
@@ -916,8 +914,141 @@
     <span>Journey reference: <code>design/flows/UserJourney_Alex_MBR_v1.0.0.html</code></span>
     <a href="../../architecture-notes/partial-update-spike-v2.md">Specification</a>
   </div>
-  <div class="stamp">design/bundles/spike-v2-journey-requirements/wireframe-v1.0.0.html</div>
+  <div class="stamp">design/bundles/spike-v2-journey-requirements/wireframe-v1.1.2.html &middot; iPhone light-chrome crop</div>
 </footer>
+
+<!-- ═════════════════════════════════════════════════════════════════════════
+     v1.1.0 iframe-fit patch
+     ─────────────────────────────────────────────────────────────────────────
+     Bug: CSS-only `transform: scale(0.5625)` clipped the 1920×1080 mockup to
+          its top-left quarter on iPhone Safari at 375–414px viewports.
+     Fix: scale each iframe to match its wrap's measured client width.
+          - Runs on DOMContentLoaded (initial paint).
+          - Runs again per-iframe on its `load` event (after src is decoded).
+          - ResizeObserver re-runs when the wrap resizes (rotation, split-view).
+          - `window.resize` fallback for older WebKits that don't observe.
+     Aspect ratio 16:9 is preserved by the `.mockup-wrap` `aspect-ratio` rule;
+     this script only writes a `scale()` transform, never width/height.
+     ───────────────────────────────────────────────────────────────────────── -->
+<script>
+(function () {
+  // Desktop (≥721px viewport): full 1920×1080 mockup, unmodified.
+  // Mobile (≤720px viewport): crop to the slide + sidebar AND repaint the
+  // mockup's PowerPoint dark chrome (#1A1A1A / #2A2A2A / #2D2D2D / #424242)
+  // to light greys so the slide and H&C panel dominate the visible area.
+  // The chrome repaint is done by injecting a <style> tag into each iframe's
+  // contentDocument — same-origin, so safe — and is reversed when the
+  // viewport widens back past the breakpoint.
+  var BASE_W = 1920;
+  var CROP_X = 200;
+  var CROP_Y = 112;
+  var CROP_W = 1720;
+  var MOBILE_BP = 720;
+  var LIGHTEN_STYLE_ID = '__hc_mobile_lighten';
+
+  var LIGHTEN_CSS = [
+    'html, body, deck-stage, section,',
+    '.ppt, .ppt-titlebar, .ppt-ribbon, .ppt-toolbar, .ppt-rail,',
+    '.ppt-stage, .ppt-stage-main, .panel-col.empty',
+    '{ background: #EFEFF1 !important; }',
+    '.ppt-titlebar { color: #5B5D64 !important; border-bottom: 1px solid #C2C2C2 !important; }',
+    '.ppt-titlebar .right { color: #87878B !important; }',
+    '.ppt-ribbon { border-bottom: 1px solid #C2C2C2 !important; }',
+    '.ppt-tabs span { color: #5B5D64 !important; }',
+    '.ppt-tabs span.active { background: #FFFFFF !important; color: #14324E !important; }',
+    '.ppt-toolbar .grp { border-right-color: #D4D4D6 !important; }',
+    '.ppt-toolbar .ico { background: #FFFFFF !important; border-color: #C2C2C2 !important; color: #5B5D64 !important; }',
+    '.ppt-toolbar .ico.hc-launch { background: #14324E !important; border-color: #E94D3A !important; color: #FFFFFF !important; }',
+    '.ppt-rail { border-right: 1px solid #C2C2C2 !important; }',
+    '.ppt-rail .thumb { border-color: #C2C2C2 !important; }',
+    '.ppt-rail .n { color: #87878B !important; }',
+    '.panel-col.empty { color: #87878B !important; }',
+    '.panel-col.empty .hint { border-color: #C2C2C2 !important; color: #87878B !important; }',
+    '.slide { box-shadow: 0 6px 20px rgba(0,0,0,0.10) !important; }'
+  ].join(' ');
+
+  function injectLighten(iframe) {
+    try {
+      var doc = iframe.contentDocument;
+      if (!doc || !doc.head) return;
+      if (doc.getElementById(LIGHTEN_STYLE_ID)) return;
+      var s = doc.createElement('style');
+      s.id = LIGHTEN_STYLE_ID;
+      s.textContent = LIGHTEN_CSS;
+      doc.head.appendChild(s);
+    } catch (e) { /* cross-origin or not yet ready — ignore */ }
+  }
+
+  function removeLighten(iframe) {
+    try {
+      var doc = iframe.contentDocument;
+      if (!doc) return;
+      var s = doc.getElementById(LIGHTEN_STYLE_ID);
+      if (s) s.remove();
+    } catch (e) { /* cross-origin or not yet ready — ignore */ }
+  }
+
+  function fit(wrap) {
+    var iframe = wrap.querySelector('iframe');
+    if (!iframe) return;
+    var w = wrap.clientWidth;
+    if (!w) return;
+    var isMobile = window.innerWidth <= MOBILE_BP;
+    if (isMobile) {
+      var s = w / CROP_W;
+      var tx = -CROP_X * s;
+      var ty = -CROP_Y * s;
+      iframe.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + s + ')';
+      injectLighten(iframe);
+    } else {
+      var sd = w / BASE_W;
+      iframe.style.transform = 'scale(' + sd + ')';
+      removeLighten(iframe);
+    }
+    iframe.style.transformOrigin = 'top left';
+  }
+
+  function fitAll() {
+    var wraps = document.querySelectorAll('.mockup-wrap');
+    for (var i = 0; i < wraps.length; i++) fit(wraps[i]);
+  }
+
+  function init() {
+    var wraps = document.querySelectorAll('.mockup-wrap');
+
+    // initial pass
+    fitAll();
+
+    // re-fit each iframe after its content has loaded
+    for (var i = 0; i < wraps.length; i++) {
+      (function (wrap) {
+        var iframe = wrap.querySelector('iframe');
+        if (iframe) {
+          iframe.addEventListener('load', function () { fit(wrap); });
+        }
+      })(wraps[i]);
+    }
+
+    // observe layout changes (rotation, split-view, font-load reflow)
+    if (typeof ResizeObserver !== 'undefined') {
+      var ro = new ResizeObserver(function (entries) {
+        for (var i = 0; i < entries.length; i++) fit(entries[i].target);
+      });
+      for (var j = 0; j < wraps.length; j++) ro.observe(wraps[j]);
+    }
+
+    // fallback for environments without ResizeObserver
+    window.addEventListener('resize', fitAll, { passive: true });
+    window.addEventListener('orientationchange', fitAll, { passive: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
 
 </body>
 </html>
