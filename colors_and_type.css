@@ -1,0 +1,188 @@
+/* ============================================================
+   Horn & Company — Colors + Type tokens
+   Canonical source for all H&C-branded artifacts.
+   Ports the brand sheet from corporate-ppt-tool-v2/design/shared/tokens.css.
+   ============================================================ */
+
+:root {
+  /* ---------- Brand color ---------- */
+  --hc-blue:        #14324E;   /* primary — masthead, headings, primary CTA, active tab label */
+  --hc-blue-deep:   #0E2438;   /* primary hover / pressed */
+  --hc-coral:       #E94D3A;   /* the "o" + "&" in the wordmark, kickers, focus, accent border */
+  --hc-coral-soft:  #F9E1DD;   /* coral-tinted active-row fill */
+  --hc-coral-safe:  #B8321F;   /* coral hover (AA-safe on white) */
+
+  /* ---------- Neutrals ---------- */
+  --hc-black:       #000000;   /* body copy */
+  --hc-white:       #FFFFFF;
+  --hc-bg:          #FFFFFF;
+  --hc-bg-alt:      #F0F0F0;   /* row striping, breadcrumb band, callout fill */
+  --hc-bg-soft:     #F7F7F7;   /* lightest panel ground */
+  --hc-gray-1:      #C2C2C2;   /* borders, hairlines */
+  --hc-gray-2:      #A4A3A7;   /* muted text, drop shadows */
+  --hc-gray-3:      #87878B;   /* placeholder, mono caption */
+  --hc-gray-4:      #5B5D64;   /* strong muted, subtitle */
+
+  /* ---------- Signals (reserved — never decorative) ---------- */
+  --hc-amber:       #C98A1A;   /* render-warning band */
+  --hc-amber-soft:  #FBF1DE;
+  --hc-green:       #2E7D4F;   /* OK status pip */
+
+  /* ---------- Type families ---------- */
+  /* Calibri Light is the brand face. Carlito is metric-compatible
+     and free; it ships as the Google-Fonts substitute when Calibri
+     isn't installed. Keep Carlito ahead of system fallbacks so the
+     letter-spacing math (-0.005em headings, 0.14em kickers) holds. */
+  --hc-font:  'Calibri Light','Calibri','Carlito',
+              'Segoe UI Light','Segoe UI','Helvetica Neue',Arial,sans-serif;
+  --hc-mono:  'Consolas','Menlo','Courier New',monospace;
+
+  /* ---------- Type sizes ---------- */
+  /* Native = 24/18/15/9 pt as printed.
+     Panel  = 17/13.5/12-13/10-11 px — a 420 px task pane is dense.
+     Modal  = 22/16/14/11 px — a 1040 px picker is airy.
+     Use the *-panel variables in dense surfaces; the *-modal variables
+     in airy ones. The default below tracks the panel scale. */
+  --hc-t-h1:        24px;
+  --hc-t-h2:        18px;
+  --hc-t-h3:        16px;
+  --hc-t-body:      15px;
+  --hc-t-body-sm:   13px;
+  --hc-t-caption:   11px;
+  --hc-t-mono:      11.5px;
+  --hc-t-kicker:    10.5px;
+
+  /* ---------- Weights ---------- */
+  /* H&C is a single-weight system. Body is 300. Active labels and
+     CTA copy step to 400 or 500; never bolder. */
+  --hc-w-light:     300;
+  --hc-w-regular:   400;
+  --hc-w-medium:    500;
+
+  /* ---------- Letter spacing ---------- */
+  --hc-ls-heading:  -0.005em;   /* H1/H2 — tight */
+  --hc-ls-wordmark:  0.02em;    /* the wordmark + body labels */
+  --hc-ls-mono:      0.02em;
+  --hc-ls-caption:   0.06em;    /* mono captions (UPPER) */
+  --hc-ls-kicker:    0.14em;    /* coral kicker (UPPER) */
+
+  /* ---------- Spacing (4-pt grid; 8/12/16/24/32) ---------- */
+  --hc-sp-1:  4px;
+  --hc-sp-2:  8px;
+  --hc-sp-3:  12px;
+  --hc-sp-4:  16px;
+  --hc-sp-5:  24px;
+  --hc-sp-6:  32px;
+  --hc-sp-7:  48px;
+  --hc-sp-8:  72px;     /* memo masthead inner padding */
+
+  /* ---------- Borders ---------- */
+  --hc-border-hair:    1px solid var(--hc-gray-1);
+  --hc-border-strong:  1.5px solid var(--hc-blue);
+  --hc-border-accent:  3px solid var(--hc-coral);   /* the canonical accent stripe */
+  --hc-border-dashed:  1px dashed var(--hc-gray-1); /* future-spec / drop targets */
+
+  /* ---------- Radii ---------- */
+  /* H&C is a square system. The 3 px radius on the add-in's buttons
+     is the LARGEST allowed; everything else is 0. Don't reach for
+     pill chips or rounded cards — they read off-brand. */
+  --hc-radius-0:    0;
+  --hc-radius-1:    2px;
+  --hc-radius-2:    3px;
+
+  /* ---------- Elevation ---------- */
+  /* Two shadows. Cards on a page lift gently; modals lift hard.
+     Never tint the shadow with coral; navy at low alpha only. */
+  --hc-shadow-card:   0 2px 8px  rgba(20, 50, 78, 0.06);
+  --hc-shadow-modal:  0 24px 48px rgba(20, 50, 78, 0.18);
+
+  /* ---------- Motion ---------- */
+  --hc-ease:        cubic-bezier(.2,.0,.0,1);   /* matches Office's standard */
+  --hc-dur-fast:    120ms;
+  --hc-dur-norm:    200ms;
+}
+
+/* ============================================================
+   Semantic typography — apply to body once and forget.
+   ============================================================ */
+
+html, body {
+  font-family: var(--hc-font);
+  font-weight: var(--hc-w-light);
+  color: var(--hc-black);
+  background: var(--hc-bg);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, .h1 {
+  font-family: var(--hc-font);
+  font-weight: var(--hc-w-light);
+  font-size: 34px;
+  line-height: 1.15;
+  letter-spacing: var(--hc-ls-heading);
+  color: var(--hc-blue);
+}
+h2, .h2 {
+  font-family: var(--hc-font);
+  font-weight: var(--hc-w-light);
+  font-size: 24px;
+  letter-spacing: var(--hc-ls-heading);
+  color: var(--hc-blue);
+}
+h3, .h3 {
+  font-family: var(--hc-font);
+  font-weight: var(--hc-w-regular);
+  font-size: 17px;
+  color: var(--hc-blue);
+}
+h4, .h4 {
+  font-family: var(--hc-mono);
+  font-weight: var(--hc-w-medium);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--hc-blue);
+}
+p {
+  font-family: var(--hc-font);
+  font-weight: var(--hc-w-light);
+  font-size: var(--hc-t-body);
+  line-height: 1.6;
+  color: var(--hc-black);
+}
+.lead {
+  font-size: 16px;
+  color: var(--hc-gray-4);
+}
+
+/* ---------- Mono ---------- */
+code, .mono {
+  font-family: var(--hc-mono);
+  font-size: var(--hc-t-mono);
+  letter-spacing: var(--hc-ls-mono);
+  color: var(--hc-blue);
+  background: var(--hc-bg-alt);
+  padding: 1px 5px;
+}
+
+/* ---------- Coral kicker — section grammar ---------- */
+.kicker {
+  font-family: var(--hc-font);
+  font-weight: var(--hc-w-medium);
+  font-size: var(--hc-t-kicker);
+  color: var(--hc-coral);
+  letter-spacing: var(--hc-ls-kicker);
+  text-transform: uppercase;
+}
+
+/* ---------- The wordmark — coral "&" and "o" ---------- */
+.wordmark {
+  font-family: var(--hc-font);
+  font-weight: var(--hc-w-light);
+  letter-spacing: var(--hc-ls-wordmark);
+  color: currentColor;
+}
+.wordmark .coral { color: var(--hc-coral); }
+.wordmark .sep   { opacity: 0.7; margin: 0 3px; }
