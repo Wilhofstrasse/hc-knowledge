@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-25T18:49:52",
+  "generated_at": "2026-09-25T16:50:47.845825+00:00",
   "n_anchors": 9,
   "anchors": {
     "arch-l3-reader#logbook-every-change-to-a-deck-gets-recorded": {
@@ -8,7 +8,8 @@
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/14",
       "issue_state": "closed",
       "updated_at": "2026-04-29T16:42:54Z",
-      "n_issues_for_anchor": 1
+      "n_issues_for_anchor": 1,
+      "repository": "Wilhofstrasse/corporate-ppt-tool-v2"
     },
     "arch-l3-reader#update-29042026": {
       "state": "orange",
@@ -16,7 +17,8 @@
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/11",
       "issue_state": "closed",
       "updated_at": "2026-04-29T11:59:10Z",
-      "n_issues_for_anchor": 1
+      "n_issues_for_anchor": 1,
+      "repository": "Wilhofstrasse/corporate-ppt-tool-v2"
     },
     "arch-l3-reader#locked-decisions": {
       "state": "orange",
@@ -24,7 +26,8 @@
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/10",
       "issue_state": "closed",
       "updated_at": "2026-04-29T12:12:31Z",
-      "n_issues_for_anchor": 2
+      "n_issues_for_anchor": 2,
+      "repository": "Wilhofstrasse/corporate-ppt-tool-v2"
     },
     "arch-l3-reader#decision-for-you": {
       "state": "orange",
@@ -32,7 +35,8 @@
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/8",
       "issue_state": "closed",
       "updated_at": "2026-04-29T04:35:40Z",
-      "n_issues_for_anchor": 1
+      "n_issues_for_anchor": 1,
+      "repository": "Wilhofstrasse/corporate-ppt-tool-v2"
     },
     "arch-l3-reader#what-i-need-from-you-five-things": {
       "state": "orange",
@@ -40,7 +44,8 @@
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/7",
       "issue_state": "closed",
       "updated_at": "2026-04-29T04:35:38Z",
-      "n_issues_for_anchor": 1
+      "n_issues_for_anchor": 1,
+      "repository": "Wilhofstrasse/corporate-ppt-tool-v2"
     },
     "arch-l3-reader#5-i-found-a-missing-piece-your-hunch-was-right": {
       "state": "orange",
@@ -48,7 +53,8 @@
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/6",
       "issue_state": "closed",
       "updated_at": "2026-04-29T04:35:37Z",
-      "n_issues_for_anchor": 1
+      "n_issues_for_anchor": 1,
+      "repository": "Wilhofstrasse/corporate-ppt-tool-v2"
     },
     "arch-l3-reader#3-i-wrote-8-of-15-emergency-playbooks": {
       "state": "orange",
@@ -56,7 +62,8 @@
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/5",
       "issue_state": "closed",
       "updated_at": "2026-04-29T04:35:36Z",
-      "n_issues_for_anchor": 1
+      "n_issues_for_anchor": 1,
+      "repository": "Wilhofstrasse/corporate-ppt-tool-v2"
     },
     "arch-l3-reader#2-i-drafted-two-new-pieces-of-the-project": {
       "state": "orange",
@@ -64,7 +71,8 @@
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/4",
       "issue_state": "closed",
       "updated_at": "2026-04-29T04:35:34Z",
-      "n_issues_for_anchor": 1
+      "n_issues_for_anchor": 1,
+      "repository": "Wilhofstrasse/corporate-ppt-tool-v2"
     },
     "arch-l3-reader#1-i-locked-in-your-three-decisions-from-yesterday": {
       "state": "orange",
@@ -72,7 +80,8 @@
       "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool-v2/issues/3",
       "issue_state": "closed",
       "updated_at": "2026-04-29T04:35:33Z",
-      "n_issues_for_anchor": 1
+      "n_issues_for_anchor": 1,
+      "repository": "Wilhofstrasse/corporate-ppt-tool-v2"
     }
   }
 }
