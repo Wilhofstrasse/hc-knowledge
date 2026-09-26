@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-25T16:50:47.845825+00:00",
-  "n_anchors": 9,
+  "generated_at": "2026-09-26T11:30:41.272695+00:00",
+  "n_anchors": 10,
   "anchors": {
     "arch-l3-reader#logbook-every-change-to-a-deck-gets-recorded": {
       "state": "orange",
@@ -82,6 +82,15 @@
       "updated_at": "2026-04-29T04:35:33Z",
       "n_issues_for_anchor": 1,
       "repository": "Wilhofstrasse/corporate-ppt-tool-v2"
+    },
+    "arch-l3-reader#ai-provider-not-locked-to-one-vendor": {
+      "state": "red",
+      "issue_number": 4,
+      "issue_url": "https://github.com/Wilhofstrasse/corporate-ppt-tool/issues/4",
+      "issue_state": "open",
+      "updated_at": "2026-09-26T11:30:00Z",
+      "n_issues_for_anchor": 1,
+      "repository": "Wilhofstrasse/corporate-ppt-tool"
     }
   }
 }
